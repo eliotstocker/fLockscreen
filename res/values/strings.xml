@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    
+    <string name="app_name">Lockscreen Concept</string>
+	<string name="music_info"><xliff:g id="artistInfo">%s</xliff:g> - <xliff:g id="trackInfo">%s</xliff:g></string>
+	<!-- sms count -->
+    <string name="lockscreen_sms_count"><xliff:g id="number">%d</xliff:g> Unread SMS</string>
+    <!-- 1 missed call count -->
+    <string name="lockscreen_1_missed"><xliff:g id="number">%d</xliff:g> Missed Call</string>
+    <!-- more than 1 missed call count -->
+    <string name="lockscreen_lots_missed"><xliff:g id="number">%d</xliff:g> Missed Calls</string>
+    <!-- 1 unread Email count -->
+    <string name="lockscreen_1_email"><xliff:g id="number">%d</xliff:g> Unread Email</string>
+    <!-- more than 1 Unread Email count -->
+    <string name="lockscreen_lots_email"><xliff:g id="number">%d</xliff:g> Unread Emails</string>
+    <string name="battery_level">Battery (<xliff:g id="batLevel">%s</xliff:g>)</string>
+    <string name="battery_charging">Charging (<xliff:g id="batLevel">%s</xliff:g>)</string>
+    <string name="battery_charged">Charged</string>
+    <string name="no_service">No Service</string>
+    <string name="no_sim">No SIM</string>
+    <string name="unknown">Unknown</string>
+    <string name="airplane_mode">Airplane Mode</string>
+</resources>
