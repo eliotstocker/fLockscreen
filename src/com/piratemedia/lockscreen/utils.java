@@ -8,6 +8,7 @@ import java.io.InputStream;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -177,5 +178,21 @@ public class utils {
 	        return mBitmap.getHeight();	
 	    }	
 	}
+	
+	//Get CheckBox Prefs
+	
+	static boolean getCheckBoxPref(Context context, String name, boolean def) {
+    	SharedPreferences prefs =
+    		context.getSharedPreferences("com.piratemedia.lockscreen_preferences", Context.MODE_PRIVATE);
+    	return prefs.getBoolean(name, def);
+    }
+	
+	//Get String Prefs (ListPrefs etc.)
+	
+	static String getStringPref(Context context, String name, String def) {
+    	SharedPreferences prefs =
+    		context.getSharedPreferences("com.piratemedia.lockscreen_preferences", Context.MODE_PRIVATE);
+    	return prefs.getString(name, def);
+    }
 	
 }

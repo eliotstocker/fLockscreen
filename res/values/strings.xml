@@ -20,4 +20,39 @@
     <string name="no_sim">No SIM</string>
     <string name="unknown">Unknown</string>
     <string name="airplane_mode">Airplane Mode</string>
+    
+    <!-- Settings Strings -->
+    <string name="settings">fLockscreen Settings</string>
+    <string name="fullscreen_title">Fullscreen Lockscreen</string>
+    <string name="fullscreen_summary_on">Fullscreen is enabled</string>
+    <string name="fullscreen_summary_off">Fullscreen is not enabled</string>
+    
+    <!-- Settings Music Players -->
+    
+	<string-array name="players">
+		<item>Stock Android 2.2 (froyo) Music</item>
+		<item>Stock Android 1.0 - 2.1 Music</item>
+		<item>HTC Music</item>
+		<item>Music Mod</item>
+	</string-array>
+	
+	<string-array name="players_val">
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+	</string-array>
+	
+	<string name="players_title">Music Player Select</string>
+	<string name="players_summary">Select the Music player that you with fLockscreen to display information from when playing</string>
+	<string name="players_dialog_title">Music Player Select</string>
+	<string name="players_dialog_message">Select your preferred music player</string>
+    
+    <!-- Settings Info -->
+	<string name="credits_cat">fLockscreen Info</string>
+	<string name="credits_name">fLockscreen</string>
+	<string name="credits_name_summary">By Ander Webb and Eliot Stocker</string>
+	<string name="credits_version">v 0.1</string>
+	<string name="credits_version_summary">Crazy Ass Alpha</string>
+
 </resources>

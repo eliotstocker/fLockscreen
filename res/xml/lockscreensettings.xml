@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	android:title="@string/settings" android:key="settings">
+
+	<CheckBoxPreference android:key="fullscreen"
+		android:defaultValue="true" android:title="@string/fullscreen_title"
+		android:summaryOn="@string/fullscreen_summary_on" android:summaryOff="@string/fullscreen_summary_off" />
+
+	<ListPreference android:key="music_player_select"
+		android:entries="@array/players" android:entryValues="@array/players_val"
+		android:title="@string/players_title" android:summary="@string/players_summary"
+		android:dialogTitle="@string/players_dialog_title" android:defaultValue="1"/>
+
+	<PreferenceCategory android:title="@string/credits_cat">
+		<Preference android:key="name" android:title="@string/credits_name"
+			android:summary="@string/credits_name_summary" android:enabled="false" />
+		<Preference android:key="version" android:title="@string/credits_version"
+			android:summary="@string/credits_version_summary" android:enabled="false" />
+	</PreferenceCategory>
+
+</PreferenceScreen>

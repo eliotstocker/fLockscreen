@@ -23,6 +23,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
@@ -94,6 +95,9 @@ public class mainActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		
+		setFullscreen();
+		getPlayer();
         
 	    mGetSmsCount = getUnreadSmsCount(getBaseContext());
 		mGetMissedCount = getMissedCallCount(getBaseContext());
@@ -627,5 +631,41 @@ public class mainActivity extends Activity {
         }
 
     // end sms count
-    
+        
+    // set fullscreen based on settings
+        private void setFullscreen() {
+        	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_FULLSCREEN, true)) {
+        			getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        		} else {
+        			getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        		}
+        }
+        
+    // Set Which Media Player we want to use
+    	public void getPlayer() {
+    		String playerString = utils.getStringPref(this , LockscreenSettings.KEY_MUSIC_PLAYER, "1");
+    		int player = Integer.parseInt(playerString);  
+    		switch(player) {
+    			case 1:
+    				//do something for 2.2 Music
+    				//com.google.android.music as provider
+    				Log.d("shit", "com.google.android.music");
+    				break;
+    			case 2:
+    				//do something for 1.0 - 2.1 Music
+    				//com.android.music as provider
+    				Log.d("shit", "com.android.music");
+    				break;
+    			case 3:
+    				//do something for HTC Music
+    				//com.htc.music? as provider
+    				Log.d("shit", "com.htc.music");
+    				break;
+    			case 4:
+    				//do something for Music Mod
+    				//com.piratemedia.musicmod as provider
+    				Log.d("shit", "com.piratemedia.musicmod");
+    				break;
+    		}
+    	}
 }
