@@ -27,20 +27,30 @@
     <string name="fullscreen_summary_on">Fullscreen is enabled</string>
     <string name="fullscreen_summary_off">Fullscreen is not enabled</string>
     
+    <!-- Settings Album Art -->
+    <string name="albumart_title">Album Art Display</string>
+    <string name="albumart_summary">Change wallpaper to Album Art (if any) When Music is Playing</string>
+    
+    <!-- Settings Custom Background Image -->
+    <string name="custombg_title">Custom Background Image</string>
+	<string name="custombg_summary_on">Custom Background will be used</string>
+	<string name="custombg_summary_off">Your system wallpaper will be used</string>
+	
+	<string name="bg_picker_title">Background Select</string>
+	<string name="bg_picker_summary">Choose a background to show behind fLockscreen</string>
+    
     <!-- Settings Music Players -->
     
 	<string-array name="players">
-		<item>Stock Android 2.2 (froyo) Music</item>
-		<item>Stock Android 1.0 - 2.1 Music</item>
+		<item>Stock Android Music</item>
 		<item>HTC Music</item>
-		<item>Music Mod</item>
+		<item>Music Mod (Market)</item>
 	</string-array>
 	
 	<string-array name="players_val">
 		<item>1</item>
 		<item>2</item>
 		<item>3</item>
-		<item>4</item>
 	</string-array>
 	
 	<string name="players_title">Music Player Select</string>
@@ -52,7 +62,7 @@
 	<string name="credits_cat">fLockscreen Info</string>
 	<string name="credits_name">fLockscreen</string>
 	<string name="credits_name_summary">By Ander Webb and Eliot Stocker</string>
-	<string name="credits_version">v 0.1</string>
+	<string name="credits_version">v 0.2</string>
 	<string name="credits_version_summary">Crazy Ass Alpha</string>
 
 </resources>

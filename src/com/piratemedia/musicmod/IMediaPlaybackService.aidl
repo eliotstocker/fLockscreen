@@ -15,7 +15,7 @@
 ** limitations under the License.
 */
 
-package com.android.music;
+package com.piratemedia.musicmod;
 
 import android.graphics.Bitmap;
 

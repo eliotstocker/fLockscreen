@@ -31,9 +31,14 @@
                 <action android:name="com.android.music.playbackcomplete"/>
                 <action android:name="com.android.music.metachanged"/>
 				<action android:name="com.android.music.queuechanged"/>
-				<action android:name="com.android.music.musicservicecommand.next"/>
-				<action android:name="com.android.music.musicservicecommand.previous"/>
-				<action android:name="com.android.music.musicservicecommand.togglepause"/>
+				<action android:name="com.htc.music.playstatechanged"/>
+                <action android:name="com.htc.music.playbackcomplete"/>
+                <action android:name="com.htc.music.metachanged"/>
+				<action android:name="com.htc.music.queuechanged"/>
+				<action android:name="com.piratemedia.musicmod.playstatechanged"/>
+                <action android:name="com.piratemedia.musicmod.playbackcomplete"/>
+                <action android:name="com.piratemedia.musicmod.metachanged"/>
+				<action android:name="com.piratemedia.musicmod.queuechanged"/>
 				<action android:name="android.provider.Telephony.SMS_RECEIVED"/>
 				<action android:name="android.intent.action.PHONE_STATE"></action>
 				<action android:name="android.intent.action.BATTERY_CHANGED"></action>

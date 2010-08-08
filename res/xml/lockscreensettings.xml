@@ -6,6 +6,18 @@
 	<CheckBoxPreference android:key="fullscreen"
 		android:defaultValue="true" android:title="@string/fullscreen_title"
 		android:summaryOn="@string/fullscreen_summary_on" android:summaryOff="@string/fullscreen_summary_off" />
+		
+	<CheckBoxPreference android:key="albumart"
+		android:defaultValue="true" android:title="@string/albumart_title"
+		android:summary="@string/albumart_summary" />
+	
+	<CheckBoxPreference android:key="custom_bg"
+		android:defaultValue="false" android:title="@string/custombg_title"
+		android:summaryOn="@string/custombg_summary_on" android:summaryOff="@string/custombg_summary_off" />
+	
+	<Preference android:key="bg_picker"
+		android:dependency="custom_bg" android:title="@string/bg_picker_title"
+		android:summary="@string/bg_picker_summary" />
 
 	<ListPreference android:key="music_player_select"
 		android:entries="@array/players" android:entryValues="@array/players_val"

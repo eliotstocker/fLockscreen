@@ -31,12 +31,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.music.IMediaPlaybackService;
-
 public class mainActivity extends Activity {
 	
 	public static LinearLayout InfoBox;
-	public IMediaPlaybackService mService = null;
 	public boolean playback = false;
 	public String nextAlarm = null;
 	
@@ -59,6 +56,10 @@ public class mainActivity extends Activity {
     private int mGetSmsCount = 0;
     private int mGetMissedCount = 0;
     private int mGetGmailCount = 0;
+    
+	private String prevString;
+ 	private String toggleString;
+ 	private String nextString;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -69,14 +70,41 @@ public class mainActivity extends Activity {
     mMissedCount = (TextView) findViewById(R.id.missedcount);
     mGmailCount = (TextView) findViewById(R.id.gmailcount);
 	
-	Intent i = new Intent();
-	i.setClassName("com.android.music", "com.android.music.MediaPlaybackService");
-	ServiceConnection conn = new MediaPlayerServiceConnection();
-	this.bindService(i, conn, 0);
+    switch(getPlayer()) {
+    	case 1: {
+    		Intent i = new Intent();
+    		i.setClassName("com.android.music", "com.android.music.MediaPlaybackService");
+    		ServiceConnection conn = new MediaPlayerServiceConnectionStock();
+    		this.bindService(i, conn, 0);
 	
-	Intent serviceIntent = new Intent();
-	serviceIntent.setAction("com.android.music.MediaPlaybackService");
-	startService(serviceIntent);
+    		Intent serviceIntent = new Intent();
+    		serviceIntent.setAction("com.android.music.MediaPlaybackService");
+    		startService(serviceIntent);
+    		break;
+    	}
+    	case 2: {
+    		Intent i = new Intent();
+    		i.setClassName("com.htc.music", "com.htc.music.MediaPlaybackService");
+    		ServiceConnection conn = new MediaPlayerServiceConnectionHTC();
+    		this.bindService(i, conn, 0);
+	
+    		Intent serviceIntent = new Intent();
+    		serviceIntent.setAction("com.htc.music.MediaPlaybackService");
+    		startService(serviceIntent);
+    		break;
+    	}
+    	case 3: {
+    		Intent i = new Intent();
+    		i.setClassName("com.piratemedia.musicmod", "com.piratemedia.musicmod.MediaPlaybackService");
+    		ServiceConnection conn = new MediaPlayerServiceConnectionPirate();
+    		this.bindService(i, conn, 0);
+	
+    		Intent serviceIntent = new Intent();
+    		serviceIntent.setAction("com.piratemedia.musicmod.MediaPlaybackService");
+    		startService(serviceIntent);
+    		break;
+    	}
+    }
 	
 	setButtonIntents();
 	setPlayButton();
@@ -140,17 +168,23 @@ public class mainActivity extends Activity {
             	long aTrackID = intent.getLongExtra("trackID", -1);
             	long aAlbumID = intent.getLongExtra("albumID", -1);
 
+            	if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.KEY_SHOW_ART, true)) {
             	updateArt(aAlbumID, aTrackID);
+            	}
                 updateInfo(aArtist, aAlbum, aTrack);
                 playback = true;
                 setPlayButton();
+            	if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.KEY_SHOW_ART, true)) {
                 showHideArt();
+            	}
                 
             } else if (action.equals(updateService.MUSIC_STOPPED)) {
             	
             	playback = false;
             	setPlayButton();
+            	if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.KEY_SHOW_ART, true)) {
             	showHideArt();
+            	}
 
             } else if (action.equals(updateService.SMS_CHANGED)) {
             	
@@ -337,27 +371,6 @@ public class mainActivity extends Activity {
     	}
     }
     
-    private void updateResumeInfo() {
-    	try {
-    		
-    		// Set views
-    		TextView Music = (TextView) findViewById(R.id.MusicInfo);
-    		
-    		// Get info from service
-    		String track = mService.getTrackName();
-    		String artist = mService.getArtistName();
-    		
-    		//Bind info/images to Views
-    		
-    		String NowPlaying = getString(R.string.music_info, track, artist);
-    		Music.setText(NowPlaying);
-    		
-    	} catch (Exception e) {
-    	e.printStackTrace();
-    	throw new RuntimeException(e);
-    	}
-    }
-    
     private void updateInfo(String artist, String album, String track) {
     	
     	TextView Music = (TextView) findViewById(R.id.MusicInfo);
@@ -366,31 +379,94 @@ public class mainActivity extends Activity {
 		Music.setText(NowPlaying);
     }
 
-    //Get Art
-    private class MediaPlayerServiceConnection implements ServiceConnection {
+    //Get starting info (Stock)
+    private class MediaPlayerServiceConnectionStock implements ServiceConnection {
     	public void onServiceConnected(ComponentName name, IBinder service) {
-    	mService = IMediaPlaybackService.Stub.asInterface(service);
+    			com.android.music.IMediaPlaybackService google =
+    				com.android.music.IMediaPlaybackService.Stub.asInterface(service);
     	
-    	try {
-			if (mService.isPlaying()) {
-				playback = true;
-		    	updateArt(mService.getAlbumId(), mService.getAudioId());
-		    	updateResumeInfo();
-		    	setPlayButton();
-		    	showHideControlsStart(true);
-			} else {
-				showHideControlsStart(false);
-			}
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    			try {
+    				if (google.isPlaying()) {
+    					playback = true;
+    	            	if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.KEY_SHOW_ART, true)) {
+    					updateArt(google.getAlbumId(), google.getAudioId());
+    	            	}
+    					updateInfo(google.getArtistName(), google.getAlbumName(), google.getTrackName());
+    					setPlayButton();
+    					showHideControlsStart(true);
+    				} else {
+    					showHideControlsStart(false);
+    				}
+    			} catch (RemoteException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    			}
     	
     	
     	}
     	public void onServiceDisconnected(ComponentName name) {
     	}
     	}
+    
+    //Get starting info (HTC Music)
+    private class MediaPlayerServiceConnectionHTC implements ServiceConnection {
+    	public void onServiceConnected(ComponentName name, IBinder service) {
+
+    			com.htc.music.IMediaPlaybackService htc =
+    				com.htc.music.IMediaPlaybackService.Stub.asInterface(service);
+    	
+    			try {
+    				if (htc.isPlaying()) {
+    					playback = true;
+    	            	if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.KEY_SHOW_ART, true)) {
+    					updateArt(htc.getAlbumId(), htc.getAudioId());
+    	            	}
+    					updateInfo(htc.getArtistName(), htc.getAlbumName(), htc.getTrackName());
+    					setPlayButton();
+    					showHideControlsStart(true);
+    				} else {
+    					showHideControlsStart(false);
+    				}
+    			} catch (RemoteException e) {
+    			// TODO Auto-generated catch block
+    			e.printStackTrace();
+    			}
+    	
+    	
+    	}
+    	public void onServiceDisconnected(ComponentName name) {
+    	}
+    	}
+    	
+        //Get starting info (Music Mod)
+        private class MediaPlayerServiceConnectionPirate implements ServiceConnection {
+        	public void onServiceConnected(ComponentName name, IBinder service) {
+
+        			com.piratemedia.musicmod.IMediaPlaybackService piratemedia =
+        				com.piratemedia.musicmod.IMediaPlaybackService.Stub.asInterface(service);
+        	
+        			try {
+        				if (piratemedia.isPlaying()) {
+        					playback = true;
+        					if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.KEY_FULLSCREEN, true)) {
+        					updateArt(piratemedia.getAlbumId(), piratemedia.getAudioId());
+        					}
+        					updateInfo(piratemedia.getArtistName(), piratemedia.getAlbumName(), piratemedia.getTrackName());
+        					setPlayButton();
+        					showHideControlsStart(true);
+        				} else {
+        					showHideControlsStart(false);
+        				}
+        			} catch (RemoteException e) {
+        			// TODO Auto-generated catch block
+        			e.printStackTrace();
+        			}
+        	
+        	
+        	}
+        	public void onServiceDisconnected(ComponentName name) {
+        	}
+        	}
     
     //set button intents
     private void setPlayButton() {
@@ -436,10 +512,28 @@ public class mainActivity extends Activity {
     	ImageButton pause = (ImageButton) findViewById(R.id.pauseIcon); 
     	ImageButton next = (ImageButton) findViewById(R.id.forwardIcon);
     	
+        switch(getPlayer()) {
+     	case 1:
+     		prevString = "com.android.music.musicservicecommand.previous";
+     		toggleString = "com.android.music.musicservicecommand.togglepause";
+     		nextString = "com.android.music.musicservicecommand.next";
+     		break;
+     	case 2:
+     		prevString = "com.htc.music.musicservicecommand.previous";
+     		toggleString = "com.htc.music.musicservicecommand.togglepause";
+     		nextString = "com.htc.music.musicservicecommand.next";
+     		break;
+     	case 3:
+     		prevString = "com.piratemedia.musicmod.musicservicecommand.previous";
+     		toggleString = "com.piratemedia.musicmod.musicservicecommand.togglepause";
+     		nextString = "com.piratemedia.musicmod.musicservicecommand.next";
+     		break;
+        }
+    	
     	back.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
              Intent intent;
-             intent = new Intent("com.android.music.musicservicecommand.previous");
+             intent = new Intent(prevString);
              getBaseContext().sendBroadcast(intent);
              }
           });
@@ -447,7 +541,7 @@ public class mainActivity extends Activity {
         play.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
              Intent intent;
-             intent = new Intent("com.android.music.musicservicecommand.togglepause");
+             intent = new Intent(toggleString);
              getBaseContext().sendBroadcast(intent);
              }
             
@@ -456,7 +550,7 @@ public class mainActivity extends Activity {
         pause.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
              Intent intent;
-             intent = new Intent("com.android.music.musicservicecommand.togglepause");
+             intent = new Intent(toggleString);
              getBaseContext().sendBroadcast(intent);
              }
           });
@@ -464,7 +558,7 @@ public class mainActivity extends Activity {
         next.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
              Intent intent;
-             intent = new Intent("com.android.music.musicservicecommand.next");
+             intent = new Intent(nextString);
              getBaseContext().sendBroadcast(intent);
              }
           });
@@ -642,30 +736,20 @@ public class mainActivity extends Activity {
         }
         
     // Set Which Media Player we want to use
-    	public void getPlayer() {
+    	public int getPlayer() {
     		String playerString = utils.getStringPref(this , LockscreenSettings.KEY_MUSIC_PLAYER, "1");
     		int player = Integer.parseInt(playerString);  
     		switch(player) {
     			case 1:
-    				//do something for 2.2 Music
-    				//com.google.android.music as provider
-    				Log.d("shit", "com.google.android.music");
-    				break;
+    				//Set Stock Music Player
+    				return 1;
     			case 2:
-    				//do something for 1.0 - 2.1 Music
-    				//com.android.music as provider
-    				Log.d("shit", "com.android.music");
-    				break;
+    				//Set HTC Music as Player
+    				return 2;
     			case 3:
-    				//do something for HTC Music
-    				//com.htc.music? as provider
-    				Log.d("shit", "com.htc.music");
-    				break;
-    			case 4:
-    				//do something for Music Mod
-    				//com.piratemedia.musicmod as provider
-    				Log.d("shit", "com.piratemedia.musicmod");
-    				break;
+    				//Set Music Mod as Player
+    				return 3;
     		}
+    		return 1;
     	}
 }
