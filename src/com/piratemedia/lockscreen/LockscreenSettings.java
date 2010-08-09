@@ -57,10 +57,9 @@ public class LockscreenSettings extends PreferenceActivity {
 		
 		if (requestCode==4) {
 			if (resultCode == RESULT_OK) {
-				
 				Bitmap bitmap;
 				try {
-					bitmap = Media.getBitmap(getContentResolver(), Uri.parse(data.getAction()));
+					bitmap = Media.getBitmap(getContentResolver(), data.getData());
 				
 				final String FileName = "bg_pic";
 				FileOutputStream fileOutputStream = null;
