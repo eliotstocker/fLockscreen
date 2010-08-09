@@ -1,5 +1,6 @@
 package com.piratemedia.lockscreen;
 
+import java.io.File;
 import java.util.Date;
 
 import android.app.Activity;
@@ -759,13 +760,9 @@ public class mainActivity extends Activity {
     // Set Custom Background Image
     	public void setCustomBackground() {
         	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_SHOW_CUSTOM_BG, false)) {
-        		
-        		String BG_FILE = getFilesDir().toString() + "bg_pic";
-        		
-        		Bitmap bgBitmap = BitmapFactory.decodeFile(BG_FILE + "jpg");
-        		
-        		BitmapDrawable background = new BitmapDrawable(bgBitmap);
-        		
+        		String BG_FILE = getFilesDir().toString() + File.separator+"bg_pic.jpg";
+        		Bitmap bgBitmap = BitmapFactory.decodeFile(BG_FILE);
+        		BitmapDrawable background = new BitmapDrawable(getResources(),bgBitmap);
         		getWindow().setBackgroundDrawable(background);
         		
         	}
