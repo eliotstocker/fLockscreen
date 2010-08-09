@@ -11,6 +11,8 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -126,6 +128,7 @@ public class mainActivity extends Activity {
 		
 		setFullscreen();
 		getPlayer();
+		setCustomBackground();
         
 	    mGetSmsCount = getUnreadSmsCount(getBaseContext());
 		mGetMissedCount = getMissedCallCount(getBaseContext());
@@ -751,5 +754,20 @@ public class mainActivity extends Activity {
     				return 3;
     		}
     		return 1;
+    	}
+    	
+    // Set Custom Background Image
+    	public void setCustomBackground() {
+        	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_SHOW_CUSTOM_BG, false)) {
+        		
+        		String BG_FILE = getFilesDir().toString() + "bg_pic";
+        		
+        		Bitmap bgBitmap = BitmapFactory.decodeFile(BG_FILE + "jpg");
+        		
+        		BitmapDrawable background = new BitmapDrawable(bgBitmap);
+        		
+        		getWindow().setBackgroundDrawable(background);
+        		
+        	}
     	}
 }
