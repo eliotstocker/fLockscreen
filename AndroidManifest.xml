@@ -6,8 +6,7 @@
       <uses-permission android:name="com.android.music.MediaPlaybackService"></uses-permission>
     <application android:name=".LockScreenApp" android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:name=".mainActivity"
-                  android:label="@string/app_name" android:screenOrientation="portrait"
-                  android:taskAffinity=".mainActivity" android:theme="@android:style/Theme.Wallpaper.NoTitleBar">
+                  android:label="@string/app_name" android:taskAffinity=".mainActivity" android:theme="@android:style/Theme.Wallpaper.NoTitleBar" android:screenOrientation="nosensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -16,7 +15,7 @@
         <activity android:name=".LockscreenSettings"
         		android:label="@string/settings"
         		android:icon="@drawable/icon"
-        		android:taskAffinity=".LockscreenSettings">
+        		android:taskAffinity=".LockscreenSettings" android:screenOrientation="portrait">
 			<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

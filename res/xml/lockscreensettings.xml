@@ -10,6 +10,10 @@
 	<CheckBoxPreference android:key="albumart"
 		android:defaultValue="true" android:title="@string/albumart_title"
 		android:summary="@string/albumart_summary" />
+		
+	<CheckBoxPreference android:key="landscape"
+		android:defaultValue="false" android:title="@string/landscape_title"
+		android:summaryOn="@string/landscape_on" android:summaryOff="@string/landscape_off" />
 	
 	<CheckBoxPreference android:key="custom_bg"
 		android:defaultValue="false" android:title="@string/custombg_title"

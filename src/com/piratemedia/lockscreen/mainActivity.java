@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,6 +25,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -128,8 +130,9 @@ public class mainActivity extends Activity {
 		super.onResume();
 		
 		setFullscreen();
+		setLandscape();
 		getPlayer();
-		setCustomBackground();
+		//setCustomBackground();
         
 	    mGetSmsCount = getUnreadSmsCount(getBaseContext());
 		mGetMissedCount = getMissedCallCount(getBaseContext());
@@ -739,6 +742,14 @@ public class mainActivity extends Activity {
         		}
         }
         
+        private void setLandscape() {
+        	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_LANDSCAPE, false)) {
+        		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        	} else {
+        		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        	}
+        }
+        
     // Set Which Media Player we want to use
     	public int getPlayer() {
     		String playerString = utils.getStringPref(this , LockscreenSettings.KEY_MUSIC_PLAYER, "1");
@@ -763,6 +774,8 @@ public class mainActivity extends Activity {
         		String BG_FILE = getFilesDir().toString() + File.separator+"bg_pic.jpg";
         		Bitmap bgBitmap = BitmapFactory.decodeFile(BG_FILE);
         		BitmapDrawable background = new BitmapDrawable(getResources(),bgBitmap);
+        		background.setGravity(17);
+        		
         		getWindow().setBackgroundDrawable(background);
         		
         	}

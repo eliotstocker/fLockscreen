@@ -23,7 +23,9 @@
     
     <!-- Settings Strings -->
     <string name="settings">fLockscreen Settings</string>
-    <string name="fullscreen_title">Fullscreen Lockscreen</string>
+    
+    <!-- Settings Fullscreen -->
+    <string name="fullscreen_title">Fullscreen fLockscreen</string>
     <string name="fullscreen_summary_on">Fullscreen is enabled</string>
     <string name="fullscreen_summary_off">Fullscreen is not enabled</string>
     
@@ -31,10 +33,17 @@
     <string name="albumart_title">Album Art Display</string>
     <string name="albumart_summary">Change wallpaper to Album Art (if any) When Music is Playing</string>
     
+    <!-- Settings Landscape -->
+    <string name="landscape_title">Landscape Mode</string>
+    <string name="landscape_on">fLockscreen will always show in Landscape mode</string>
+    <string name="landscape_off">fLockscreen will always show in Portrait Mode</string>
+    <string name="landscape_image_warning">After changing display orientation please reselect your background image, If used</string>
+    
     <!-- Settings Custom Background Image -->
     <string name="custombg_title">Custom Background Image</string>
 	<string name="custombg_summary_on">Custom Background will be used</string>
 	<string name="custombg_summary_off">Your system wallpaper will be used</string>
+	<string name="custombg_none_selected">No Image Selected</string>
 	
 	<string name="bg_picker_title">Background Select</string>
 	<string name="bg_picker_summary">Choose a background to show behind fLockscreen</string>
