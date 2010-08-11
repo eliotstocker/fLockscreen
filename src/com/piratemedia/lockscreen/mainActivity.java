@@ -163,6 +163,10 @@ public class mainActivity extends Activity {
         registerReceiver(mStatusListener, new IntentFilter(f));
     }
     
+    public void onBackPressed () {
+    	//do nothing
+    }
+    
     private BroadcastReceiver mStatusListener = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
