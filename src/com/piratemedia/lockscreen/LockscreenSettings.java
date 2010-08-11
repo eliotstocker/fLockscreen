@@ -34,6 +34,9 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	static final String KEY_LANDSCAPE = "landscape";
 
+	static final String KEY_HOME_APP_PACKAGE = "user_home_app_package";
+	static final String KEY_HOME_APP_ACTIVITY = "user_home_app_activity";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,17 @@ public class LockscreenSettings extends PreferenceActivity {
             	return true;
         	}
             });
+        
+        //ADW: Home app preference
+        Preference homeApp=findPreference("user_home_app");
+        homeApp.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference preference) {
+				Intent intent=new Intent(LockscreenSettings.this,HomeChooserActivity.class);
+				intent.putExtra("loadOnClick", false);
+				startActivity(intent);
+				return true;
+			}
+		});
         
 	}
 

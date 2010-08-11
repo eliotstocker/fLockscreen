@@ -9,6 +9,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -193,6 +194,14 @@ public class utils {
     	SharedPreferences prefs =
     		context.getSharedPreferences("com.piratemedia.lockscreen_preferences", Context.MODE_PRIVATE);
     	return prefs.getString(name, def);
+    }
+	//Store string prefs
+	static void setStringPref(Context context, String name, String value) {
+    	SharedPreferences prefs =
+    		context.getSharedPreferences("com.piratemedia.lockscreen_preferences", Context.MODE_PRIVATE);
+    	Editor editor=prefs.edit();
+    	editor.putString(name, value);
+    	editor.commit();
     }
 	
 }

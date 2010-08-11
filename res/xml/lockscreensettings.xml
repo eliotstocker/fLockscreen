@@ -2,7 +2,10 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	android:title="@string/settings" android:key="settings">
-
+	<Preference android:key="user_home_app"
+		android:title="@string/home_chooser_title"
+		android:summary="@string/home_chooser_summary">
+	</Preference>
 	<CheckBoxPreference android:key="fullscreen"
 		android:defaultValue="true" android:title="@string/fullscreen_title"
 		android:summaryOn="@string/fullscreen_summary_on" android:summaryOff="@string/fullscreen_summary_off" />

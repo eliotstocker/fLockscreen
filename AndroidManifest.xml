@@ -23,6 +23,8 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		<activity android:name=".HomeChooserActivity" android:label="@string/home_chooser_title">
+		</activity>
 
 		<service android:name=".updateService" />
 

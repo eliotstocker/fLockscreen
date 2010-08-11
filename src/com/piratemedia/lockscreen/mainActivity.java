@@ -69,6 +69,8 @@ public class mainActivity extends Activity {
  	private String toggleString;
  	private String nextString;
 	
+ 	private String mLauncherPackage;
+ 	private String mLauncherActivity;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -126,6 +128,9 @@ public class mainActivity extends Activity {
         }
     });
     
+	mLauncherPackage=utils.getStringPref(this, LockscreenSettings.KEY_HOME_APP_PACKAGE, "");
+	mLauncherActivity=utils.getStringPref(this, LockscreenSettings.KEY_HOME_APP_ACTIVITY, "");
+
 	}
 	
 	@Override
@@ -167,7 +172,8 @@ public class mainActivity extends Activity {
     }
     
     public void onBackPressed () {
-    	//do nothing
+    	//temporal unlock key until we add the proper stuff
+    	unlockScreen();
     }
     
     private BroadcastReceiver mStatusListener = new BroadcastReceiver() {
@@ -782,7 +788,6 @@ public class mainActivity extends Activity {
 				BitmapFactory.Options options=new BitmapFactory.Options();
 				options.inSampleSize = 5;
         		Bitmap bgBitmap = BitmapFactory.decodeFile(BG_FILE,options);
-        		Log.d("LOCKSCREEN","Bitmap="+bgBitmap);
         		BitmapDrawable background = new BitmapDrawable(getResources(),bgBitmap);
         		background.setGravity(Gravity.FILL);
         		
@@ -791,4 +796,48 @@ public class mainActivity extends Activity {
         		getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         	}
     	}
+
+		/**
+		 * ***onNewIntent***
+		 * 
+		 * 1-If the user already have a selected home app in preferences, load it
+		 * 2-Else, show our home-app selection activity for the user to choose
+		 */		@Override
+		protected void onNewIntent(Intent intent) {
+			Log.d("LOCKSCREEN","New intent!!");
+			super.onNewIntent(intent);
+			if ((intent.getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) !=
+                Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) {
+				//ADW: This is what happens when user click home button while showing the lock screen
+				Log.d("LOCKSCREEN","We should NOT do anything!!");
+			}else{
+				if(mLauncherPackage!="" && mLauncherActivity!=""){
+			        Intent launcher = new Intent();
+			        launcher.setComponent(new ComponentName(mLauncherPackage,mLauncherActivity));
+			        startActivity(launcher);
+				}else{
+					Intent chooser=new Intent(this, HomeChooserActivity.class);
+					intent.putExtra("loadOnClick", true);
+					startActivity(chooser);
+				}
+			}
+		}
+		/**
+		 * ***unlockScreen***
+		 * 
+		 * I don't know if we should call the user stored launcher
+		 * or just call finish()....
+		 * If the lock screen is what first gets loaded when the phone boots
+		 * we should call the launcher or show the launcher picker
+		 * 
+		 * But if the lockscreen is visible just cause the user turned on the screen,
+		 * we just should call finish() so it goes to the last open app
+		 */
+		private void unlockScreen(){
+			//Currently i can't use the "finish" way, cause then the newIntent stuff doesn't work
+			//We need a way to make this better....
+	        Intent launcher = new Intent();
+	        launcher.setComponent(new ComponentName(mLauncherPackage,mLauncherActivity));
+	        startActivity(launcher);
+		}
 }

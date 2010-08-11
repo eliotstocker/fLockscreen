@@ -73,5 +73,7 @@
 	<string name="credits_name_summary">By Ander Webb and Eliot Stocker</string>
 	<string name="credits_version">v 0.3</string>
 	<string name="credits_version_summary">Getting Closer - Alpha</string>
-
+	<!-- Home chooser -->
+	<string name="home_chooser_title">Pick your default home application</string>
+	<string name="home_chooser_summary">Please eliot add something here :P</string>
 </resources>
