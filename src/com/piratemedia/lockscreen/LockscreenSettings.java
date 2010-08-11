@@ -94,10 +94,8 @@ public class LockscreenSettings extends PreferenceActivity {
 				
 					final String FileName = "bg_pic";
 					FileOutputStream fileOutputStream = null;
-					int quality = 50;
+					int quality = 80;
 
-					BitmapFactory.Options options=new BitmapFactory.Options();
-					options.inSampleSize = 5;
 					fileOutputStream = openFileOutput(FileName + ".jpg", getBaseContext().MODE_PRIVATE);
 					BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
 					BG_Image.compress(CompressFormat.JPEG, quality, bos);

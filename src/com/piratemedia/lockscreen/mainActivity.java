@@ -14,7 +14,9 @@ import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -132,7 +135,7 @@ public class mainActivity extends Activity {
 		setFullscreen();
 		setLandscape();
 		getPlayer();
-		//setCustomBackground();
+		setCustomBackground();
         
 	    mGetSmsCount = getUnreadSmsCount(getBaseContext());
 		mGetMissedCount = getMissedCallCount(getBaseContext());
@@ -776,12 +779,16 @@ public class mainActivity extends Activity {
     	public void setCustomBackground() {
         	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_SHOW_CUSTOM_BG, false)) {
         		String BG_FILE = getFilesDir().toString() + File.separator+"bg_pic.jpg";
-        		Bitmap bgBitmap = BitmapFactory.decodeFile(BG_FILE);
+				BitmapFactory.Options options=new BitmapFactory.Options();
+				options.inSampleSize = 5;
+        		Bitmap bgBitmap = BitmapFactory.decodeFile(BG_FILE,options);
+        		Log.d("LOCKSCREEN","Bitmap="+bgBitmap);
         		BitmapDrawable background = new BitmapDrawable(getResources(),bgBitmap);
-        		background.setGravity(17);
+        		background.setGravity(Gravity.FILL);
         		
         		getWindow().setBackgroundDrawable(background);
-        		
+        	}else{
+        		getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         	}
     	}
 }
