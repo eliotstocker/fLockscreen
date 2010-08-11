@@ -73,64 +73,75 @@ public class mainActivity extends Activity {
  	private String mLauncherActivity;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	setContentView(R.layout.main);
-	
-	mSmsCount = (TextView) findViewById(R.id.smscount);
-    mMissedCount = (TextView) findViewById(R.id.missedcount);
-    mGmailCount = (TextView) findViewById(R.id.gmailcount);
-	
-    switch(getPlayer()) {
-    	case 1: {
-    		Intent i = new Intent();
-    		i.setClassName("com.android.music", "com.android.music.MediaPlaybackService");
-    		ServiceConnection conn = new MediaPlayerServiceConnectionStock();
-    		this.bindService(i, conn, 0);
-	
-    		Intent serviceIntent = new Intent();
-    		serviceIntent.setAction("com.android.music.MediaPlaybackService");
-    		startService(serviceIntent);
-    		break;
-    	}
-    	case 2: {
-    		Intent i = new Intent();
-    		i.setClassName("com.htc.music", "com.htc.music.MediaPlaybackService");
-    		ServiceConnection conn = new MediaPlayerServiceConnectionHTC();
-    		this.bindService(i, conn, 0);
-	
-    		Intent serviceIntent = new Intent();
-    		serviceIntent.setAction("com.htc.music.MediaPlaybackService");
-    		startService(serviceIntent);
-    		break;
-    	}
-    	case 3: {
-    		Intent i = new Intent();
-    		i.setClassName("com.piratemedia.musicmod", "com.piratemedia.musicmod.MediaPlaybackService");
-    		ServiceConnection conn = new MediaPlayerServiceConnectionPirate();
-    		this.bindService(i, conn, 0);
-	
-    		Intent serviceIntent = new Intent();
-    		serviceIntent.setAction("com.piratemedia.musicmod.MediaPlaybackService");
-    		startService(serviceIntent);
-    		break;
-    	}
-    }
-	
-	setButtonIntents();
-	setPlayButton();
-	showHideControlsStart(false);
-	
-	ImageButton toggle = (ImageButton) findViewById(R.id.musicControlsToggle);
-	
-    toggle.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View v) {
-        	toggleMusic();
-        }
-    });
-    
-	mLauncherPackage=utils.getStringPref(this, LockscreenSettings.KEY_HOME_APP_PACKAGE, "");
-	mLauncherActivity=utils.getStringPref(this, LockscreenSettings.KEY_HOME_APP_ACTIVITY, "");
-
+		super.onCreate(savedInstanceState);
+		mLauncherPackage=utils.getStringPref(this, LockscreenSettings.KEY_HOME_APP_PACKAGE, "");
+		mLauncherActivity=utils.getStringPref(this, LockscreenSettings.KEY_HOME_APP_ACTIVITY, "");
+		//First check if we are locking or not.
+		Intent intent=getIntent();
+		if(intent.getAction().equals("android.intent.action.MAIN") && intent.getCategories().contains("android.intent.category.HOME")){
+			//Fire intent to the stock home
+			Intent launcher = new Intent();
+	        launcher.setComponent(new ComponentName(mLauncherPackage,mLauncherActivity));
+	        launcher.setAction("android.intent.action.MAIN");
+	        launcher.addCategory("android.intent.category.HOME");
+	        launcher.addCategory("android.intent.category.DEFAULT");
+	        startActivity(launcher);
+	        finish();
+		}else{
+			setContentView(R.layout.main);
+			
+			mSmsCount = (TextView) findViewById(R.id.smscount);
+		    mMissedCount = (TextView) findViewById(R.id.missedcount);
+		    mGmailCount = (TextView) findViewById(R.id.gmailcount);
+			
+		    switch(getPlayer()) {
+		    	case 1: {
+		    		Intent i = new Intent();
+		    		i.setClassName("com.android.music", "com.android.music.MediaPlaybackService");
+		    		ServiceConnection conn = new MediaPlayerServiceConnectionStock();
+		    		this.bindService(i, conn, 0);
+			
+		    		Intent serviceIntent = new Intent();
+		    		serviceIntent.setAction("com.android.music.MediaPlaybackService");
+		    		startService(serviceIntent);
+		    		break;
+		    	}
+		    	case 2: {
+		    		Intent i = new Intent();
+		    		i.setClassName("com.htc.music", "com.htc.music.MediaPlaybackService");
+		    		ServiceConnection conn = new MediaPlayerServiceConnectionHTC();
+		    		this.bindService(i, conn, 0);
+			
+		    		Intent serviceIntent = new Intent();
+		    		serviceIntent.setAction("com.htc.music.MediaPlaybackService");
+		    		startService(serviceIntent);
+		    		break;
+		    	}
+		    	case 3: {
+		    		Intent i = new Intent();
+		    		i.setClassName("com.piratemedia.musicmod", "com.piratemedia.musicmod.MediaPlaybackService");
+		    		ServiceConnection conn = new MediaPlayerServiceConnectionPirate();
+		    		this.bindService(i, conn, 0);
+			
+		    		Intent serviceIntent = new Intent();
+		    		serviceIntent.setAction("com.piratemedia.musicmod.MediaPlaybackService");
+		    		startService(serviceIntent);
+		    		break;
+		    	}
+		    }
+			
+			setButtonIntents();
+			setPlayButton();
+			showHideControlsStart(false);
+			
+			ImageButton toggle = (ImageButton) findViewById(R.id.musicControlsToggle);
+			
+		    toggle.setOnClickListener(new View.OnClickListener() {
+		        public void onClick(View v) {
+		        	toggleMusic();
+		        }
+		    });
+		}		    
 	}
 	
 	@Override
@@ -834,10 +845,6 @@ public class mainActivity extends Activity {
 		 * we just should call finish() so it goes to the last open app
 		 */
 		private void unlockScreen(){
-			//Currently i can't use the "finish" way, cause then the newIntent stuff doesn't work
-			//We need a way to make this better....
-	        Intent launcher = new Intent();
-	        launcher.setComponent(new ComponentName(mLauncherPackage,mLauncherActivity));
-	        startActivity(launcher);
+	        finish();
 		}
 }
