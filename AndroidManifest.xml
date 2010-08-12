@@ -50,9 +50,6 @@
 				<action android:name="android.intent.action.BOOT_COMPLETED"></action>
 			</intent-filter>
 		</receiver>
-		
-		<receiver android:name=".screenState">
-		</receiver>
 
 	</application>
 	<uses-sdk android:minSdkVersion="5" />
