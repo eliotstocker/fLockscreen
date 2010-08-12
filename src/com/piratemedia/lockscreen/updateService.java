@@ -220,7 +220,8 @@ public class updateService extends Service {
             	Intent lock=utils.getLockIntent(this);
             	lock.setAction(utils.ACTION_LOCK);
             	startActivity(lock);
-				ManageKeyguard.reenableKeyguard();
+            	ManageKeyguard.disableKeyguard(getApplicationContext());
+				//ManageKeyguard.reenableKeyguard();
             } else if(aIntent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)){
             	Log.d("Lockscreen", "Boot Completed");
             	Intent lock=utils.getLockIntent(this);
