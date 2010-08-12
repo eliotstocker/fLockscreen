@@ -1,6 +1,8 @@
 package com.piratemedia.lockscreen;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.app.Service;
 import android.os.IBinder;
@@ -32,6 +34,12 @@ public class updateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        
+        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        BroadcastReceiver mReceiver = new intentReceiver();
+        registerReceiver(mReceiver, filter);
+
         
     }
 
@@ -154,7 +162,7 @@ public class updateService extends Service {
                     || aIntent.getAction().equals("com.piratemedia.musicmod.metachanged")
                     || aIntent.getAction().equals("com.piratemedia.musicmod.queuechanged")
                     || aIntent.getAction().equals("com.piratemedia.musicmod.playbackcomplete")
-                    && getPlayer() == 4) {
+                    && getPlayer() == 3) {
 
                 bindService(new Intent().setClassName("com.piratemedia.musicmod", "com.piratemedia.musicmod.MediaPlaybackService"), new ServiceConnection() {
             
@@ -198,17 +206,18 @@ public class updateService extends Service {
                     }
 
                 }, 0);
-            } else if (aIntent.getAction().equals("android.Intent.ACTION_SCREEN_OFF")) {
-            	Log.d("shit", "Screen Off");
-            } else if (aIntent.getAction().equals("android.Intent.ACTION_SCREEN_ON")) {
-            	Log.d("shit", "Screen On");
             } else if (aIntent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
             	notifyChange(SMS_CHANGED);
             } else if (aIntent.getAction().equals("android.intent.action.PHONE_STATE")) {
             	notifyChange(PHONE_CHANGED);
             } else if (aIntent.getAction().equals("android.media.RINGER_MODE_CHANGED")) {
             	notifyChange(MUTE_CHANGED);
+            } else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+            	Log.d("Lockscreen", "Screen On");
+            } else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+            	Log.d("Lockscreen", "Screen Off");
             }
+        
         }
     
 private void notifyChange(String what) {

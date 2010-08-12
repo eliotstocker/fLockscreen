@@ -169,6 +169,13 @@ public class mainActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		
+	      //make sure service is running
+        Intent ServiceStrt = new Intent("com.piratemedia.lockscreen.startservice");
+        Intent serviceIntent = new Intent(this, updateService.class);
+		serviceIntent.setAction(ServiceStrt.getAction());
+		serviceIntent.putExtras(ServiceStrt);
+		getBaseContext().startService(serviceIntent);
+		
 		setFullscreen();
 		setLandscape();
 		getPlayer();
@@ -868,8 +875,8 @@ public class mainActivity extends Activity {
 		 * we just should call finish() so it goes to the last open app
 		 */
 		private void unlockScreen(){
+			whatsHappening(R.drawable.unlock, 1000);
 	        finish();
-	        whatsHappening(R.drawable.unlock, 1000);
 		}
 		/**
 		 * ***Cool Custom Toast for unlock, mute etc ***

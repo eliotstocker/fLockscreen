@@ -42,6 +42,13 @@ public class LockscreenSettings extends PreferenceActivity {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.lockscreensettings);
         
+      //make sure service is running
+        Intent ServiceStrt = new Intent("com.piratemedia.lockscreen.startservice");
+        Intent serviceIntent = new Intent(this, updateService.class);
+		serviceIntent.setAction(ServiceStrt.getAction());
+		serviceIntent.putExtras(ServiceStrt);
+		getBaseContext().startService(serviceIntent);
+        
         PreferenceScreen screen = this.getPreferenceScreen();
         Preference pick = (Preference) screen.findPreference(KEY_PICK_BG);
         Preference landscape = (Preference) screen.findPreference(KEY_LANDSCAPE);

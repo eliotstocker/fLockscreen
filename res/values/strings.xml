@@ -75,5 +75,5 @@
 	<string name="credits_version_summary">Almost Beta - Alpha</string>
 	<!-- Home chooser -->
 	<string name="home_chooser_title">Pick your default home application</string>
-	<string name="home_chooser_summary">Please eliot add something here :P</string>
+	<string name="home_chooser_summary">Please pick your preferred home application </string>
 </resources>
