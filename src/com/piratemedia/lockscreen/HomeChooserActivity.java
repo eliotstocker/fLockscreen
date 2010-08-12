@@ -64,6 +64,8 @@ public class HomeChooserActivity extends ListActivity {
 	        //store it in preferences or launch it
 	        if(mNeedlaunch){
 	        	startActivity(intent);
+	        	utils.setStringPref(this, LockscreenSettings.KEY_HOME_APP_PACKAGE, tag.activityInfo.applicationInfo.packageName);
+	        	utils.setStringPref(this, LockscreenSettings.KEY_HOME_APP_ACTIVITY, tag.activityInfo.name);
 	        }else{
 	        	utils.setStringPref(this, LockscreenSettings.KEY_HOME_APP_PACKAGE, tag.activityInfo.applicationInfo.packageName);
 	        	utils.setStringPref(this, LockscreenSettings.KEY_HOME_APP_ACTIVITY, tag.activityInfo.name);

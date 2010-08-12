@@ -868,8 +868,9 @@ public class mainActivity extends Activity {
 		 * we just should call finish() so it goes to the last open app
 		 */
 		private void unlockScreen(){
-			whatsHappening(R.drawable.unlock, 1000);
+			whatsHappening(R.drawable.unlock, 600);
 	        finish();
+	        overridePendingTransition(R.anim.fadein_fast, R.anim.fadeout_fast);
 		}
 		/**
 		 * ***Cool Custom Toast for unlock, mute etc ***
