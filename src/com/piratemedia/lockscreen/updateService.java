@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.app.Service;
 import android.os.IBinder;
+import android.util.Log;
 import android.content.ComponentName;
 
 import com.android.music.IMediaPlaybackService;
@@ -197,6 +198,10 @@ public class updateService extends Service {
                     }
 
                 }, 0);
+            } else if (aIntent.getAction().equals("android.Intent.ACTION_SCREEN_OFF")) {
+            	Log.d("shit", "Screen Off");
+            } else if (aIntent.getAction().equals("android.Intent.ACTION_SCREEN_ON")) {
+            	Log.d("shit", "Screen On");
             } else if (aIntent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
             	notifyChange(SMS_CHANGED);
             } else if (aIntent.getAction().equals("android.intent.action.PHONE_STATE")) {

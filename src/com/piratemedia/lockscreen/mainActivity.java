@@ -27,7 +27,6 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -766,6 +765,7 @@ public class mainActivity extends Activity {
         		}
         }
         
+    // set landscape/portrait based on settings
         private void setLandscape() {
         	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_LANDSCAPE, false)) {
         		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);

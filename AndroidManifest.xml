@@ -47,6 +47,8 @@
 				<action android:name="android.intent.action.BATTERY_CHANGED"></action>
 				<action android:name="android.intent.action.AIRPLANE_MODE"></action>
 				<action android:name="android.media.RINGER_MODE_CHANGED"></action>
+				<action android:name="android.Intent.ACTION_SCREEN_ON"></action>
+				<action android:name="android.Intent.ACTION_SCREEN_OFF"></action>
 			</intent-filter>
 		</receiver>
 
