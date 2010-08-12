@@ -29,7 +29,9 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -37,6 +39,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class mainActivity extends Activity {
 	
@@ -846,5 +849,26 @@ public class mainActivity extends Activity {
 		 */
 		private void unlockScreen(){
 	        finish();
+	        whatsHappening(R.drawable.unlock, 1000);
+		}
+		/**
+		 * ***Cool Custom Toast for unlock, mute etc ***
+		 * 
+		 * Just to show a nice graphic when unlocking or
+		 * muting etc.
+		 */
+		private void whatsHappening(int imageRes, int dur) {
+			LayoutInflater inflater = getLayoutInflater();
+			View layout = inflater.inflate(R.layout.cooltoast,
+			                               (ViewGroup) findViewById(R.id.toast_layout_root));
+
+			ImageView image = (ImageView) layout.findViewById(R.id.image);
+			image.setImageResource(imageRes);
+
+			Toast toast = new Toast(getApplicationContext());
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.setDuration(dur);
+			toast.setView(layout);
+			toast.show();
 		}
 }
