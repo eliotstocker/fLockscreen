@@ -2,8 +2,11 @@ package com.piratemedia.lockscreen;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -82,12 +85,28 @@ public class mainActivity extends Activity {
 		Intent intent=getIntent();
 		if(intent.getAction().equals("android.intent.action.MAIN") && intent.getCategories().contains("android.intent.category.HOME")){
 			//Fire intent to the stock home
-			Intent launcher = new Intent();
-	        launcher.setComponent(new ComponentName(mLauncherPackage,mLauncherActivity));
-	        launcher.setAction("android.intent.action.MAIN");
-	        launcher.addCategory("android.intent.category.HOME");
-	        launcher.addCategory("android.intent.category.DEFAULT");
-	        startActivity(launcher);
+			if(mLauncherPackage!="" && mLauncherActivity!=""){
+				Intent launcher = new Intent();
+		        launcher.setComponent(new ComponentName(mLauncherPackage,mLauncherActivity));
+		        //Check if the launcher was already running on top to fire the first intent
+		        ActivityManager actvityManager = (ActivityManager)this.getSystemService( ACTIVITY_SERVICE );
+		        List<RunningTaskInfo> procInfos = actvityManager.getRunningTasks(2);
+		        //Maybe remove the loop and check just the 2nd procInfo?
+		        for(int i = 0; i < procInfos.size(); i++)
+		        {
+		        	if(procInfos.get(i).baseActivity.getPackageName().equals(mLauncherPackage) && procInfos.get(i).baseActivity.getClassName().equals(mLauncherActivity)) {
+		    	        startActivity(launcher);
+		    	        break;
+		        	}
+		        }	        
+		        launcher.setAction("android.intent.action.MAIN");
+		        launcher.addCategory("android.intent.category.HOME");
+		        startActivity(launcher);
+			}else{
+				Intent chooser=new Intent(this, HomeChooserActivity.class);
+				chooser.putExtra("loadOnClick", true);
+				startActivity(chooser);
+			}
 	        finish();
 		}else{
 			setContentView(R.layout.main);
@@ -825,13 +844,14 @@ public class mainActivity extends Activity {
 				//ADW: This is what happens when user click home button while showing the lock screen
 				Log.d("LOCKSCREEN","We should NOT do anything!!");
 			}else{
+				//ADW: I think this part will never be called....
 				if(mLauncherPackage!="" && mLauncherActivity!=""){
 			        Intent launcher = new Intent();
 			        launcher.setComponent(new ComponentName(mLauncherPackage,mLauncherActivity));
 			        startActivity(launcher);
 				}else{
 					Intent chooser=new Intent(this, HomeChooserActivity.class);
-					intent.putExtra("loadOnClick", true);
+					chooser.putExtra("loadOnClick", true);
 					startActivity(chooser);
 				}
 			}
