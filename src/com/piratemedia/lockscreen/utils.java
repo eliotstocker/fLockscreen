@@ -8,6 +8,7 @@ import java.io.InputStream;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
@@ -25,8 +26,10 @@ public class utils {
 	private static final BitmapFactory.Options sBitmapOptions = new BitmapFactory.Options();
 	private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
 	private static Bitmap mCachedBit = null;
-
-	
+	public static final String ACTION_LOCK="com.piratemedia.lockscreen.ACTION_LOCK";
+	public static final String ACTION_UNLOCK="com.piratemedia.lockscreen.ACTION_UNLOCK";
+	public static final String KEYGUARD_KEY="keyguard";
+	public static final String KEYGUARD_KEYWORD="eliot_is_cool";	
 	/** Get album art for specified album. You should not pass in the album id
 	 * for the "unknown" album here (use -1 instead)
 	 */
@@ -203,5 +206,12 @@ public class utils {
     	editor.putString(name, value);
     	editor.commit();
     }
+	//Lock screen intent
+	static Intent getLockIntent(Context context){
+		Intent mMainLock= new Intent();
+		mMainLock.setClass(context, mainActivity.class);
+		mMainLock.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		return mMainLock;
+	}
 	
 }

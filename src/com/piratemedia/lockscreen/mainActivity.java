@@ -6,7 +6,9 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.KeyguardManager;
 import android.app.ActivityManager.RunningTaskInfo;
+import android.app.KeyguardManager.KeyguardLock;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -87,6 +89,7 @@ public class mainActivity extends Activity {
 			//Fire intent to the stock home
 			if(mLauncherPackage!="" && mLauncherActivity!=""){
 				Intent launcher = new Intent();
+				launcher.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 		        launcher.setComponent(new ComponentName(mLauncherPackage,mLauncherActivity));
 		        //Check if the launcher was already running on top to fire the first intent
 		        ActivityManager actvityManager = (ActivityManager)this.getSystemService( ACTIVITY_SERVICE );
@@ -104,11 +107,25 @@ public class mainActivity extends Activity {
 		        startActivity(launcher);
 			}else{
 				Intent chooser=new Intent(this, HomeChooserActivity.class);
+				chooser.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 				chooser.putExtra("loadOnClick", true);
 				startActivity(chooser);
 			}
 	        finish();
 		}else{
+			if(intent.getAction().equals(utils.ACTION_LOCK)){
+				KeyguardManager mKeyguard=null;
+				try{
+					mKeyguard=(KeyguardManager) getSystemService(utils.KEYGUARD_KEY);
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+				if(mKeyguard!=null){
+					KeyguardLock mKeyguardLock= mKeyguard.newKeyguardLock(utils.KEYGUARD_KEYWORD);
+					mKeyguardLock.disableKeyguard();
+				}
+			}
+			
 			setContentView(R.layout.main);
 			
 			mSmsCount = (TextView) findViewById(R.id.smscount);
@@ -168,7 +185,7 @@ public class mainActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+
 	      //make sure service is running
         Intent ServiceStrt = new Intent("com.piratemedia.lockscreen.startservice");
         Intent serviceIntent = new Intent(this, updateService.class);
@@ -196,6 +213,8 @@ public class mainActivity extends Activity {
 	
     @Override
     public void onStart() {
+		Log.d("LOCKSCREEN","Displaying lock screen, ONSTART");
+
         super.onStart();
         
         IntentFilter f = new IntentFilter();
@@ -854,10 +873,14 @@ public class mainActivity extends Activity {
 				//ADW: I think this part will never be called....
 				if(mLauncherPackage!="" && mLauncherActivity!=""){
 			        Intent launcher = new Intent();
+			        launcher.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+			        launcher.setAction("android.intent.action.MAIN");
+			        launcher.addCategory("android.intent.category.HOME");
 			        launcher.setComponent(new ComponentName(mLauncherPackage,mLauncherActivity));
 			        startActivity(launcher);
 				}else{
 					Intent chooser=new Intent(this, HomeChooserActivity.class);
+					chooser.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 					chooser.putExtra("loadOnClick", true);
 					startActivity(chooser);
 				}

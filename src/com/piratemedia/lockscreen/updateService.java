@@ -214,8 +214,19 @@ public class updateService extends Service {
             	notifyChange(MUTE_CHANGED);
             } else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             	Log.d("Lockscreen", "Screen On");
+            	/*Intent lock=utils.getLockIntent(this);
+            	lock.setAction(utils.ACTION_LOCK);
+            	startActivity(lock);*/
             } else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
             	Log.d("Lockscreen", "Screen Off");
+            	Intent lock=utils.getLockIntent(this);
+            	lock.setAction(utils.ACTION_LOCK);
+            	startActivity(lock);
+            } else if(aIntent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)){
+            	Log.d("Lockscreen", "Boot Completed");
+            	Intent lock=utils.getLockIntent(this);
+            	lock.setAction(utils.ACTION_LOCK);
+            	startActivity(lock);
             }
         
         }
