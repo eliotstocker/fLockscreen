@@ -25,9 +25,7 @@
 		</activity>
 		<activity android:name=".HomeChooserActivity" android:label="@string/home_chooser_title">
 		</activity>
-
 		<service android:name=".updateService" />
-
 		<receiver android:name=".intentReceiver">
 			<intent-filter>
 				<action android:name="com.android.music.playstatechanged" />
@@ -50,20 +48,15 @@
 				<action android:name="android.intent.action.BOOT_COMPLETED"></action>
 			</intent-filter>
 		</receiver>
-
 	</application>
 	<uses-sdk android:minSdkVersion="5" />
-
 	<uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
 	<uses-permission android:name="android.permission.RECEIVE_SMS"></uses-permission>
 	<uses-permission android:name="android.permission.READ_SMS"></uses-permission>
 	<uses-permission android:name="android.permission.BATTERY_STATS" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
-	
 	<uses-permission android:name="android.permission.GET_TASKS"></uses-permission>
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD"></uses-permission>
-
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission><uses-permission android:name="com.android.music"></uses-permission>
-<uses-permission android:name="com.piratemedia.musicmod"></uses-permission>
-
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
 </manifest> 
