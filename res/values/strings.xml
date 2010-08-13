@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     
-    <string name="app_name">Lockscreen Concept</string>
+    <string name="app_name">fLockscreen</string>
 	<string name="music_info"><xliff:g id="artistInfo">%s</xliff:g> - <xliff:g id="trackInfo">%s</xliff:g></string>
 	<!-- sms count -->
     <string name="lockscreen_sms_count"><xliff:g id="number">%d</xliff:g> Unread SMS</string>

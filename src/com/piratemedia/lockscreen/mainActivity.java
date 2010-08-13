@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -21,10 +22,13 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -122,33 +126,21 @@ public class mainActivity extends Activity {
 		    		Intent i = new Intent();
 		    		i.setClassName("com.android.music", "com.android.music.MediaPlaybackService");
 		    		ServiceConnection conn = new MediaPlayerServiceConnectionStock();
-		    		this.bindService(i, conn, 0);
-			
-		    		Intent serviceIntent = new Intent();
-		    		serviceIntent.setAction("com.android.music.MediaPlaybackService");
-		    		startService(serviceIntent);
+		    		this.bindService(i, conn, BIND_AUTO_CREATE);
 		    		break;
 		    	}
 		    	case 2: {
 		    		Intent i = new Intent();
 		    		i.setClassName("com.htc.music", "com.htc.music.MediaPlaybackService");
 		    		ServiceConnection conn = new MediaPlayerServiceConnectionHTC();
-		    		this.bindService(i, conn, 0);
-			
-		    		Intent serviceIntent = new Intent();
-		    		serviceIntent.setAction("com.htc.music.MediaPlaybackService");
-		    		startService(serviceIntent);
+		    		this.bindService(i, conn, BIND_AUTO_CREATE);
 		    		break;
 		    	}
 		    	case 3: {
 		    		Intent i = new Intent();
 		    		i.setClassName("com.piratemedia.musicmod", "com.piratemedia.musicmod.MediaPlaybackService");
 		    		ServiceConnection conn = new MediaPlayerServiceConnectionPirate();
-		    		this.bindService(i, conn, 0);
-			
-		    		Intent serviceIntent = new Intent();
-		    		serviceIntent.setAction("com.piratemedia.musicmod.MediaPlaybackService");
-		    		startService(serviceIntent);
+		    		this.bindService(i, conn, BIND_AUTO_CREATE);
 		    		break;
 		    	}
 		    }
@@ -170,13 +162,6 @@ public class mainActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-
-	      //make sure service is running
-        Intent ServiceStrt = new Intent("com.piratemedia.lockscreen.startservice");
-        Intent serviceIntent = new Intent(this, updateService.class);
-		serviceIntent.setAction(ServiceStrt.getAction());
-		serviceIntent.putExtras(ServiceStrt);
-		getBaseContext().startService(serviceIntent);
 		
 		setFullscreen();
 		setLandscape();
@@ -288,12 +273,13 @@ public class mainActivity extends Activity {
     	boolean airplane = Settings.System.getInt(
     		      getBaseContext().getContentResolver(),
     		      Settings.System.AIRPLANE_MODE_ON, 0) == 1;
-    	int state = telephonyManager.getPhoneType();
+    	ConnectivityManager connManager =((ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE));
+    	boolean state = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isAvailable();
     	if(airplane) {
 	    	Network.setText(
                     getBaseContext().getString(R.string.airplane_mode));
     	} else {
-    		if(state != telephonyManager.PHONE_TYPE_NONE) {
+    		if(state = true) {
     			Network.setText(operatorName);
     		} else {
     			Network.setText(
@@ -627,7 +613,7 @@ public class mainActivity extends Activity {
           });
     }
     
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) 
+    public boolean onKeyDown(int keyCode, KeyEvent event) 
     { 
            if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
                Intent intent;
@@ -891,5 +877,9 @@ public class mainActivity extends Activity {
 			toast.setDuration(dur);
 			toast.setView(layout);
 			toast.show();
+		}
+		
+		private void enableDisableNotification() {
+
 		}
 }

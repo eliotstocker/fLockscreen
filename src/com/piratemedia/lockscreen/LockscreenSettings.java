@@ -4,7 +4,10 @@ import java.io.BufferedOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -137,4 +140,24 @@ public class LockscreenSettings extends PreferenceActivity {
 			}
 		}
 	}
+	
+	// check if android music exists, will use this to set default music player
+	
+    private void doesServiceExist() {
+    	
+    	final ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		final List<RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+    
+	     		String pkgName = "com.android.music";
+	     		String svcName = "com.android.music.MediaPlaybackService";
+	
+		Boolean ServiceExists = false;
+		for (int i = 0; i < services.size(); i++) {
+			if (pkgName.equals(services.get(i).service.getPackageName())) {
+				if (svcName.equals(services.get(i).service.getClassName())){
+				ServiceExists = true;
+				}
+			}
+		}
+    }
 }
