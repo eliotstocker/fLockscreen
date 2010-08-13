@@ -11,9 +11,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -38,6 +36,7 @@ public class LockscreenSettings extends PreferenceActivity {
 	static final String KEY_LANDSCAPE = "landscape";
 
 	static final String KEY_HOME_APP_PACKAGE = "user_home_app_package";
+	
 	static final String KEY_HOME_APP_ACTIVITY = "user_home_app_activity";
 
 	@Override
@@ -51,6 +50,8 @@ public class LockscreenSettings extends PreferenceActivity {
 		serviceIntent.setAction(ServiceStrt.getAction());
 		serviceIntent.putExtras(ServiceStrt);
 		getBaseContext().startService(serviceIntent);
+		
+		DefaultMusicApp();
         
         PreferenceScreen screen = this.getPreferenceScreen();
         Preference pick = (Preference) screen.findPreference(KEY_PICK_BG);
@@ -143,20 +144,24 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	// check if android music exists, will use this to set default music player
 	
-    private void doesServiceExist() {
+    private void DefaultMusicApp() {
+    	
+    	PreferenceScreen screen = this.getPreferenceScreen();
+    	Preference MusicSel = (Preference) screen.findPreference(KEY_MUSIC_PLAYER);
     	
     	final ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 		final List<RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
     
-	     		String pkgName = "com.android.music";
-	     		String svcName = "com.android.music.MediaPlaybackService";
+	     		String StockMusic = "com.android.music";
+	     		String HTCMusic = "com.htc.music";
 	
-		Boolean ServiceExists = false;
 		for (int i = 0; i < services.size(); i++) {
-			if (pkgName.equals(services.get(i).service.getPackageName())) {
-				if (svcName.equals(services.get(i).service.getClassName())){
-				ServiceExists = true;
-				}
+			if (StockMusic.equals(services.get(i).service.getPackageName())) {
+				MusicSel.setDefaultValue("1");
+			} else if (HTCMusic.equals(services.get(i).service.getPackageName())) {
+				MusicSel.setDefaultValue("2");
+			} else {
+				MusicSel.setDefaultValue("3");
 			}
 		}
     }

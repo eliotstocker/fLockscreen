@@ -29,6 +29,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
+import android.preference.Preference;
+import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -795,7 +797,7 @@ public class mainActivity extends Activity {
         
     // Set Which Media Player we want to use
     	public int getPlayer() {
-    		String playerString = utils.getStringPref(this , LockscreenSettings.KEY_MUSIC_PLAYER, "1");
+    		String playerString = utils.getStringPref(this , LockscreenSettings.KEY_MUSIC_PLAYER, DefaultMusicApp());
     		int player = Integer.parseInt(playerString);  
     		switch(player) {
     			case 1:
@@ -879,7 +881,23 @@ public class mainActivity extends Activity {
 			toast.show();
 		}
 		
-		private void enableDisableNotification() {
-
-		}
+	    private String DefaultMusicApp() {
+	    	
+	    	final ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+			final List<RunningServiceInfo> services = activityManager.getRunningServices(Integer.MAX_VALUE);
+	    
+		     		String StockMusic = "com.android.music";
+		     		String HTCMusic = "com.htc.music";
+		
+			for (int i = 0; i < services.size(); i++) {
+				if (StockMusic.equals(services.get(i).service.getPackageName())) {
+					return "1";
+				} else if (HTCMusic.equals(services.get(i).service.getPackageName())) {
+					return "2";
+				} else {
+					return "3";
+				}
+			}
+			return "1";
+	    }
 }
