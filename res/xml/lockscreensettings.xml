@@ -30,6 +30,31 @@
 		android:entries="@array/players" android:entryValues="@array/players_val"
 		android:title="@string/players_title" android:summary="@string/players_summary"
 		android:dialogTitle="@string/players_dialog_title" android:defaultValue="1"/>
+		
+	<PreferenceScreen android:key="notifications"
+		android:title="Enable/Disble Notifications"
+		android:summary="Choose which notifications you wish you display on the lockscreen">
+		
+		<CheckBoxPreference android:key="sms_count"
+			android:defaultValue="true" android:title="@string/sms_count_title"
+			android:summary="@string/sms_count_summary"/>
+		<CheckBoxPreference android:key="missed_calls"
+			android:defaultValue="true" android:title="@string/missed_title"
+			android:summary="@string/missed_summary"/>
+		<CheckBoxPreference android:key="gmail_count"
+			android:defaultValue="true" android:title="@string/gmail_title"
+			android:summary="@string/gmail_summary"/>
+		<CheckBoxPreference android:key="mute_toggle"
+			android:defaultValue="true" android:title="@string/mute_title"
+			android:summary="@string/mute_summary"/>
+		<CheckBoxPreference android:key="usb_ms"
+			android:defaultValue="true" android:title="@string/usb_ms_title"
+			android:summary="@string/usb_ms_summary"/>
+		<CheckBoxPreference android:key="wifi_mode"
+			android:defaultValue="true" android:title="@string/wifi_title"
+			android:summary="@string/wifi_summary"/>
+			
+	</PreferenceScreen>
 
 	<PreferenceCategory android:title="@string/credits_cat">
 		<Preference android:key="name" android:title="@string/credits_name"
@@ -37,5 +62,6 @@
 		<Preference android:key="version" android:title="@string/credits_version"
 			android:summary="@string/credits_version_summary" android:enabled="false" />
 	</PreferenceCategory>
+
 
 </PreferenceScreen>

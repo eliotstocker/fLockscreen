@@ -66,6 +66,25 @@
 	<string name="players_summary">Select the Music player that you with fLockscreen to display information from when playing</string>
 	<string name="players_dialog_title">Music Player Select</string>
 	<string name="players_dialog_message">Select your preferred music player</string>
+	
+	<!-- Settings Notification enable -->
+	<string name="sms_count_title">SMS Count</string>
+	<string name="sms_count_summary">Show Number of unread SMS</string>
+
+	<string name="missed_title">Missed Call Count</string>
+	<string name="missed_summary">Show Number of Missed calls</string>
+
+	<string name="gmail_title">Gmail Unread Count</string>
+	<string name="gmail_summary">Show number of unread Gmail Messages</string>
+	
+	<string name="mute_title">Mute Icon</string>
+	<string name="mute_summary">Display icon when mute is enabled</string>
+
+	<string name="usb_ms_title">USB Mass Storage Icon</string>
+	<string name="usb_ms_summary">Display icon when USB mass storage is mounted</string>
+
+	<string name="wifi_title">Wi-Fi Icon</string>
+	<string name="wifi_summary">Display icon when Wi-Fi is connected</string>
     
     <!-- Settings Info -->
 	<string name="credits_cat">fLockscreen Info</string>

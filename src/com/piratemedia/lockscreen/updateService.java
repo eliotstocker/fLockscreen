@@ -18,6 +18,7 @@ public class updateService extends Service {
 	public static final String SMS_CHANGED = "com.piratemedia.lockscreen.smschanged";
 	public static final String PHONE_CHANGED = "com.piratemedia.lockscreen.phonechanged";
 	public static final String MUTE_CHANGED = "com.piratemedia.lockscreen.mutechanged";
+	public static final String WIFI_CHANGED = "com.piratemedia.lockscreen.wifichnaged";
 	public IMediaPlaybackService mService = null;
 	public static boolean playing = false;
 	public String titleName;
@@ -212,6 +213,8 @@ public class updateService extends Service {
             	notifyChange(PHONE_CHANGED);
             } else if (aIntent.getAction().equals("android.media.RINGER_MODE_CHANGED")) {
             	notifyChange(MUTE_CHANGED);
+            } else if (aIntent.getAction().equals("android.net.wifi.STATE_CHANGE")) {
+            	notifyChange(WIFI_CHANGED);
             } else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             	Log.d("Lockscreen", "Screen On");
 				ManageKeyguard.disableKeyguard(getApplicationContext());

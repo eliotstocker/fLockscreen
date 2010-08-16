@@ -46,7 +46,9 @@
 				<action android:name="android.intent.action.AIRPLANE_MODE"></action>
 				<action android:name="android.media.RINGER_MODE_CHANGED"></action>
 				<action android:name="android.intent.action.BOOT_COMPLETED"></action>
-			</intent-filter>
+				<action android:name="android.net.wifi.STATE_CHANGE"></action>
+			
+</intent-filter>
 		</receiver>
 	</application>
 	<uses-sdk android:minSdkVersion="5" />
@@ -59,4 +61,6 @@
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD"></uses-permission>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+	<uses-permission android:name="com.google.android.gm.permission.READ_GMAIL"></uses-permission>
+	<uses-permission android:name="com.google.android.providers.gmail.permission.READ_GMAIL"></uses-permission>
 </manifest> 

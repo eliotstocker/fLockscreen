@@ -38,6 +38,18 @@ public class LockscreenSettings extends PreferenceActivity {
 	static final String KEY_HOME_APP_PACKAGE = "user_home_app_package";
 	
 	static final String KEY_HOME_APP_ACTIVITY = "user_home_app_activity";
+	
+	static final String SMS_COUNT_KEY = "sms_count";
+	
+	static final String MISSED_CALL_KEY = "missed_calls";
+	
+	static final String GMAIL_COUNT_KEY = "gmail_count";
+	
+	static final String MUTE_TOGGLE_KEY = "mute_toggle";
+	
+	static final String USB_MS_KEY = "usb_ms";
+	
+	static final String WIFI_MODE_KEY = "wifi_mode";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

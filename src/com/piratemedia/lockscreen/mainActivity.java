@@ -3,6 +3,7 @@ package com.piratemedia.lockscreen;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -10,6 +11,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -26,6 +28,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
@@ -39,6 +42,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -49,6 +53,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
+import android.widget.ViewFlipper;
 
 public class mainActivity extends Activity {
 	
@@ -56,9 +62,12 @@ public class mainActivity extends Activity {
 	public boolean playback = false;
 	public String nextAlarm = null;
 	
-    public static final Uri GMAIL_CONTENT_URI = Uri.parse("content://gmail-ls");
-    public static final Uri GMAIL_UNREAD_CONTENT_URI  = Uri.withAppendedPath(GMAIL_CONTENT_URI, "messages");
+    public static final Uri GMAIL_CONTENT_URI = Uri.parse("content://gmail-ls/labels/");
     public static final String GMAIL_ID = "_id";
+    public static final String CANONICAL_NAME = "canonicalName";
+    public static final String NAME = "name";
+    public static final String NUM_CONVERSATIONS = "numConversations";
+    public static final String NUM_UNREAD_CONVERSATIONS = "numUnreadConversations";
 
     public static final Uri CALL_CONTENT_URI = Uri.parse("content://call_log");
     public static final Uri CALL_LOG_CONTENT_URI  = Uri.withAppendedPath(CALL_CONTENT_URI, "calls");
@@ -79,6 +88,8 @@ public class mainActivity extends Activity {
 	private String prevString;
  	private String toggleString;
  	private String nextString;
+ 	
+ 	private boolean state = true;
 	
  	private String mLauncherPackage;
  	private String mLauncherActivity;
@@ -169,17 +180,21 @@ public class mainActivity extends Activity {
 		setLandscape();
 		getPlayer();
 		setCustomBackground();
+		wifiMod();
+		usbMsMode();
         
 	    mGetSmsCount = getUnreadSmsCount(getBaseContext());
 		mGetMissedCount = getMissedCallCount(getBaseContext());
+		mGetGmailCount = getGmailUnreadCount(getBaseContext());
 		
 	    setSmsCountText();
 	    setMissedCountText();
+	    setGmailCountText();
 	    
 	    getNextAlarm();
 	    getDate();
 	    updateNetworkInfo();
-	    muteMode();
+	    muteMode(true);
 		
 	}
 	
@@ -195,6 +210,7 @@ public class mainActivity extends Activity {
         f.addAction(updateService.SMS_CHANGED);
         f.addAction(updateService.PHONE_CHANGED);
         f.addAction(updateService.MUTE_CHANGED);
+        f.addAction(updateService.WIFI_CHANGED);
         f.addAction(Intent.ACTION_BATTERY_CHANGED);
         f.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         f.addAction(Intent.ACTION_DATE_CHANGED);
@@ -262,9 +278,13 @@ public class mainActivity extends Activity {
             	
             } else if (action.equals(updateService.MUTE_CHANGED)) {
             	
-            	muteMode();
+            	muteMode(false);
             	
-            }
+            } else if (action.equals(updateService.WIFI_CHANGED)) {
+            	
+            	wifiMod();
+            	
+            } 
         };
     };
     
@@ -276,7 +296,7 @@ public class mainActivity extends Activity {
     		      getBaseContext().getContentResolver(),
     		      Settings.System.AIRPLANE_MODE_ON, 0) == 1;
     	ConnectivityManager connManager =((ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE));
-    	boolean state = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isAvailable();
+    	state = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isAvailable();
     	if(airplane) {
 	    	Network.setText(
                     getBaseContext().getString(R.string.airplane_mode));
@@ -295,12 +315,12 @@ public class mainActivity extends Activity {
     	if(sms) {
     		mGetSmsCount = getUnreadSmsCount(getBaseContext());
     		//always one behind, so add one
-    		mGetSmsCount = mGetSmsCount + 1;
+    		//mGetSmsCount = mGetSmsCount + 1;
     		setSmsCountText();
     	} else {
 		mGetMissedCount = getMissedCallCount(getBaseContext());
 		//always one behind, so add one
-		mGetMissedCount = mGetMissedCount + 1;
+		//mGetMissedCount = mGetMissedCount + 1;
 	    setMissedCountText();
     	}
     }
@@ -337,20 +357,70 @@ public class mainActivity extends Activity {
     	
     }
     
-    private void muteMode() {
+    private void muteMode(boolean onstart) {
     	AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
     	ImageView MuteIcon = (ImageView) findViewById(R.id.mute);
 
     	switch (am.getRingerMode()) {
     	    case AudioManager.RINGER_MODE_SILENT:
-    	    	MuteIcon.setVisibility(View.VISIBLE);
+    	    	if (utils.getCheckBoxPref(this, LockscreenSettings.MUTE_TOGGLE_KEY, true)) {
+    	    		MuteIcon.setVisibility(View.VISIBLE);
+    	    	} else {
+    	    		MuteIcon.setVisibility(View.GONE);
+    	    	}
+    	    	if(!onstart) {
+    				whatsHappening(R.drawable.mute, 350);
+    	    	}
     	        break;
     	    case AudioManager.RINGER_MODE_VIBRATE:
-    	    	MuteIcon.setVisibility(View.VISIBLE);
+    	    	if (utils.getCheckBoxPref(this, LockscreenSettings.MUTE_TOGGLE_KEY, true)) {
+    	    		MuteIcon.setVisibility(View.VISIBLE);
+    	    	} else {
+    	    		MuteIcon.setVisibility(View.GONE);
+    	    	}
+    	    	if(!onstart) {
+    	    		whatsHappening(R.drawable.mute, 350);
+    	    	}
     	        break;
     	    case AudioManager.RINGER_MODE_NORMAL:
     	    	MuteIcon.setVisibility(View.GONE);
+    	    	if(!onstart) {
+    	    		whatsHappening(R.drawable.unmute, 350);
+    	    	}
     	        break;
+    	}
+    }
+    
+    //TODO: add these options for Wi-Fi and USB MS
+    private void wifiMod() {
+    	ConnectivityManager connManager =((ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE));
+    	boolean state = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
+    	
+    	ImageView wifiIcon = (ImageView) findViewById(R.id.wifi);
+    	if (utils.getCheckBoxPref(this, LockscreenSettings.WIFI_MODE_KEY, true)) {
+    		if (state) {
+    			wifiIcon.setVisibility(View.VISIBLE);
+    		} else {
+    			wifiIcon.setVisibility(View.GONE);
+    		}
+    	} else {
+			wifiIcon.setVisibility(View.GONE);
+    	}
+    }
+    
+    private void usbMsMode() {
+    	String state = Environment.getExternalStorageState();
+    	
+    	ImageView usbMsIcon = (ImageView) findViewById(R.id.usb_ms);
+    	
+    	if (utils.getCheckBoxPref(this, LockscreenSettings.USB_MS_KEY, true)) {
+    		if (Environment.MEDIA_SHARED.equals(state)) {
+    			usbMsIcon.setVisibility(View.VISIBLE);
+    		} else {
+    			usbMsIcon.setVisibility(View.GONE);
+    		}
+    	} else {
+			usbMsIcon.setVisibility(View.GONE);
     	}
     }
     
@@ -423,9 +493,7 @@ public class mainActivity extends Activity {
     }
     
     private void updateInfo(String artist, String album, String track) {
-    	
     	TextView Music = (TextView) findViewById(R.id.MusicInfo);
-    	
     	String NowPlaying = getString(R.string.music_info, track, artist);
 		Music.setText(NowPlaying);
     }
@@ -651,57 +719,59 @@ public class mainActivity extends Activity {
     } 
     
     private void fadeArt(boolean visible, int anim) {
-    	
     	ImageView AlbumArt = (ImageView) findViewById(R.id.Art);
-    	
         AlbumArt.setVisibility(visible ? View.VISIBLE : View.GONE);
         AlbumArt.startAnimation(loadAnim(anim, null));
     }
     
     private void fadeControls(boolean visible, int anim) {
-    	
     	LinearLayout InfoBox = (LinearLayout) findViewById(R.id.InfoBox);
-
         InfoBox.setVisibility(visible ? View.VISIBLE : View.GONE);
         InfoBox.startAnimation(loadAnim(anim, null));
     }
     
- // gmail count TODO: doesnt work, must fix.
+    // gmail count TODO: not crashing anymore, and seems to be
+    // doing the right stuff, but its still got working :( andy fix? :P
+		public static int getGmailUnreadCount(Context context) { 
+    	    
+    	    String account="eliot@piratemedia.tv";
+    	    Uri LABELS_URI = GMAIL_CONTENT_URI;
+    	    Uri ACCOUNT_URI = Uri.withAppendedPath(LABELS_URI, account);
+    	    ContentResolver contentResolver = context.getContentResolver();
+    	    Cursor cursor = contentResolver.query(ACCOUNT_URI, null, null, null, null);
 
-    public static int getGmailUnreadCount(Context context) { 
-             String GMAIL_UNREAD = "label_ids";
-             String GMAIL_CONDITION = GMAIL_UNREAD + " like %^u%";
-             int count = 0; 
-             Cursor cursor = context.getContentResolver().query( 
-                   GMAIL_UNREAD_CONTENT_URI, 
-                   new String[] { GMAIL_ID }, 
-                   GMAIL_CONDITION, null, null); 
-             if (cursor != null) {
-                Log.d ("Gmail Count", "Gmail cursor != null");
-                try { 
-                   count = cursor.getCount(); 
-                   Log.d ("Gmail Count", "Gmail cursor.getCount()");
-                } finally { 
-                   cursor.close(); 
-                } 
-             } 
-             return count;
-       }
+    	    int count = 0; 
+    	    
+    	    if (cursor.moveToFirst()) {
+    	        int unreadColumn = cursor.getColumnIndex(NUM_UNREAD_CONVERSATIONS);
+    	        int nameColumn = cursor.getColumnIndex(NAME);
+    	        do {
+    	        	String name = cursor.getString(nameColumn);
+    	            String unread = cursor.getString(unreadColumn);//here's the value you need
+    	            count = Integer.parseInt(unread); 
+    	        } while (cursor.moveToNext());
+    	    }
+    	    return count;
+    	}
 
         private void setGmailCountText() {
-    	   if (mGetGmailCount <= 0) {
+        	if (utils.getCheckBoxPref(this, LockscreenSettings.GMAIL_COUNT_KEY, true)) {
+        		if (mGetGmailCount <= 0) {
                     mGmailCount.setVisibility(View.GONE);
                 } else {
-    	   if (mGetGmailCount == 1) {
-    		mGmailCount.setVisibility(View.VISIBLE);
-                    mGmailCount.setText(
+                	if (mGetGmailCount == 1) {
+                		mGmailCount.setVisibility(View.VISIBLE);
+                		mGmailCount.setText(
                             getBaseContext().getString(R.string.lockscreen_1_email, mGetGmailCount));
-                   } else {
-    			mGmailCount.setVisibility(View.VISIBLE);
-                    mGmailCount.setText(
+                	} else {
+                		mGmailCount.setVisibility(View.VISIBLE);
+                		mGmailCount.setText(
                             getBaseContext().getString(R.string.lockscreen_lots_email, mGetGmailCount));
-                   }
+                	}
                 }
+        	} else {
+                mGmailCount.setVisibility(View.GONE);
+        	}
         }
 
     // end gmail count
@@ -728,19 +798,23 @@ public class mainActivity extends Activity {
        }
 
         private void setMissedCountText() {
-    	   if (mGetMissedCount <= 0) {
-                    mMissedCount.setVisibility(View.GONE);
+        	if (utils.getCheckBoxPref(this, LockscreenSettings.MISSED_CALL_KEY, true)) {
+        		if (mGetMissedCount <= 0) {
+        			mMissedCount.setVisibility(View.GONE);
                 } else {
-    	   if (mGetMissedCount == 1) {
-    		mMissedCount.setVisibility(View.VISIBLE);
-                    mMissedCount.setText(
+                	if (mGetMissedCount == 1) {
+                		mMissedCount.setVisibility(View.VISIBLE);
+                		mMissedCount.setText(
                             getBaseContext().getString(R.string.lockscreen_1_missed, mGetMissedCount));
-                   } else {
-    			mMissedCount.setVisibility(View.VISIBLE);
-                    mMissedCount.setText(
+                	} else {
+                		mMissedCount.setVisibility(View.VISIBLE);
+                		mMissedCount.setText(
                             getBaseContext().getString(R.string.lockscreen_lots_missed, mGetMissedCount));
-                   }
+                	}
                 }
+        	} else {
+        		mMissedCount.setVisibility(View.GONE);
+        	}
         }
 
     // end missed call count
@@ -766,13 +840,17 @@ public class mainActivity extends Activity {
        }
 
         private void setSmsCountText() {
-    	   if (mGetSmsCount <= 0) {
+        	if (utils.getCheckBoxPref(this, LockscreenSettings.SMS_COUNT_KEY, true)) {
+        		if (mGetSmsCount <= 0) {
                     mSmsCount.setVisibility(View.GONE);
                 } else {
-    		mSmsCount.setVisibility(View.VISIBLE);
+                	mSmsCount.setVisibility(View.VISIBLE);
                     mSmsCount.setText(
                             getBaseContext().getString(R.string.lockscreen_sms_count, mGetSmsCount));
                 }
+        	} else {
+                mSmsCount.setVisibility(View.GONE);
+        	}
         }
 
     // end sms count
@@ -856,7 +934,7 @@ public class mainActivity extends Activity {
 		 * we just should call finish() so it goes to the last open app
 		 */
 		private void unlockScreen(){
-			whatsHappening(R.drawable.unlock, 600);
+			whatsHappening(R.drawable.unlock, 350);
 	        finish();
 	        overridePendingTransition(R.anim.fadein_fast, R.anim.fadeout_fast);
 		}
