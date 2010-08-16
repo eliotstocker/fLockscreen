@@ -1,10 +1,12 @@
 package com.piratemedia.lockscreen;
 
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.app.Service;
+import android.net.ConnectivityManager;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -33,9 +35,7 @@ public class updateService extends Service {
 	public long albumId;
 	public long songId;
 	public int batLevel;
-	public int batpercentage;
-	public boolean inCall = false;
-	
+	public int batpercentage;	
 
     @Override
     public void onCreate() {
@@ -45,10 +45,6 @@ public class updateService extends Service {
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         BroadcastReceiver mReceiver = new intentReceiver();
         registerReceiver(mReceiver, filter);
-        
-		TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
-		tm.listen(inCallListener, PhoneStateListener.LISTEN_CALL_STATE);
-
         
     }
 
@@ -225,12 +221,12 @@ public class updateService extends Service {
             	notifyChange(WIFI_CHANGED);
             } else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             	Log.d("Lockscreen", "Screen On");
-            	if (!inCall){
+            	if (!inCall()){
 				ManageKeyguard.disableKeyguard(getApplicationContext());
             	}
 			} else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
             	Log.d("Lockscreen", "Screen Off");
-            	if (!inCall){
+            	if (!inCall()){
             		Intent lock=utils.getLockIntent(this);
             		lock.setAction(utils.ACTION_LOCK);
             		startActivity(lock);
@@ -279,24 +275,18 @@ private void notifyChange(String what) {
         		return 1;
         	}
 		
-		private PhoneStateListener inCallListener = new PhoneStateListener()
-		{
-		        public void onCallStateChanged(int state, String incomingNumber)
-		        {
-		                switch (state)
-						{
-						case TelephonyManager.CALL_STATE_RINGING:
-							inCall = false;
-						    break;
-						case TelephonyManager.CALL_STATE_OFFHOOK:
-							inCall = true;
-						    break;
-						case TelephonyManager.CALL_STATE_IDLE:
-							inCall = false;
-						    break;
-						default:
-							
-						}
-		        }
-		};
+		private boolean inCall() {
+			TelephonyManager telMan =((TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE));
+	    	int state = telMan.getCallState();
+	    	
+	    	switch(state) {
+	    		case TelephonyManager.CALL_STATE_IDLE:
+	    			return false;
+	    		case TelephonyManager.CALL_STATE_RINGING:
+	    			return false;
+	    		case TelephonyManager.CALL_STATE_OFFHOOK:
+	    			return true;
+	    	}
+	    	return false;
+		}
 }
