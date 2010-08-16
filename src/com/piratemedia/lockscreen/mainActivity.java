@@ -29,6 +29,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
@@ -76,6 +77,9 @@ public class mainActivity extends Activity {
     public static final Uri SMS_CONTENT_URI = Uri.parse("content://sms");
     public static final Uri SMS_INBOX_CONTENT_URI = Uri.withAppendedPath(SMS_CONTENT_URI, "inbox");
     public static final String SMS_ID = "_id";
+    
+	Handler mHandler = new Handler();
+
     
     private TextView mSmsCount;
     private TextView mMissedCount;
@@ -254,11 +258,44 @@ public class mainActivity extends Activity {
 
             } else if (action.equals(updateService.SMS_CHANGED)) {
             	
-            	updateCounts(true);
+            	new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                            try {
+                                Thread.sleep(1000);
+                                mHandler.post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                		mGetSmsCount = getUnreadSmsCount(getBaseContext());
+                                		setSmsCountText();
+                                    }
+                                });
+                            } catch (Exception e) {
+                            }
+                    }
+                }).start();
+            	
         	    
             } else if (action.equals(updateService.PHONE_CHANGED)) {
         	
-            	updateCounts(false);
+            	new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                            try {
+                                Thread.sleep(1000);
+                                mHandler.post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                		mGetMissedCount = getMissedCallCount(getBaseContext());
+                                		setMissedCountText();
+                                    }
+                                });
+                            } catch (Exception e) {
+                            }
+                    }
+                }).start();
             	
             } else if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
             	
@@ -307,21 +344,6 @@ public class mainActivity extends Activity {
     			Network.setText(
     					getBaseContext().getString(R.string.no_service));
     		}
-    	}
-    }
-    
-    private void updateCounts(boolean sms) {
-    	
-    	if(sms) {
-    		mGetSmsCount = getUnreadSmsCount(getBaseContext());
-    		//always one behind, so add one
-    		//mGetSmsCount = mGetSmsCount + 1;
-    		setSmsCountText();
-    	} else {
-		mGetMissedCount = getMissedCallCount(getBaseContext());
-		//always one behind, so add one
-		//mGetMissedCount = mGetMissedCount + 1;
-	    setMissedCountText();
     	}
     }
     
@@ -391,7 +413,6 @@ public class mainActivity extends Activity {
     	}
     }
     
-    //TODO: add these options for Wi-Fi and USB MS
     private void wifiMod() {
     	ConnectivityManager connManager =((ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE));
     	boolean state = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
