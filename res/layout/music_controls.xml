@@ -1,0 +1,85 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<!-- Music Buttons -->
+	
+<LinearLayout android:id="@+id/InfoBox"
+	android:layout_gravity="bottom|center"
+	android:gravity="center"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:paddingBottom="70dp">
+	
+<LinearLayout
+	android:layout_gravity="top"
+	android:gravity="center"
+	android:orientation="vertical"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:background="#66000000"
+	android:paddingTop="5dp"
+	android:paddingBottom="5dp">
+	
+<TextView android:id="@+id/MusicInfo"
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content"
+    android:textSize="8pt"
+    android:singleLine="true"
+	android:gravity="center"
+	android:ellipsize="marquee"
+	android:textColor="#ffffffff"/>
+	
+<LinearLayout
+	android:orientation="horizontal"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:paddingTop="2dp">
+	
+	<ImageButton android:id="@+id/rewindIcon"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	android:layout_weight="1"
+	android:src="@android:drawable/ic_media_previous"
+	android:background="@android:color/transparent"
+	android:paddingLeft="20dp"
+	android:paddingRight="20dp"
+	/>
+
+	<ImageButton android:id="@+id/playIcon"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	android:layout_weight="1"
+	android:src="@android:drawable/ic_media_play"
+	android:background="@android:color/transparent"
+	android:paddingLeft="20dp"
+	android:paddingRight="20dp"
+	/>
+
+	<ImageButton android:id="@+id/pauseIcon"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	android:layout_weight="1"
+	android:src="@android:drawable/ic_media_pause"
+	android:background="@android:color/transparent"
+	android:visibility="gone"
+	android:paddingLeft="20dp"
+	android:paddingRight="20dp"
+	/>
+
+	<ImageButton android:id="@+id/forwardIcon"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	android:layout_weight="1"
+	android:src="@android:drawable/ic_media_next"
+	android:background="@android:color/transparent"
+	android:paddingLeft="20dp"
+	android:paddingRight="20dp"
+	/>
+	
+	</LinearLayout>
+	
+ </LinearLayout>
+ </LinearLayout>
+ <!-- end music controls -->
+ 
+ </merge>

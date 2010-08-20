@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    
+    <HorizontalScrollView android:id="@+id/mainSlide"
+    	android:layout_width="fill_parent" android:layout_height="fill_parent"
+    	android:scrollbars="none" android:fadingEdge="none">
+    
+    	<LinearLayout android:id="@+id/full"
+    		android:layout_height="fill_parent" android:layout_width="wrap_content"
+    		android:orientation="horizontal">
+    		
+    		<include layout="@layout/left_action" />
+    		
+    		<LinearLayout android:id="@+id/base"
+				android:layout_height="fill_parent" android:orientation="horizontal"
+    			android:layout_width="320dp" android:gravity="center">
+    
+    			<include layout="@layout/base_layout" />
+    			
+    		</LinearLayout>
+    		
+    		<include layout="@layout/right_action" />
+    	
+		</LinearLayout>
+		
+    </HorizontalScrollView>
+    
+</LinearLayout>

@@ -3,7 +3,6 @@ package com.piratemedia.lockscreen;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -25,21 +24,18 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.os.SystemClock;
-import android.preference.Preference;
-import android.preference.PreferenceScreen;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -47,15 +43,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ViewAnimator;
-import android.widget.ViewFlipper;
 
 public class mainActivity extends Activity {
 	
@@ -80,6 +76,18 @@ public class mainActivity extends Activity {
     
 	Handler mHandler = new Handler();
 
+	//Slider Initialisation Stuff
+	
+	private int Displaywidth;
+	private HorizontalScrollView slider;
+	private LinearLayout LeftAction;
+	private LinearLayout RightAction;
+	private LinearLayout mainFrame;
+	private int unlock_count;
+	private boolean left = false;
+	private boolean right = false;
+	
+	//End Slider Init
     
     private TextView mSmsCount;
     private TextView mMissedCount;
@@ -132,7 +140,59 @@ public class mainActivity extends Activity {
 			}
 	        finish();
 		}else{
-			setContentView(R.layout.main);
+			setContentView(R.layout.slide_base);
+			
+			//Start Slider Stuff
+			
+	        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+	        Displaywidth = display.getWidth();
+			
+			mainFrame = (LinearLayout) findViewById(R.id.base);
+			LeftAction = (LinearLayout) findViewById(R.id.left_action);
+			RightAction = (LinearLayout) findViewById(R.id.right_action);
+			//get a problem here - need to add proper width, MinWidth doesn't allow
+			//child objects to fill the the Layout.
+			mainFrame.setMinimumWidth(Displaywidth);
+			
+			slider = (HorizontalScrollView) findViewById(R.id.mainSlide);
+			
+			slider.setOnTouchListener(new OnTouchListener() {
+	            public boolean onTouch(View view, MotionEvent motionevent) {
+	                if (motionevent.getAction() == MotionEvent.ACTION_UP || motionevent.getAction() == MotionEvent.ACTION_CANCEL) {
+	                	//stopAllCounts();
+	                	Thread t = new Thread() {
+	                        public void run() {
+	                            mHandler.post(mScroll);
+	                        }
+	                    };
+	                    t.start();
+	                	return true;
+	                } else if (motionevent.getAction() == MotionEvent.ACTION_MOVE) {
+	                	int pos = slider.getScrollX();
+	                	int end = LeftAction.getWidth() + RightAction.getWidth();
+	                	if (pos == 0) {
+	                    	if (!left) {
+	                			left = true;
+	                			unlock_count = 3;
+	                	//		startUnlockCount();
+	                    	}
+	                	} else if (pos == end) {
+	                		if (!right) {
+	                			right = true;
+	                			unlock_count = 3;
+	                	//		startMuteCount();
+	                		}
+	                	} else {
+	                		left = false;
+	                		right = false;
+	                	//	stopAllCounts();
+	                	}
+	                }
+					return false;
+	            };
+			});
+			
+			//End Slider Stuff
 			
 			mSmsCount = (TextView) findViewById(R.id.smscount);
 		    mMissedCount = (TextView) findViewById(R.id.missedcount);
@@ -927,6 +987,17 @@ public class mainActivity extends Activity {
         		getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         	}
     	}
+    	
+    	//slidyness stuff
+        final Runnable mScroll = new Runnable() {
+            public void run() {
+            	LinearLayout mainFrame = (LinearLayout) findViewById(R.id.base);
+        		HorizontalScrollView slider = (HorizontalScrollView) findViewById(R.id.mainSlide);
+                slider.smoothScrollTo(mainFrame.getLeft(), 0);
+                slider.postInvalidate();
+            }
+        };
+        //end slidyness stuff
 
 		/**
 		 * ***onNewIntent***
@@ -955,7 +1026,7 @@ public class mainActivity extends Activity {
 		 * we just should call finish() so it goes to the last open app
 		 */
 		private void unlockScreen(){
-			whatsHappening(R.drawable.unlock, 350);
+			whatsHappening(R.drawable.unlock, Toast.LENGTH_SHORT);
 	        finish();
 	        overridePendingTransition(R.anim.fadein_fast, R.anim.fadeout_fast);
 		}

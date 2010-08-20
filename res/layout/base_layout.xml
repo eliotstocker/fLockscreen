@@ -1,0 +1,33 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<FrameLayout android:id="@+id/frame" android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+		<ImageView android:id="@+id/Art" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:scaleType="centerCrop" />
+
+		<include layout="@layout/notification_icons" />
+
+		<include layout="@layout/standard_info" />
+
+		<!-- Start Music Control Toggle Button Overlay -->
+		<LinearLayout android:gravity="bottom"
+			android:orientation="vertical" android:layout_width="fill_parent"
+			android:layout_height="fill_parent">
+
+			<ImageButton android:id="@+id/musicControlsToggle"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:src="@android:color/transparent" android:background="@android:color/transparent" />
+
+		</LinearLayout>
+		<!-- End -->
+
+		<include layout="@layout/music_controls" />
+
+		<include layout="@layout/text_notifications" />
+
+		<include layout="@layout/count_down" />
+
+	</FrameLayout>
+
+</merge>

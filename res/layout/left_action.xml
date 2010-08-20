@@ -1,0 +1,15 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+<LinearLayout android:id="@+id/left_action"
+	android:layout_height="fill_parent" android:layout_width="wrap_content"
+	android:orientation="horizontal" android:gravity="center"
+	android:background="#66FFFFFF">
+    	
+	<ImageView android:id="@+id/unlock"
+    	android:src="@drawable/unlock_slide" android:paddingLeft="15dp"
+    	android:paddingRight="15dp" android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"/>
+    	
+</LinearLayout>
+
+</merge>
