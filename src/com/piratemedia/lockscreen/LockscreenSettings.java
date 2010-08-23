@@ -50,6 +50,8 @@ public class LockscreenSettings extends PreferenceActivity {
 	static final String USB_MS_KEY = "usb_ms";
 	
 	static final String WIFI_MODE_KEY = "wifi_mode";
+	
+	static final String COUNT_KEY = "countDown";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

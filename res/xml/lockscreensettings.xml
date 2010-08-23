@@ -14,6 +14,11 @@
 		android:defaultValue="true" android:title="@string/albumart_title"
 		android:summary="@string/albumart_summary" />
 		
+	<com.piratemedia.lockscreen.DialogSeekBarPreference
+		android:title="@string/count_time" android:summary="@string/count_time_summary"
+		android:dialogMessage="@string/count_down_time" android:key="countDown"
+		android:defaultValue="3" android:max="5" />
+		
 	<CheckBoxPreference android:key="landscape"
 		android:defaultValue="false" android:title="@string/landscape_title"
 		android:summaryOn="@string/landscape_on" android:summaryOff="@string/landscape_off" />

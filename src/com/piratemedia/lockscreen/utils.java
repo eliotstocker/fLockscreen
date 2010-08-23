@@ -191,6 +191,14 @@ public class utils {
     	return prefs.getBoolean(name, def);
     }
 	
+	//Get Int Prefs
+	
+	static int getIntPref(Context context, String name, int def) {
+    	SharedPreferences prefs =
+    		context.getSharedPreferences("com.piratemedia.lockscreen_preferences", Context.MODE_PRIVATE);
+    	return prefs.getInt(name, def);
+    }
+	
 	//Get String Prefs (ListPrefs etc.)
 	
 	static String getStringPref(Context context, String name, String def) {

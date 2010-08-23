@@ -29,6 +29,11 @@
     <string name="fullscreen_summary_on">Fullscreen is enabled</string>
     <string name="fullscreen_summary_off">Fullscreen is not enabled</string>
     
+    <!-- Settings Count Down -->
+    <string name="count_time">Action Count down</string>
+	<string name="count_time_summary">Unlock etc. action Count Down</string>
+	<string name="count_down_time">Set Count Down Time</string>
+    
     <!-- Settings Album Art -->
     <string name="albumart_title">Album Art Display</string>
     <string name="albumart_summary">Change wallpaper to Album Art (if any) When Music is Playing</string>

@@ -178,13 +178,13 @@ public class mainActivity extends Activity {
 	                	if (pos == 0) {
 	                    	if (!left) {
 	                			left = true;
-	                			unlock_count = 3;
+	                			unlock_count = utils.getIntPref(getBaseContext(), LockscreenSettings.COUNT_KEY, 3);
 	                			startCount(false);
 	                    	}
 	                	} else if (pos == end) {
 	                		if (!right) {
 	                			right = true;
-	                			unlock_count = 3;
+	                			unlock_count = utils.getIntPref(getBaseContext(), LockscreenSettings.COUNT_KEY, 3);
 	                			startCount(true);
 	                		}
 	                	} else {
@@ -294,8 +294,8 @@ public class mainActivity extends Activity {
     }
     
     public void onBackPressed () {
-    	//temporal unlock key until we add the proper stuff
-    	unlockScreen();
+    	//slide to unlock is now working, so back can now do nothing
+    	//unlockScreen();
     }
     
     private BroadcastReceiver mStatusListener = new BroadcastReceiver() {
@@ -1069,6 +1069,24 @@ public class mainActivity extends Activity {
         		Thread start;
 
         	switch(unlock_count) {
+        	case 5:
+                start = new Thread() {
+                    public void run() {
+                        mHandler.post(mUnlockToast);
+                    }
+                };
+                start.start();
+        		unlock_count = 4;
+        		break;
+        	case 4:
+                start = new Thread() {
+                    public void run() {
+                        mHandler.post(mUnlockToast);
+                    }
+                };
+                start.start();
+        		unlock_count = 3;
+        		break;
         	case 3:
                 start = new Thread() {
                     public void run() {
