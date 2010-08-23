@@ -16,7 +16,9 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -52,6 +54,10 @@ public class LockscreenSettings extends PreferenceActivity {
 	static final String WIFI_MODE_KEY = "wifi_mode";
 	
 	static final String COUNT_KEY = "countDown";
+	
+	static final String LEFT_ACTION_KEY = "leftAction";
+	
+	static final String RIGHT_ACTION_KEY = "rightAction";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,22 @@ public class LockscreenSettings extends PreferenceActivity {
         PreferenceScreen screen = this.getPreferenceScreen();
         Preference pick = (Preference) screen.findPreference(KEY_PICK_BG);
         Preference landscape = (Preference) screen.findPreference(KEY_LANDSCAPE);
+        Preference laction = (Preference) screen.findPreference(LEFT_ACTION_KEY);
+        Preference raction = (Preference) screen.findPreference(RIGHT_ACTION_KEY);
+        
+        laction.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+            	actionLeft(newValue);
+            	return true;
+        	}
+            });
+        
+        raction.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+            	//actionRight(newValue);
+            	return true;
+            }
+            });
         
         pick.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -97,6 +119,38 @@ public class LockscreenSettings extends PreferenceActivity {
 			}
 		});
         
+	}
+	
+	private void actionLeft(Object newVal) {
+		int LeftInt;
+		int RightInt;
+		String LeftString = newVal.toString();
+		String RightString = utils.getStringPref(getBaseContext() , LockscreenSettings.RIGHT_ACTION_KEY, "2");
+		LeftInt = Integer.parseInt(LeftString);
+		RightInt = Integer.parseInt(RightString);
+		if (LeftInt != 1 && RightInt != 1) {
+			Toast.makeText(getBaseContext(), "one of the actions must be unlock, setting right to unlock", Toast.LENGTH_SHORT).show();
+			utils.setStringPref(getBaseContext(), RIGHT_ACTION_KEY, "1");
+			startActivity(new Intent(getBaseContext(),
+			LockscreenSettings.class));
+			finish();
+        }
+	}
+	
+	private void actionRight(Object newVal) {
+		int RightInt;
+		int LeftInt;
+		String RightString = newVal.toString();
+		String LeftString = utils.getStringPref(getBaseContext() , LockscreenSettings.LEFT_ACTION_KEY, "1");
+		LeftInt = Integer.parseInt(LeftString);
+		RightInt = Integer.parseInt(RightString);
+		if (LeftInt != 1 && RightInt != 1) {
+			Toast.makeText(getBaseContext(), "one of the actions must be unlock, setting left to unlock", Toast.LENGTH_SHORT).show();
+			utils.setStringPref(getBaseContext(), LEFT_ACTION_KEY, "1");
+			startActivity(new Intent(getBaseContext(),
+			LockscreenSettings.class));
+			finish();
+        }
 	}
 
 	private void pickImage() {

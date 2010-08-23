@@ -38,6 +38,29 @@
     <string name="albumart_title">Album Art Display</string>
     <string name="albumart_summary">Change wallpaper to Album Art (if any) When Music is Playing</string>
     
+    <!-- Settings L/R Actions -->
+    <string name="left_action">Set Left Slide Action</string>
+    <string name="left_action_summary">Set what happens when sliding the screen to the left</string>
+    <string name="left_action_title">Set Left Action</string>
+    <string name="right_action">Set Right Slide Action</string>
+    <string name="right_action_summary">Set what happens when sliding the screen to the right</string>
+    <string name="right_action_title">Set Right Action</string>
+    
+    <!-- Settings Action Arrays -->
+    <string-array name="action_entries">
+		<item>Unlock</item>
+		<item>Mute Toggle</item>
+		<item>Wifi Toggle</item>
+		<item>Brightness</item>
+	</string-array>
+	
+	<string-array name="actionvals">
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+		<item>4</item>
+	</string-array>
+    
     <!-- Settings Landscape -->
     <string name="landscape_title">Landscape Mode</string>
     <string name="landscape_on">fLockscreen will always show in Landscape mode</string>

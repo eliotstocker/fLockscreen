@@ -91,7 +91,7 @@ public class mainActivity extends Activity {
 	private boolean right = false;
 	private Timer timer = new Timer();
 	private Toast msg;
-	private boolean unlock = true;
+	private boolean actleft = true;
 	
 	//End Slider Init
     
@@ -1021,10 +1021,42 @@ public class mainActivity extends Activity {
         }
         
         private void doAction() {
-        	if(unlock) {
-        		unlockScreen();
+    		int RightInt;
+    		int LeftInt;
+        	if(actleft) {
+        		String LeftString = utils.getStringPref(getBaseContext() , LockscreenSettings.LEFT_ACTION_KEY, "1");
+        		LeftInt = Integer.parseInt(LeftString);
+        		switch(LeftInt) {
+        		case 1:
+        			unlockScreen();
+        			break;
+        		case 2:
+        			mutePhone();
+        			break;
+        		case 3:
+        			Toast.makeText(getBaseContext(), "This should toggle brightness", Toast.LENGTH_SHORT).show();
+        			break;
+        		case 4:
+        			Toast.makeText(getBaseContext(), "This should toggle Wifi", Toast.LENGTH_SHORT).show();
+        			break;
+        		}
         	} else {
-        		mutePhone();
+        		String RightString = utils.getStringPref(getBaseContext() , LockscreenSettings.RIGHT_ACTION_KEY, "2");
+        		RightInt = Integer.parseInt(RightString);
+        		switch(RightInt) {
+        		case 1:
+        			unlockScreen();
+        			break;
+        		case 2:
+        			mutePhone();
+        			break;
+        		case 3:
+        			Toast.makeText(getBaseContext(), "This should toggle brightness", Toast.LENGTH_SHORT).show();
+        			break;
+        		case 4:
+        			Toast.makeText(getBaseContext(), "This should toggle Wifi", Toast.LENGTH_SHORT).show();
+        			break;
+        		}
         		// do mute action
         	}
         }
@@ -1062,11 +1094,11 @@ public class mainActivity extends Activity {
             }
         };
         
-        private void startCount(boolean mute) {
-        	if(mute) {
-        		unlock = false;
+        private void startCount(boolean left) {
+        	if(left) {
+        		actleft = false;
         	} else {
-        		unlock = true;
+        		actleft = true;
         	}
         	timer.scheduleAtFixedRate( new TimerTask() {
 

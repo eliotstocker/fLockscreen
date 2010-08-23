@@ -19,6 +19,16 @@
 		android:dialogMessage="@string/count_down_time" android:key="countDown"
 		android:defaultValue="3" android:max="5" />
 		
+	<ListPreference android:key="leftAction"
+		android:title="@string/left_action" android:summary="@string/left_action_summary"
+		android:dialogTitle="@string/left_action_title" android:entries="@array/action_entries"
+		android:entryValues="@array/actionvals" android:defaultValue="1"/>
+		
+	<ListPreference android:key="rightAction"
+		android:title="@string/right_action" android:summary="@string/right_action_summary"
+		android:dialogTitle="@string/right_action_title" android:entries="@array/action_entries"
+		android:entryValues="@array/actionvals" android:defaultValue="2"/>
+		
 	<CheckBoxPreference android:key="landscape"
 		android:defaultValue="false" android:title="@string/landscape_title"
 		android:summaryOn="@string/landscape_on" android:summaryOff="@string/landscape_off" />
