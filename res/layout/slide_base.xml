@@ -16,7 +16,7 @@
     		
     		<LinearLayout android:id="@+id/base"
 				android:layout_height="fill_parent" android:orientation="horizontal"
-    			android:layout_width="320dp" android:gravity="center">
+    			android:layout_width="fill_parent" android:gravity="center">
     
     			<include layout="@layout/base_layout" />
     			
