@@ -155,9 +155,8 @@ public class mainActivity extends Activity {
 			mainFrame = (LinearLayout) findViewById(R.id.base);
 			LeftAction = (LinearLayout) findViewById(R.id.left_action);
 			RightAction = (LinearLayout) findViewById(R.id.right_action);
-			//get a problem here - need to add proper width, MinWidth doesn't allow
-			//child objects to fill the the Layout.
-			mainFrame.setMinimumWidth(Displaywidth);
+			LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(Displaywidth, LinearLayout.LayoutParams.FILL_PARENT);
+			mainFrame.setLayoutParams(lp);
 			
 			slider = (HorizontalScrollView) findViewById(R.id.mainSlide);
 			
@@ -834,7 +833,7 @@ public class mainActivity extends Activity {
     	    Cursor cursor = contentResolver.query(ACCOUNT_URI, null, null, null, null);
 
     	    int count = 0; 
-    	    
+    	    if(cursor==null)return 0;
     	    if (cursor.moveToFirst()) {
     	        int unreadColumn = cursor.getColumnIndex(NUM_UNREAD_CONVERSATIONS);
     	        int nameColumn = cursor.getColumnIndex(NAME);
