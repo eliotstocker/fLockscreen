@@ -50,8 +50,9 @@
     <string-array name="action_entries">
 		<item>Unlock</item>
 		<item>Mute Toggle</item>
-		<item>Wifi Toggle</item>
 		<item>Brightness</item>
+		<item>Wifi Toggle</item>
+		<item>Bluetooth Toggle</item>
 	</string-array>
 	
 	<string-array name="actionvals">
@@ -59,6 +60,7 @@
 		<item>2</item>
 		<item>3</item>
 		<item>4</item>
+		<item>5</item>
 	</string-array>
     
     <!-- Settings Landscape -->
@@ -118,8 +120,8 @@
 	<string name="credits_cat">fLockscreen Info</string>
 	<string name="credits_name">fLockscreen</string>
 	<string name="credits_name_summary">By Ander Webb and Eliot Stocker</string>
-	<string name="credits_version">v 0.4</string>
-	<string name="credits_version_summary">Almost Beta - Alpha</string>
+	<string name="credits_version">v 0.5</string>
+	<string name="credits_version_summary">Early Access - Beta</string>
 	<!-- Home chooser -->
 	<string name="home_chooser_title">Pick your default home application</string>
 	<string name="home_chooser_summary">Please pick your preferred home application </string>

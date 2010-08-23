@@ -258,6 +258,7 @@ public class mainActivity extends Activity {
 		setCustomBackground();
 		wifiMod();
 		usbMsMode();
+		setActionSlides();
         
 	    mGetSmsCount = getUnreadSmsCount(getBaseContext());
 		mGetMissedCount = getMissedCallCount(getBaseContext());
@@ -454,11 +455,11 @@ public class mainActivity extends Activity {
     private void muteMode(boolean onstart) {
     	AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
     	ImageView MuteIcon = (ImageView) findViewById(R.id.mute);
-    	ImageView mute_slide = (ImageView) findViewById(R.id.mute_slide);
+    	ImageView mute_slide_right = (ImageView) findViewById(R.id.mute_slide_right);
 
     	switch (am.getRingerMode()) {
     	    case AudioManager.RINGER_MODE_SILENT:
-    	    	mute_slide.setImageResource(R.drawable.unmute_slide);
+    	    	mute_slide_right.setImageResource(R.drawable.unmute_slide);
     	    	if (utils.getCheckBoxPref(this, LockscreenSettings.MUTE_TOGGLE_KEY, true)) {
     	    		MuteIcon.setVisibility(View.VISIBLE);
     	    	} else {
@@ -469,7 +470,7 @@ public class mainActivity extends Activity {
     	    	}
     	        break;
     	    case AudioManager.RINGER_MODE_VIBRATE:
-    	    	mute_slide.setImageResource(R.drawable.unmute_slide);
+    	    	mute_slide_right.setImageResource(R.drawable.unmute_slide);
     	    	if (utils.getCheckBoxPref(this, LockscreenSettings.MUTE_TOGGLE_KEY, true)) {
     	    		MuteIcon.setVisibility(View.VISIBLE);
     	    	} else {
@@ -480,7 +481,7 @@ public class mainActivity extends Activity {
     	    	}
     	        break;
     	    case AudioManager.RINGER_MODE_NORMAL:
-    	    	mute_slide.setImageResource(R.drawable.mute_slide);
+    	    	mute_slide_right.setImageResource(R.drawable.mute_slide);
     	    	MuteIcon.setVisibility(View.GONE);
     	    	if(!onstart) {
     	    		whatsHappening(R.drawable.unmute, 350);
@@ -1034,10 +1035,13 @@ public class mainActivity extends Activity {
         			mutePhone();
         			break;
         		case 3:
-        			Toast.makeText(getBaseContext(), "This should toggle brightness", Toast.LENGTH_SHORT).show();
+        			toggleBrightness();
         			break;
         		case 4:
-        			Toast.makeText(getBaseContext(), "This should toggle Wifi", Toast.LENGTH_SHORT).show();
+        			toggleWifi();
+        			break;
+        		case 5:
+        			toggleBluetooth();
         			break;
         		}
         	} else {
@@ -1051,10 +1055,13 @@ public class mainActivity extends Activity {
         			mutePhone();
         			break;
         		case 3:
-        			Toast.makeText(getBaseContext(), "This should toggle brightness", Toast.LENGTH_SHORT).show();
+        			toggleBrightness();
         			break;
         		case 4:
-        			Toast.makeText(getBaseContext(), "This should toggle Wifi", Toast.LENGTH_SHORT).show();
+        			toggleWifi();
+        			break;
+        		case 5:
+        			toggleBluetooth();
         			break;
         		}
         		// do mute action
@@ -1270,5 +1277,81 @@ public class mainActivity extends Activity {
                 }
             };
             t.start();
+	    }
+	    
+	    private void setActionSlides() {
+    		int RightInt;
+    		int LeftInt;
+        	String RightString = utils.getStringPref(getBaseContext() , LockscreenSettings.RIGHT_ACTION_KEY, "2");
+        	String LeftString = utils.getStringPref(getBaseContext() , LockscreenSettings.LEFT_ACTION_KEY, "1");
+        	RightInt = Integer.parseInt(RightString);
+    		LeftInt = Integer.parseInt(LeftString);
+        	ImageView unlock_right = (ImageView) findViewById(R.id.unlock_slide_right);
+        	ImageView mute_right = (ImageView) findViewById(R.id.mute_slide_right);
+        	ImageView brightness_right = (ImageView) findViewById(R.id.brightness_slide_right);
+        	ImageView wifi_right = (ImageView) findViewById(R.id.wifi_slide_right);
+        	ImageView bluetooth_right = (ImageView) findViewById(R.id.bluetooth_slide_right);
+        	ImageView unlock_left = (ImageView) findViewById(R.id.unlock_slide_left);
+        	ImageView mute_left = (ImageView) findViewById(R.id.mute_slide_left);
+        	ImageView brightness_left = (ImageView) findViewById(R.id.brightness_slide_left);
+        	ImageView wifi_left = (ImageView) findViewById(R.id.wifi_slide_left);
+        	ImageView bluetooth_left = (ImageView) findViewById(R.id.bluetooth_slide_left);
+        		
+        	unlock_right.setVisibility(View.GONE);
+        	mute_right.setVisibility(View.GONE);
+        	brightness_right.setVisibility(View.GONE);
+        	wifi_right.setVisibility(View.GONE);
+        	bluetooth_right.setVisibility(View.GONE);
+        	unlock_left.setVisibility(View.GONE);
+        	mute_left.setVisibility(View.GONE);
+        	brightness_left.setVisibility(View.GONE);
+        	wifi_left.setVisibility(View.GONE);
+        	bluetooth_left.setVisibility(View.GONE);
+        		
+        	switch(RightInt) {
+        		case 1:
+        			unlock_right.setVisibility(View.VISIBLE);
+        			break;
+        		case 2:
+        			mute_right.setVisibility(View.VISIBLE);
+        			break;
+        		case 3:
+        			brightness_right.setVisibility(View.VISIBLE);
+        			break;
+        		case 4:
+        			wifi_right.setVisibility(View.VISIBLE);
+        			break;
+        		case 5:
+        			bluetooth_right.setVisibility(View.VISIBLE);
+        			break;
+        	} switch(LeftInt) {
+        		case 1:
+        			unlock_left.setVisibility(View.VISIBLE);
+        			break;
+        		case 2:
+        			mute_left.setVisibility(View.VISIBLE);
+        			break;
+        		case 3:
+        			brightness_left.setVisibility(View.VISIBLE);
+        			break;
+        		case 4:
+        			wifi_left.setVisibility(View.VISIBLE);
+        			break;
+        		case 5:
+        			bluetooth_left.setVisibility(View.VISIBLE);
+        			break;
+        	}
+	    }
+	    
+	    private void toggleBrightness() {
+			Toast.makeText(getBaseContext(), "This should toggle brightness", Toast.LENGTH_SHORT).show();
+	    }
+	    
+	    private void toggleWifi() {
+			Toast.makeText(getBaseContext(), "This should toggle Wifi", Toast.LENGTH_SHORT).show();
+	    }
+	    
+	    private void toggleBluetooth() {
+			Toast.makeText(getBaseContext(), "This should toggle Bluetooth", Toast.LENGTH_SHORT).show();
 	    }
 }

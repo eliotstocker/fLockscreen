@@ -5,8 +5,28 @@
 	android:orientation="horizontal" android:gravity="center"
 	android:background="@drawable/shadow_left">
     	
-	<ImageView android:id="@+id/unlock"
+	<ImageView android:id="@+id/unlock_slide_left"
     	android:src="@drawable/unlock_slide" android:paddingLeft="15dp"
+    	android:paddingRight="15dp" android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"/>
+    	
+    <ImageView android:id="@+id/mute_slide_left"
+    	android:src="@drawable/mute_slide" android:paddingLeft="15dp"
+    	android:paddingRight="15dp" android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"/>
+    	
+    <ImageView android:id="@+id/brightness_slide_left"
+    	android:src="@drawable/brightness_slide" android:paddingLeft="15dp"
+    	android:paddingRight="15dp" android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"/>
+    	
+    <ImageView android:id="@+id/wifi_slide_left"
+    	android:src="@drawable/wifi_slide" android:paddingLeft="15dp"
+    	android:paddingRight="15dp" android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"/>
+    	
+    <ImageView android:id="@+id/bluetooth_slide_left"
+    	android:src="@drawable/bluetooth_slide" android:paddingLeft="15dp"
     	android:paddingRight="15dp" android:layout_width="wrap_content"
     	android:layout_height="wrap_content"/>
     	
