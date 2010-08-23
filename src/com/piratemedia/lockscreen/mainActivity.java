@@ -60,6 +60,7 @@ public class mainActivity extends Activity {
 	public static LinearLayout InfoBox;
 	public boolean playback = false;
 	public String nextAlarm = null;
+	private ServiceConnection conn = null;
 	
     public static final Uri GMAIL_CONTENT_URI = Uri.parse("content://gmail-ls/labels/");
     public static final String GMAIL_ID = "_id";
@@ -206,26 +207,26 @@ public class mainActivity extends Activity {
 		    	case 1: {
 		    		Intent i = new Intent();
 		    		i.setClassName("com.android.music", "com.android.music.MediaPlaybackService");
-		    		ServiceConnection conn = new MediaPlayerServiceConnectionStock();
-		    		this.bindService(i, conn, BIND_AUTO_CREATE);
+		    		conn = new MediaPlayerServiceConnectionStock();
+		    		this.bindService(i, conn, BIND_AUTO_CREATE);		    		
 		    		break;
 		    	}
 		    	case 2: {
 		    		Intent i = new Intent();
 		    		i.setClassName("com.htc.music", "com.htc.music.MediaPlaybackService");
-		    		ServiceConnection conn = new MediaPlayerServiceConnectionHTC();
+		    		conn = new MediaPlayerServiceConnectionHTC();
 		    		this.bindService(i, conn, BIND_AUTO_CREATE);
 		    		break;
 		    	}
 		    	case 3: {
 		    		Intent i = new Intent();
 		    		i.setClassName("com.piratemedia.musicmod", "com.piratemedia.musicmod.MediaPlaybackService");
-		    		ServiceConnection conn = new MediaPlayerServiceConnectionPirate();
+		    		conn = new MediaPlayerServiceConnectionPirate();
 		    		this.bindService(i, conn, BIND_AUTO_CREATE);
 		    		break;
 		    	}
 		    }
-			
+		    
 			setButtonIntents();
 			setPlayButton();
 			showHideControlsStart(false);
@@ -453,9 +454,11 @@ public class mainActivity extends Activity {
     private void muteMode(boolean onstart) {
     	AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
     	ImageView MuteIcon = (ImageView) findViewById(R.id.mute);
+    	ImageView mute_slide = (ImageView) findViewById(R.id.mute_slide);
 
     	switch (am.getRingerMode()) {
     	    case AudioManager.RINGER_MODE_SILENT:
+    	    	mute_slide.setImageResource(R.drawable.unmute_slide);
     	    	if (utils.getCheckBoxPref(this, LockscreenSettings.MUTE_TOGGLE_KEY, true)) {
     	    		MuteIcon.setVisibility(View.VISIBLE);
     	    	} else {
@@ -466,6 +469,7 @@ public class mainActivity extends Activity {
     	    	}
     	        break;
     	    case AudioManager.RINGER_MODE_VIBRATE:
+    	    	mute_slide.setImageResource(R.drawable.unmute_slide);
     	    	if (utils.getCheckBoxPref(this, LockscreenSettings.MUTE_TOGGLE_KEY, true)) {
     	    		MuteIcon.setVisibility(View.VISIBLE);
     	    	} else {
@@ -476,6 +480,7 @@ public class mainActivity extends Activity {
     	    	}
     	        break;
     	    case AudioManager.RINGER_MODE_NORMAL:
+    	    	mute_slide.setImageResource(R.drawable.mute_slide);
     	    	MuteIcon.setVisibility(View.GONE);
     	    	if(!onstart) {
     	    		whatsHappening(R.drawable.unmute, 350);
@@ -1019,6 +1024,7 @@ public class mainActivity extends Activity {
         	if(unlock) {
         		unlockScreen();
         	} else {
+        		mutePhone();
         		// do mute action
         	}
         }
@@ -1155,6 +1161,12 @@ public class mainActivity extends Activity {
 				Log.d("LOCKSCREEN","We should NOT do anything!!");
 			}
 		}
+		 
+		//unbind music service
+		 private void unbindMusic() {	
+			 //we need to unbind the music service to stop NPE's here.
+		 }
+		 
 		/**
 		 * ***unlockScreen***
 		 * 
@@ -1210,5 +1222,21 @@ public class mainActivity extends Activity {
 				}
 			}
 			return "1";
+	    }
+	    
+	    private void mutePhone() {
+	    	AudioManager am = (AudioManager)
+	    	this.getSystemService(Context.AUDIO_SERVICE);
+		    if (am.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+	    		am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+	    	} else {
+		    	am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+	    	}
+        	Thread t = new Thread() {
+                public void run() {
+                    mHandler.post(mScroll);
+                }
+            };
+            t.start();
 	    }
 }
