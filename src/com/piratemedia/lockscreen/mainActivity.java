@@ -3,6 +3,8 @@ package com.piratemedia.lockscreen;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -86,6 +88,9 @@ public class mainActivity extends Activity {
 	private int unlock_count;
 	private boolean left = false;
 	private boolean right = false;
+	private Timer timer = new Timer();
+	private Toast msg;
+	private boolean unlock = true;
 	
 	//End Slider Init
     
@@ -159,7 +164,7 @@ public class mainActivity extends Activity {
 			slider.setOnTouchListener(new OnTouchListener() {
 	            public boolean onTouch(View view, MotionEvent motionevent) {
 	                if (motionevent.getAction() == MotionEvent.ACTION_UP || motionevent.getAction() == MotionEvent.ACTION_CANCEL) {
-	                	//stopAllCounts();
+	                	stopAllCounts();
 	                	Thread t = new Thread() {
 	                        public void run() {
 	                            mHandler.post(mScroll);
@@ -174,18 +179,18 @@ public class mainActivity extends Activity {
 	                    	if (!left) {
 	                			left = true;
 	                			unlock_count = 3;
-	                	//		startUnlockCount();
+	                			startCount(false);
 	                    	}
 	                	} else if (pos == end) {
 	                		if (!right) {
 	                			right = true;
 	                			unlock_count = 3;
-	                	//		startMuteCount();
+	                			startCount(true);
 	                		}
 	                	} else {
 	                		left = false;
 	                		right = false;
-	                	//	stopAllCounts();
+	                		stopAllCounts();
 	                	}
 	                }
 					return false;
@@ -239,6 +244,13 @@ public class mainActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		
+        Thread start = new Thread() {
+            public void run() {
+                mHandler.post(mScroll);
+            }
+        };
+        start.start();
 		
 		setFullscreen();
 		setLandscape();
@@ -997,6 +1009,118 @@ public class mainActivity extends Activity {
                 slider.postInvalidate();
             }
         };
+        
+        private void fadeCount(boolean visible, int anim) {
+        	ImageView Count = (ImageView) findViewById(R.id.count);
+            Count.setVisibility(visible ? View.VISIBLE : View.GONE);
+            Count.startAnimation(loadAnim(anim, null));
+        }
+        
+        private void doAction() {
+        	if(unlock) {
+        		unlockScreen();
+        	} else {
+        		// do mute action
+        	}
+        }
+        
+        
+        final Runnable mUnlockToast = new Runnable() {
+            public void run() {
+            	int num = unlock_count + 1;
+            	ImageView count = (ImageView) findViewById(R.id.count);
+            switch(num) {
+            	case 5:
+            		count.setImageResource(R.drawable.count_5);
+            		fadeCount(true, R.anim.fadeout_fast);
+            		break;
+            	case 4:
+            		count.setImageResource(R.drawable.count_4);
+            		fadeCount(true, R.anim.fadeout_fast);
+            		break;
+            	case 3:
+            		count.setImageResource(R.drawable.count_3);
+            		fadeCount(true, R.anim.fadeout_fast);
+            		break;
+            	case 2:
+            		count.setImageResource(R.drawable.count_2);
+            		fadeCount(true, R.anim.fadeout_fast);
+            		break;
+            	case 1:
+            		count.setImageResource(R.drawable.count_1);
+            		fadeCount(true, R.anim.fadeout_fast);
+            		break;
+            	case 0:
+            		doAction();
+            		break;
+            }
+            }
+        };
+        
+        private void startCount(boolean mute) {
+        	if(mute) {
+        		unlock = false;
+        	} else {
+        		unlock = true;
+        	}
+        	timer.scheduleAtFixedRate( new TimerTask() {
+
+        	public void run() {
+        		Thread start;
+
+        	switch(unlock_count) {
+        	case 3:
+                start = new Thread() {
+                    public void run() {
+                        mHandler.post(mUnlockToast);
+                    }
+                };
+                start.start();
+        		unlock_count = 2;
+        		break;
+        	case 2:
+                start = new Thread() {
+                    public void run() {
+                        mHandler.post(mUnlockToast);
+                    }
+                };
+                start.start();
+        		unlock_count = 1;
+        		break;
+        	case 1:
+                start = new Thread() {
+                    public void run() {
+                        mHandler.post(mUnlockToast);
+                    }
+                };
+                start.start();
+        		unlock_count = 0;
+        		break;
+        	case 0:
+                start = new Thread() {
+                    public void run() {
+                        mHandler.post(mUnlockToast);
+                    }
+                };
+                start.start();
+        		unlock_count = -1;
+        		break;
+        	}
+
+        	}
+
+        	}, 0, 500);
+        	; }
+        
+        private void stopAllCounts() {
+        	ImageView count = (ImageView) findViewById(R.id.count);
+        	count.setVisibility(View.GONE);
+        	if (timer != null){
+        	timer.cancel();
+        	timer = new Timer();
+        	}
+
+        	}
         //end slidyness stuff
 
 		/**
