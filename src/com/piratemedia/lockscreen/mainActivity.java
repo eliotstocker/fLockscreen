@@ -241,6 +241,10 @@ public class mainActivity extends Activity {
 		}		    
 	}
 	
+	public boolean onTrackballEvent(MotionEvent event) {
+		return true;
+	}
+	
 	@Override
 	public void onResume() {
 		super.onResume();
