@@ -4,7 +4,7 @@
 	android:layout_height="fill_parent" android:layout_width="wrap_content"
 	android:orientation="horizontal" android:gravity="center"
 	android:background="@drawable/shadow_left">
-    	
+
 	<ImageView android:id="@+id/unlock_slide_left"
     	android:src="@drawable/unlock_slide" android:paddingLeft="15dp"
     	android:paddingRight="15dp" android:layout_width="wrap_content"

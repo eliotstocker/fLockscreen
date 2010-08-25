@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.app.KeyguardManager;
 import android.app.Service;
+import android.app.KeyguardManager.KeyguardLock;
 import android.net.ConnectivityManager;
 import android.os.Environment;
 import android.os.IBinder;
@@ -35,7 +37,8 @@ public class updateService extends Service {
 	public long albumId;
 	public long songId;
 	public int batLevel;
-	public int batpercentage;	
+	public int batpercentage;
+	private KeyguardManager keyguardManager;
 
     @Override
     public void onCreate() {
@@ -45,6 +48,7 @@ public class updateService extends Service {
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         BroadcastReceiver mReceiver = new intentReceiver();
         registerReceiver(mReceiver, filter);
+        keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
         
     }
 
@@ -222,7 +226,8 @@ public class updateService extends Service {
             } else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             	Log.d("Lockscreen", "Screen On");
             	if (!inCall()){
-				ManageKeyguard.disableKeyguard(getApplicationContext());
+            		KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("fLockscreen");
+            		keyguardLock.disableKeyguard();
             	}
 			} else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
             	Log.d("Lockscreen", "Screen Off");
@@ -230,7 +235,8 @@ public class updateService extends Service {
             		Intent lock=utils.getLockIntent(this);
             		lock.setAction(utils.ACTION_LOCK);
             		startActivity(lock);
-            		ManageKeyguard.disableKeyguard(getApplicationContext());
+            		KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("fLockscreen");
+            		keyguardLock.disableKeyguard();
             		//ManageKeyguard.reenableKeyguard();
             	}
             } else if(aIntent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)){
