@@ -12,6 +12,7 @@ import android.app.KeyguardManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.ActivityManager.RunningTaskInfo;
 import android.app.KeyguardManager.KeyguardLock;
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -29,6 +30,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -264,7 +266,8 @@ public class mainActivity extends Activity {
 		setLandscape();
 		getPlayer();
 		setCustomBackground();
-		wifiMod();
+		wifiMode();
+		bluetoothMode();
 		usbMsMode();
 		setActionSlides();
         
@@ -411,7 +414,7 @@ public class mainActivity extends Activity {
             	
             } else if (action.equals(updateService.WIFI_CHANGED)) {
             	
-            	wifiMod();
+            	wifiMode();
             	
             } 
         };
@@ -509,7 +512,24 @@ public class mainActivity extends Activity {
     	}
     }
     
-    private void wifiMod() {
+    private void bluetoothMode() {
+	    BluetoothAdapter bta = (BluetoothAdapter)
+	    BluetoothAdapter.getDefaultAdapter();
+	    boolean on = bta.isEnabled();
+	    
+	    ImageView BluetoothIcon = (ImageView) findViewById(R.id.bluetooth);
+	    if (utils.getCheckBoxPref(this, LockscreenSettings.BLUETOOTH_MODE_KEY, true)) {
+	    	if(on){
+	    		BluetoothIcon.setVisibility(View.VISIBLE);
+	    	} else {
+	    		BluetoothIcon.setVisibility(View.GONE);
+	    	}
+	    } else {
+	    	BluetoothIcon.setVisibility(View.GONE);
+	    }
+    }
+    
+    private void wifiMode() {
     	ConnectivityManager connManager =((ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE));
     	boolean state = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
     	
@@ -1114,6 +1134,7 @@ public class mainActivity extends Activity {
             		fadeCount(true, R.anim.fadeout_fast);
             		break;
             	case 0:
+            		count.setVisibility(View.GONE);
             		doAction();
             		break;
             }
@@ -1374,10 +1395,34 @@ public class mainActivity extends Activity {
 	    }
 	    
 	    private void toggleWifi() {
-			Toast.makeText(getBaseContext(), "This should toggle Wifi", Toast.LENGTH_SHORT).show();
+	    	WifiManager wifim = (WifiManager)
+	    	this.getSystemService(Context.WIFI_SERVICE);
+	    	boolean on = wifim.isWifiEnabled();
+	    	
+	    	if(on){
+	    		wifim.setWifiEnabled(false);
+				whatsHappening(R.drawable.wifi, Toast.LENGTH_SHORT);
+	    	} else {
+	    		wifim.setWifiEnabled(true);
+				whatsHappening(R.drawable.wifi, Toast.LENGTH_SHORT);
+	    	}
+	    	
+	    	wifiMode();
 	    }
 	    
 	    private void toggleBluetooth() {
-			Toast.makeText(getBaseContext(), "This should toggle Bluetooth", Toast.LENGTH_SHORT).show();
+	    	BluetoothAdapter bta = (BluetoothAdapter)
+	    	BluetoothAdapter.getDefaultAdapter();
+	    	boolean on = bta.isEnabled();
+	    	
+	    	if(on){
+	    		bta.disable();
+				whatsHappening(R.drawable.bluetooth, Toast.LENGTH_SHORT);
+	    	} else {
+	    		bta.enable();
+				whatsHappening(R.drawable.bluetooth_on, Toast.LENGTH_SHORT);
+	    	}
+	    	
+	    	bluetoothMode();
 	    }
 }

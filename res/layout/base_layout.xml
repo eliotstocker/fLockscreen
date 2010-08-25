@@ -26,8 +26,6 @@
 
 		<include layout="@layout/text_notifications" />
 
-		<include layout="@layout/count_down" />
-
 	</FrameLayout>
 
 </merge>

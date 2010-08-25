@@ -68,6 +68,9 @@
 		<CheckBoxPreference android:key="wifi_mode"
 			android:defaultValue="true" android:title="@string/wifi_title"
 			android:summary="@string/wifi_summary"/>
+		<CheckBoxPreference android:key="bluetooth_mode"
+			android:defaultValue="true" android:title="@string/bluetooth_title"
+			android:summary="@string/bluetooth_summary"/>
 			
 	</PreferenceScreen>
 

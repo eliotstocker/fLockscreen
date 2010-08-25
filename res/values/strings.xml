@@ -115,6 +115,9 @@
 
 	<string name="wifi_title">Wi-Fi Icon</string>
 	<string name="wifi_summary">Display icon when Wi-Fi is connected</string>
+	
+	<string name="bluetooth_title">Bluetooth Icon</string>
+	<string name="bluetooth_summary">Display icon when Bluetooth is enabled</string>
     
     <!-- Settings Info -->
 	<string name="credits_cat">fLockscreen Info</string>
