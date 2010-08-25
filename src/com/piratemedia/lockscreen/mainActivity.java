@@ -260,13 +260,6 @@ public class mainActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		
-        Thread start = new Thread() {
-            public void run() {
-                mHandler.post(mScroll);
-            }
-        };
-        start.start();
-		
 		setFullscreen();
 		setLandscape();
 		getPlayer();
@@ -289,7 +282,18 @@ public class mainActivity extends Activity {
 	    muteMode(true);
 		
 	}
-	
+
+	@Override
+	public void onAttachedToWindow() {
+		super.onAttachedToWindow();
+		Thread start = new Thread() {
+			public void run() {
+				mHandler.post(mScroll);
+			}
+		};
+		start.start();
+	}
+
     @Override
     public void onStart() {
 		Log.d("LOCKSCREEN","Displaying lock screen, ONSTART");
@@ -1234,8 +1238,15 @@ public class mainActivity extends Activity {
 		 */
 		private void unlockScreen(){
 			whatsHappening(R.drawable.unlock, Toast.LENGTH_SHORT);
-	        finish();
-	        overridePendingTransition(R.anim.fadein_fast, R.anim.fadeout_fast);
+	        Handler handler=new Handler();
+	        handler.postDelayed(new Runnable() {
+				public void run() {
+					finish();
+					overridePendingTransition(R.anim.fadein_fast, R.anim.fadeout_fast);
+				}
+			}, 500);
+	        mHandler.removeCallbacks(mScroll);
+	        mHandler.post(mScroll);
 		}
 		/**
 		 * ***Cool Custom Toast for unlock, mute etc ***
