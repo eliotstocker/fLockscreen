@@ -291,7 +291,7 @@ public class mainActivity extends Activity {
 		super.onAttachedToWindow();
 		Thread start = new Thread() {
 			public void run() {
-				mHandler.post(mScroll);
+				mHandler.post(mScrollStart);
 			}
 		};
 		start.start();
@@ -1050,6 +1050,15 @@ public class mainActivity extends Activity {
             	LinearLayout mainFrame = (LinearLayout) findViewById(R.id.base);
         		HorizontalScrollView slider = (HorizontalScrollView) findViewById(R.id.mainSlide);
                 slider.smoothScrollTo(mainFrame.getLeft(), 0);
+                slider.postInvalidate();
+            }
+        };
+        
+        final Runnable mScrollStart = new Runnable() {
+            public void run() {
+            	LinearLayout mainFrame = (LinearLayout) findViewById(R.id.base);
+        		HorizontalScrollView slider = (HorizontalScrollView) findViewById(R.id.mainSlide);
+                slider.scrollTo(mainFrame.getLeft(), 0);
                 slider.postInvalidate();
             }
         };
