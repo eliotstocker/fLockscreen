@@ -226,8 +226,8 @@ public class updateService extends Service {
             } else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
             	Log.d("Lockscreen", "Screen On");
             	if (!inCall()){
-            		KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("fLockscreen");
-            		keyguardLock.disableKeyguard();
+            		ManageKeyguard.disableKeyguard(getApplicationContext()); 
+
             	}
 			} else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
             	Log.d("Lockscreen", "Screen Off");
@@ -235,9 +235,7 @@ public class updateService extends Service {
             		Intent lock=utils.getLockIntent(this);
             		lock.setAction(utils.ACTION_LOCK);
             		startActivity(lock);
-            		KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("fLockscreen");
-            		keyguardLock.disableKeyguard();
-            		//ManageKeyguard.reenableKeyguard();
+            		ManageKeyguard.reenableKeyguard(); 
             	}
             } else if(aIntent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)){
             	Log.d("Lockscreen", "Boot Completed");

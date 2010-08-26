@@ -141,24 +141,15 @@ public class mainActivity extends Activity {
 		        }	        
 		        launcher.setAction("android.intent.action.MAIN");
 		        launcher.addCategory("android.intent.category.HOME");
-				KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-				KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("fLockscreen");
-				keyguardLock.disableKeyguard();
 		        startActivity(launcher);
 			}else{
 				Intent chooser=new Intent(this, HomeChooserActivity.class);
 				chooser.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 				chooser.putExtra("loadOnClick", true);
-				KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-				KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("fLockscreen");
-				keyguardLock.disableKeyguard();
 				startActivity(chooser);
 			}
 	        finish();
 		}else{
-			KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-			KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("fLockscreen");
-			keyguardLock.disableKeyguard();
 			setContentView(R.layout.slide_base);
 			
 			//Start Slider Stuff
