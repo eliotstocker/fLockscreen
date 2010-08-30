@@ -1440,12 +1440,18 @@ public class mainActivity extends Activity {
 		@Override
 		protected void onDestroy() {
 			// TODO Auto-generated method stub
+			
+			try {
 			if(mStatusListener != null) {
-			//	unregisterReceiver(mStatusListener); --this is causing FC onDestroy on my N1 (ES)
+				unregisterReceiver(mStatusListener);
 			}
 			if(conn != null) {
 				unbindService(conn);
 			}
+			} catch (Exception e) {
+				e.getMessage();
+			}
+
 			super.onDestroy();
 		}
 
