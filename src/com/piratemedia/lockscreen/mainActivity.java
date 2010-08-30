@@ -704,7 +704,7 @@ public class mainActivity extends Activity {
         			try {
         				if (piratemedia.isPlaying()) {
         					playback = true;
-        					if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.KEY_FULLSCREEN, true)) {
+        					if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.KEY_SHOW_ART, true)) {
         					updateArt(piratemedia.getAlbumId(), piratemedia.getAudioId());
         					}
         					updateInfo(piratemedia.getArtistName(), piratemedia.getAlbumName(), piratemedia.getTrackName());
