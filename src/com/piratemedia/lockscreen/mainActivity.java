@@ -215,6 +215,7 @@ public class mainActivity extends Activity {
 		    	case 1: {
 		    		Intent i = new Intent();
 		    		i.setClassName("com.android.music", "com.android.music.MediaPlaybackService");
+		    		startService(i);
 		    		conn = new MediaPlayerServiceConnectionStock();
 		    		this.bindService(i, conn, BIND_AUTO_CREATE);		    		
 		    		break;
@@ -222,6 +223,7 @@ public class mainActivity extends Activity {
 		    	case 2: {
 		    		Intent i = new Intent();
 		    		i.setClassName("com.htc.music", "com.htc.music.MediaPlaybackService");
+		    		startService(i);
 		    		conn = new MediaPlayerServiceConnectionHTC();
 		    		this.bindService(i, conn, BIND_AUTO_CREATE);
 		    		break;
@@ -229,6 +231,7 @@ public class mainActivity extends Activity {
 		    	case 3: {
 		    		Intent i = new Intent();
 		    		i.setClassName("com.piratemedia.musicmod", "com.piratemedia.musicmod.MediaPlaybackService");
+		    		startService(i);
 		    		conn = new MediaPlayerServiceConnectionPirate();
 		    		this.bindService(i, conn, BIND_AUTO_CREATE);
 		    		break;
@@ -1451,7 +1454,6 @@ public class mainActivity extends Activity {
 			} catch (Exception e) {
 				e.getMessage();
 			}
-
 			super.onDestroy();
 		}
 
