@@ -1272,6 +1272,7 @@ public class mainActivity extends Activity {
 	        Handler handler=new Handler();
 	        handler.postDelayed(new Runnable() {
 				public void run() {
+					ManageKeyguard.exitKeyguardSecurely(null);
 					finish();
 					overridePendingTransition(R.anim.fadein_fast, R.anim.fadeout_fast);
 				}
