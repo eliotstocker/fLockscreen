@@ -8,10 +8,8 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.KeyguardManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.ActivityManager.RunningTaskInfo;
-import android.app.KeyguardManager.KeyguardLock;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -211,32 +209,7 @@ public class mainActivity extends Activity {
 		    mMissedCount = (TextView) findViewById(R.id.missedcount);
 		    mGmailCount = (TextView) findViewById(R.id.gmailcount);
 			
-		    switch(getPlayer()) {
-		    	case 1: {
-		    		Intent i = new Intent();
-		    		i.setClassName("com.android.music", "com.android.music.MediaPlaybackService");
-		    		startService(i);
-		    		conn = new MediaPlayerServiceConnectionStock();
-		    		this.bindService(i, conn, BIND_AUTO_CREATE);		    		
-		    		break;
-		    	}
-		    	case 2: {
-		    		Intent i = new Intent();
-		    		i.setClassName("com.htc.music", "com.htc.music.MediaPlaybackService");
-		    		startService(i);
-		    		conn = new MediaPlayerServiceConnectionHTC();
-		    		this.bindService(i, conn, BIND_AUTO_CREATE);
-		    		break;
-		    	}
-		    	case 3: {
-		    		Intent i = new Intent();
-		    		i.setClassName("com.piratemedia.musicmod", "com.piratemedia.musicmod.MediaPlaybackService");
-		    		startService(i);
-		    		conn = new MediaPlayerServiceConnectionPirate();
-		    		this.bindService(i, conn, BIND_AUTO_CREATE);
-		    		break;
-		    	}
-		    }
+		    BindMusicService();
 		    
 			setButtonIntents();
 			setPlayButton();
@@ -317,6 +290,35 @@ public class mainActivity extends Activity {
     public void onBackPressed () {
     	//slide to unlock is now working, so back can now do nothing
     	//unlockScreen();
+    }
+    
+    public void BindMusicService() {
+	    switch(getPlayer()) {
+    	case 1: {
+    		Intent i = new Intent();
+    		i.setClassName("com.android.music", "com.android.music.MediaPlaybackService");
+    		startService(i);
+    		conn = new MediaPlayerServiceConnectionStock();
+    		this.bindService(i, conn, BIND_AUTO_CREATE);		    		
+    		break;
+    	}
+    	case 2: {
+    		Intent i = new Intent();
+    		i.setClassName("com.htc.music", "com.htc.music.MediaPlaybackService");
+    		startService(i);
+    		conn = new MediaPlayerServiceConnectionHTC();
+    		this.bindService(i, conn, BIND_AUTO_CREATE);
+    		break;
+    	}
+    	case 3: {
+    		Intent i = new Intent();
+    		i.setClassName("com.piratemedia.musicmod", "com.piratemedia.musicmod.MediaPlaybackService");
+    		startService(i);
+    		conn = new MediaPlayerServiceConnectionPirate();
+    		this.bindService(i, conn, BIND_AUTO_CREATE);
+    		break;
+    	}
+    }
     }
     
     private BroadcastReceiver mStatusListener = new BroadcastReceiver() {

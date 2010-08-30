@@ -1,14 +1,26 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:piratemedia="http://schemas.android.com/apk/res/com.piratemedia.lockscreen">
 
 <LinearLayout android:id="@+id/left_action"
 	android:layout_height="fill_parent" android:layout_width="wrap_content"
 	android:orientation="horizontal" android:gravity="center"
 	android:background="@drawable/shadow_left">
 
-	<ImageView android:id="@+id/unlock_slide_left"
+	<LinearLayout android:id="@+id/unlock_slide_left"
+		android:layout_height="fill_parent" android:layout_width="wrap_content"
+		android:orientation="vertical" android:gravity="center" >
+		
+	<com.piratemedia.lockscreen.RotateView
+		piratemedia:text="Unlock" piratemedia:textColor="#ff000000"
+		piratemedia:textSize="25dp" android:layout_width="wrap_content"
+		android:layout_height="wrap_content"/>
+	
+	<ImageView
     	android:src="@drawable/unlock_slide" android:paddingLeft="15dp"
     	android:paddingRight="15dp" android:layout_width="wrap_content"
     	android:layout_height="wrap_content"/>
+    	
+    </LinearLayout>
     	
     <ImageView android:id="@+id/mute_slide_left"
     	android:src="@drawable/mute_slide" android:paddingLeft="15dp"
