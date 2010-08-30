@@ -159,8 +159,8 @@ public class updateService extends Service {
                         unbindService(this);
                     }
                     public void onServiceDisconnected(ComponentName aName) {
-                        	playing = false;
-                        	notifyChange(MUSIC_STOPPED);
+                        	//playing = false;
+                        	//notifyChange(MUSIC_STOPPED);
                     }
 
                 }, 0);

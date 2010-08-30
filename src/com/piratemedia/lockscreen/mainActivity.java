@@ -1436,4 +1436,18 @@ public class mainActivity extends Activity {
 	    	
 	    	bluetoothMode();
 	    }
+
+		@Override
+		protected void onDestroy() {
+			// TODO Auto-generated method stub
+			unregisterReceiver(mStatusListener);
+			unbindService(conn);
+			super.onDestroy();
+		}
+
+		@Override
+		protected void onPause() {
+			// TODO Auto-generated method stub
+			super.onPause();
+		}
 }
