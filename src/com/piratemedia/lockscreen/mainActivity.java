@@ -115,6 +115,8 @@ public class mainActivity extends Activity {
 	
  	private String mLauncherPackage;
  	private String mLauncherActivity;
+ 	
+ 	private boolean unlocked=false;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -145,6 +147,7 @@ public class mainActivity extends Activity {
 			}else{
 				Intent chooser=new Intent(this, HomeChooserActivity.class);
 				chooser.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+				chooser.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				chooser.putExtra("loadOnClick", true);
 				startActivity(chooser);
 			}
@@ -167,6 +170,7 @@ public class mainActivity extends Activity {
 			
 			slider.setOnTouchListener(new OnTouchListener() {
 	            public boolean onTouch(View view, MotionEvent motionevent) {
+	            	if(unlocked)return true;
 	                if (motionevent.getAction() == MotionEvent.ACTION_UP || motionevent.getAction() == MotionEvent.ACTION_CANCEL) {
 	                	stopAllCounts();
 	                	Thread t = new Thread() {
@@ -506,16 +510,21 @@ public class mainActivity extends Activity {
     private void bluetoothMode() {
 	    BluetoothAdapter bta = (BluetoothAdapter)
 	    BluetoothAdapter.getDefaultAdapter();
-	    boolean on = bta.isEnabled();
-	    
 	    ImageView BluetoothIcon = (ImageView) findViewById(R.id.bluetooth);
-	    if (utils.getCheckBoxPref(this, LockscreenSettings.BLUETOOTH_MODE_KEY, true)) {
-	    	if(on){
-	    		BluetoothIcon.setVisibility(View.VISIBLE);
-	    	} else {
-	    		BluetoothIcon.setVisibility(View.GONE);
-	    	}
-	    } else {
+
+	    if(bta!=null){
+		    boolean on = bta.isEnabled();
+		    
+		    if (utils.getCheckBoxPref(this, LockscreenSettings.BLUETOOTH_MODE_KEY, true)) {
+		    	if(on){
+		    		BluetoothIcon.setVisibility(View.VISIBLE);
+		    	} else {
+		    		BluetoothIcon.setVisibility(View.GONE);
+		    	}
+		    } else {
+		    	BluetoothIcon.setVisibility(View.GONE);
+		    }
+	    }else{
 	    	BluetoothIcon.setVisibility(View.GONE);
 	    }
     }
@@ -1258,6 +1267,7 @@ public class mainActivity extends Activity {
 		 * we just should call finish() so it goes to the last open app
 		 */
 		private void unlockScreen(){
+			unlocked=true;
 			whatsHappening(R.drawable.unlock, Toast.LENGTH_SHORT);
 	        Handler handler=new Handler();
 	        handler.postDelayed(new Runnable() {
