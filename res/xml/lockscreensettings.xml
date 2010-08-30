@@ -29,6 +29,10 @@
 		android:dialogTitle="@string/right_action_title" android:entries="@array/action_entries"
 		android:entryValues="@array/actionvals" android:defaultValue="2"/>
 		
+	<CheckBoxPreference android:key="muteMode"
+		android:title="@string/Vibrate_title" android:summaryOn="@string/Vibrate_on"
+		android:summaryOff="@string/Vibrate_off" android:defaultValue="true"/>
+		
 	<CheckBoxPreference android:key="landscape"
 		android:defaultValue="false" android:title="@string/landscape_title"
 		android:summaryOn="@string/landscape_on" android:summaryOff="@string/landscape_off" />

@@ -62,6 +62,11 @@
 		<item>4</item>
 		<item>5</item>
 	</string-array>
+	
+	<!-- Settings Mute Mode -->
+	<string name="Vibrate_title">Vibrate Mode on Mute</string>
+	<string name="Vibrate_on">When phone is set to Mute Mode, Vibration is on</string>
+	<string name="Vibrate_off">When phone is set to Mute Mode, Vibration is off</string>
     
     <!-- Settings Landscape -->
     <string name="landscape_title">Landscape Mode</string>

@@ -60,6 +60,8 @@ public class LockscreenSettings extends PreferenceActivity {
 	static final String RIGHT_ACTION_KEY = "rightAction";
 	
 	static final String BLUETOOTH_MODE_KEY = "bluetooth_mode";
+	
+	static final String MUTE_MODE_KEY = "muteMode";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

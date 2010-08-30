@@ -14,6 +14,7 @@ public class RotateView extends View {
     private String mText;
     private int mAscent;
     private Rect text_bounds = new Rect();
+    private int rotateVal;
 
     final static int DEFAULT_TEXT_SIZE = 15;
 
@@ -26,16 +27,18 @@ public class RotateView extends View {
         super(context, attrs);
         initLabelView();
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.VerticalLabelView);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RotateView);
 
-        CharSequence s = a.getString(R.styleable.VerticalLabelView_text);
+        CharSequence s = a.getString(R.styleable.RotateView_text);
         if (s != null) setText(s.toString());
 
-        setTextColor(a.getColor(R.styleable.VerticalLabelView_textColor, 0xFF000000));
+        setTextColor(a.getColor(R.styleable.RotateView_textColor, 0xFF000000));
 
-        int textSize = a.getDimensionPixelOffset(R.styleable.VerticalLabelView_textSize, 0);
+        int textSize = a.getDimensionPixelOffset(R.styleable.RotateView_textSize, 0);
         if (textSize > 0) setTextSize(textSize);
 
+        rotateVal = a.getInt(R.styleable.RotateView_rotate, 90);
+        
         a.recycle();
     }
 
@@ -45,7 +48,7 @@ public class RotateView extends View {
         mTextPaint.setTextSize(DEFAULT_TEXT_SIZE);
         mTextPaint.setColor(0xFF000000);
         mTextPaint.setTextAlign(Align.CENTER);
-        setPadding(3, 3, 3, 3);
+        setPadding(0, 0, 0, 0);
     }
 
     public void setText(String text) {
@@ -120,10 +123,10 @@ public class RotateView extends View {
         super.onDraw(canvas);
 
         float text_horizontally_centered_origin_x = getPaddingLeft() + text_bounds.width()/2f;
-        float text_horizontally_centered_origin_y = getPaddingTop() - mAscent;
+        float text_horizontally_centered_origin_y = getPaddingTop() - mAscent - getPaddingBottom();
 
         canvas.translate(text_horizontally_centered_origin_y, text_horizontally_centered_origin_x);
-        canvas.rotate(-90);
+        canvas.rotate(rotateVal);
         canvas.drawText(mText, 0, 0, mTextPaint);
     }
 }
