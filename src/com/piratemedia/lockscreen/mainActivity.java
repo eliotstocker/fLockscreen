@@ -1354,7 +1354,7 @@ public class mainActivity extends Activity {
         	ImageView brightness_right = (ImageView) findViewById(R.id.brightness_slide_right);
         	ImageView wifi_right = (ImageView) findViewById(R.id.wifi_slide_right);
         	ImageView bluetooth_right = (ImageView) findViewById(R.id.bluetooth_slide_right);
-        	ImageView unlock_left = (ImageView) findViewById(R.id.unlock_slide_left);
+        	LinearLayout unlock_left = (LinearLayout) findViewById(R.id.unlock_slide_left);
         	ImageView mute_left = (ImageView) findViewById(R.id.mute_slide_left);
         	ImageView brightness_left = (ImageView) findViewById(R.id.brightness_slide_left);
         	ImageView wifi_left = (ImageView) findViewById(R.id.wifi_slide_left);
