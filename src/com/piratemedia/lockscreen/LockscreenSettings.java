@@ -164,11 +164,13 @@ public class LockscreenSettings extends PreferenceActivity {
 	    intent.setType("image/*");
 		Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay(); 
     	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_LANDSCAPE, false)) {
-    		width = display.getHeight();
-    		height = display.getWidth();
+    		//for some reson these dont work unless the are halved, ie 800x480 is too big
+    		//TODO: we need to fix this :)
+    		width = display.getHeight()/2;
+    		height = display.getWidth()/2;
     	} else {
-    		width = display.getWidth();
-    		height = display.getHeight();
+    		width = display.getWidth()/2;
+    		height = display.getHeight()/2;
     	}
         intent.putExtra("crop", "true");
 		intent.putExtra("outputX", width);
