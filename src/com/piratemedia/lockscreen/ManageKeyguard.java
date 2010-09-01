@@ -57,14 +57,14 @@ public class ManageKeyguard {
           reenableKeyguard();
           if (success) {
             if (DEBUG) Log.v(LOGTAG,"--Keyguard exited securely");
-            callback.LaunchOnKeyguardExitSuccess();
+            if(callback!=null)callback.LaunchOnKeyguardExitSuccess();
           } else {
             if (DEBUG) Log.v(LOGTAG,"--Keyguard exit failed");
           }
         }
       });
     } else {
-      callback.LaunchOnKeyguardExitSuccess();
+      if(callback!=null)callback.LaunchOnKeyguardExitSuccess();
     }
   }
 
