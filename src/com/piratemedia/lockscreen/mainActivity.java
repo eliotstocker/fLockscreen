@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -251,7 +252,7 @@ public class mainActivity extends Activity {
 	    setSmsCountText();
 	    setMissedCountText();
 	    setGmailCountText();
-	    
+	    setContentObservers();
 	    getNextAlarm();
 	    getDate();
 	    updateNetworkInfo();
@@ -878,7 +879,7 @@ public class mainActivity extends Activity {
     // doing the right stuff, but its still got working :( andy fix? :P
 		public static int[] getGmailUnreadCount(Context context) { 
     	    
-    	    String account="eliot@piratemedia.tv";
+    	    String account="anderweb@gmail.com";
     	    Uri LABELS_URI = GMAIL_CONTENT_URI;
     	    Uri ACCOUNT_URI = Uri.withAppendedPath(LABELS_URI, account);
     	    ContentResolver contentResolver = context.getContentResolver();
@@ -1457,6 +1458,7 @@ public class mainActivity extends Activity {
 			} catch (Exception e) {
 				e.getMessage();
 			}
+			this.getApplicationContext().getContentResolver().unregisterContentObserver(mGmailObserver);
 			super.onDestroy();
 		}
 
@@ -1465,4 +1467,33 @@ public class mainActivity extends Activity {
 			// TODO Auto-generated method stub
 			super.onPause();
 		}
+		/**
+		 * GMAIL CONTENT OBSERVER STUFF
+		 * @author adw
+		 *
+		 */
+	    private class MyGmailObserver extends ContentObserver {
+
+	        public MyGmailObserver() {
+	            super(null);
+	        }
+
+	        @Override
+	        public void onChange(boolean selfChange) {
+	    		mGetGmailCount = getGmailUnreadCount(getBaseContext());
+	    	    setSmsCountText();
+	    	    setMissedCountText();
+	    	    setGmailCountText();
+	            //super.onChange(selfChange);
+	        }
+
+	    }
+
+	    MyGmailObserver mGmailObserver = new MyGmailObserver();
+
+		private void setContentObservers() {
+			this.getApplicationContext().getContentResolver().
+				registerContentObserver (Uri.parse("content://gmail-ls/"), true, mGmailObserver);
+		}
+		
 }

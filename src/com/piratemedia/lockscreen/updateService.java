@@ -38,7 +38,6 @@ public class updateService extends Service {
 	public long songId;
 	public int batLevel;
 	public int batpercentage;
-	private KeyguardManager keyguardManager;
 
     @Override
     public void onCreate() {
@@ -48,8 +47,6 @@ public class updateService extends Service {
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         BroadcastReceiver mReceiver = new intentReceiver();
         registerReceiver(mReceiver, filter);
-        keyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
-        
     }
 
     public int onStartCommand(Intent aIntent, int aFlags, int aStartId) {
