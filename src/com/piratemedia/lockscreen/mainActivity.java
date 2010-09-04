@@ -66,11 +66,13 @@ public class mainActivity extends Activity {
 	
     public static final Uri GMAIL_CONTENT_URI = Uri.parse("content://gmail-ls/labels/");
     public static final String GMAIL_ID = "_id";
-    public static final String CANONICAL_NAME = "canonicalName";
-    public static final String NAME = "name";
-    public static final String NUM_CONVERSATIONS = "numConversations";
-    public static final String NUM_UNREAD_CONVERSATIONS = "numUnreadConversations";
-
+    public static final String GMAIL_CANONICAL_NAME = "canonicalName";
+    public static final String GMAIL_NAME = "name";
+    public static final String GMAIL_NUM_CONVERSATIONS = "numConversations";
+    public static final String GMAIL_NUM_UNREAD_CONVERSATIONS = "numUnreadConversations";
+    public static final String GMAIL_LABEL_UNSEEN = "^^unseen-^i";
+    public static final String GMAIL_LABEL_UNREAD = "^i";
+    
     public static final Uri CALL_CONTENT_URI = Uri.parse("content://call_log");
     public static final Uri CALL_LOG_CONTENT_URI  = Uri.withAppendedPath(CALL_CONTENT_URI, "calls");
     public static final String CALLER_ID = "_id";
@@ -103,7 +105,7 @@ public class mainActivity extends Activity {
 
     private int mGetSmsCount = 0;
     private int mGetMissedCount = 0;
-    private int mGetGmailCount = 0;
+    private int[] mGetGmailCount = {0,0};
     
 	private String prevString;
  	private String toggleString;
@@ -874,42 +876,43 @@ public class mainActivity extends Activity {
     
     // gmail count TODO: not crashing anymore, and seems to be
     // doing the right stuff, but its still got working :( andy fix? :P
-		public static int getGmailUnreadCount(Context context) { 
+		public static int[] getGmailUnreadCount(Context context) { 
     	    
     	    String account="eliot@piratemedia.tv";
     	    Uri LABELS_URI = GMAIL_CONTENT_URI;
     	    Uri ACCOUNT_URI = Uri.withAppendedPath(LABELS_URI, account);
     	    ContentResolver contentResolver = context.getContentResolver();
-    	    Cursor cursor = contentResolver.query(ACCOUNT_URI, null, null, null, null);
-
-    	    int count = 0; 
-    	    if(cursor==null)return 0;
+    	    String[] columns={GMAIL_CANONICAL_NAME,GMAIL_NUM_UNREAD_CONVERSATIONS};
+    	    Cursor cursor = contentResolver.query(ACCOUNT_URI,columns,null ,null, null);
+    	    int count = 0;
+    	    int unseen=0;
+    	    if(cursor==null)return new int[]{0,0};
     	    if (cursor.moveToFirst()) {
-    	        int unreadColumn = cursor.getColumnIndex(NUM_UNREAD_CONVERSATIONS);
-    	        int nameColumn = cursor.getColumnIndex(NAME);
+    	        int unreadColumn = cursor.getColumnIndex(GMAIL_NUM_UNREAD_CONVERSATIONS);
+    	        int nameColumn = cursor.getColumnIndex(GMAIL_CANONICAL_NAME);
     	        do {
     	        	String name = cursor.getString(nameColumn);
     	            String unread = cursor.getString(unreadColumn);//here's the value you need
-    	            count = Integer.parseInt(unread); 
+    	            if(name.equals(GMAIL_LABEL_UNREAD)){
+    	            	count = Integer.parseInt(unread);
+    	            }
+    	            if(name.equals(GMAIL_LABEL_UNSEEN)){
+    	            	unseen = Integer.parseInt(unread);
+    	            }
     	        } while (cursor.moveToNext());
     	    }
-    	    return count;
+    	    cursor.close();
+    	    return new int[]{count,unseen};
     	}
 
         private void setGmailCountText() {
         	if (utils.getCheckBoxPref(this, LockscreenSettings.GMAIL_COUNT_KEY, true)) {
-        		if (mGetGmailCount <= 0) {
+        		if (mGetGmailCount[0] <= 0 && mGetGmailCount[1] <= 0) {
                     mGmailCount.setVisibility(View.GONE);
                 } else {
-                	if (mGetGmailCount == 1) {
-                		mGmailCount.setVisibility(View.VISIBLE);
-                		mGmailCount.setText(
-                            getBaseContext().getString(R.string.lockscreen_1_email, mGetGmailCount));
-                	} else {
-                		mGmailCount.setVisibility(View.VISIBLE);
-                		mGmailCount.setText(
-                            getBaseContext().getString(R.string.lockscreen_lots_email, mGetGmailCount));
-                	}
+            		mGmailCount.setVisibility(View.VISIBLE);
+            		String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count, mGetGmailCount[0]);
+            		mGmailCount.setText(String.format(emails, mGetGmailCount[0],mGetGmailCount[1]));
                 }
         	} else {
                 mGmailCount.setVisibility(View.GONE);
@@ -944,15 +947,9 @@ public class mainActivity extends Activity {
         		if (mGetMissedCount <= 0) {
         			mMissedCount.setVisibility(View.GONE);
                 } else {
-                	if (mGetMissedCount == 1) {
                 		mMissedCount.setVisibility(View.VISIBLE);
                 		mMissedCount.setText(
-                            getBaseContext().getString(R.string.lockscreen_1_missed, mGetMissedCount));
-                	} else {
-                		mMissedCount.setVisibility(View.VISIBLE);
-                		mMissedCount.setText(
-                            getBaseContext().getString(R.string.lockscreen_lots_missed, mGetMissedCount));
-                	}
+                            String.format(getResources().getQuantityString(R.plurals.lockscreen_missed_count, mGetMissedCount),mGetMissedCount));
                 }
         	} else {
         		mMissedCount.setVisibility(View.GONE);

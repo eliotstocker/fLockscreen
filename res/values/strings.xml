@@ -5,14 +5,16 @@
 	<string name="music_info"><xliff:g id="artistInfo">%s</xliff:g> - <xliff:g id="trackInfo">%s</xliff:g></string>
 	<!-- sms count -->
     <string name="lockscreen_sms_count"><xliff:g id="number">%d</xliff:g> Unread SMS</string>
-    <!-- 1 missed call count -->
-    <string name="lockscreen_1_missed"><xliff:g id="number">%d</xliff:g> Missed Call</string>
-    <!-- more than 1 missed call count -->
-    <string name="lockscreen_lots_missed"><xliff:g id="number">%d</xliff:g> Missed Calls</string>
-    <!-- 1 unread Email count -->
-    <string name="lockscreen_1_email"><xliff:g id="number">%d</xliff:g> Unread Email</string>
-    <!-- more than 1 Unread Email count -->
-    <string name="lockscreen_lots_email"><xliff:g id="number">%d</xliff:g> Unread Emails</string>
+    <plurals name="lockscreen_missed_count">
+        <item quantity="one"><xliff:g id="number">%d</xliff:g> Missed Call</item>
+        <item quantity="other"><xliff:g id="number">%d</xliff:g> Missed Calls</item>
+    </plurals>
+    <plurals name="lockscreen_email_count">
+        <item quantity="one"><xliff:g id="number">%d</xliff:g> Unread Email (<xliff:g id="number">%d</xliff:g> unseen)</item>
+        <item quantity="other"><xliff:g id="number">%d</xliff:g> Unread Emails (<xliff:g id="number">%d</xliff:g> unseen)</item>
+    </plurals>
+    
+    
     <string name="battery_level">Battery (<xliff:g id="batLevel">%s</xliff:g>)</string>
     <string name="battery_charging">Charging (<xliff:g id="batLevel">%s</xliff:g>)</string>
     <string name="battery_charged">Charged</string>
