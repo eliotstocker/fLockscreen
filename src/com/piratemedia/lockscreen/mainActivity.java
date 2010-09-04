@@ -1,11 +1,14 @@
 package com.piratemedia.lockscreen;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -102,11 +105,10 @@ public class mainActivity extends Activity {
     
     private TextView mSmsCount;
     private TextView mMissedCount;
-    private TextView mGmailCount;
+    private LinearLayout mLayoutNotifications;
 
     private int mGetSmsCount = 0;
     private int mGetMissedCount = 0;
-    private int[] mGetGmailCount = {0,0};
     
 	private String prevString;
  	private String toggleString;
@@ -118,6 +120,7 @@ public class mainActivity extends Activity {
  	private String mLauncherActivity;
  	
  	private boolean unlocked=false;
+ 	private ArrayList<GmailData> mAccountList;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -205,13 +208,19 @@ public class mainActivity extends Activity {
 					return false;
 	            };
 			});
-			
+			loadAccounts();
 			//End Slider Stuff
-			
-			mSmsCount = (TextView) findViewById(R.id.smscount);
-		    mMissedCount = (TextView) findViewById(R.id.missedcount);
-		    mGmailCount = (TextView) findViewById(R.id.gmailcount);
-			
+			LayoutInflater layoutInflater=getLayoutInflater();
+		    mLayoutNotifications = (LinearLayout) findViewById(R.id.lock_notifications);
+			mSmsCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
+			mLayoutNotifications.addView(mSmsCount);
+		    mMissedCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
+		    mLayoutNotifications.addView(mMissedCount);
+		    for(GmailData data:mAccountList){
+		    	data.view=(TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
+		    	mLayoutNotifications.addView(data.view);
+		    }
+		    mLayoutNotifications.requestLayout();
 		    BindMusicService();
 		    
 			setButtonIntents();
@@ -235,7 +244,6 @@ public class mainActivity extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		
 		setFullscreen();
 		setLandscape();
 		getPlayer();
@@ -247,7 +255,6 @@ public class mainActivity extends Activity {
         
 	    mGetSmsCount = getUnreadSmsCount(getBaseContext());
 		mGetMissedCount = getMissedCallCount(getBaseContext());
-		mGetGmailCount = getGmailUnreadCount(getBaseContext());
 		
 	    setSmsCountText();
 	    setMissedCountText();
@@ -257,7 +264,6 @@ public class mainActivity extends Activity {
 	    getDate();
 	    updateNetworkInfo();
 	    muteMode(true);
-		
 	}
 
 	@Override
@@ -875,48 +881,61 @@ public class mainActivity extends Activity {
         InfoBox.startAnimation(loadAnim(anim, null));
     }
     
-    // gmail count TODO: not crashing anymore, and seems to be
-    // doing the right stuff, but its still got working :( andy fix? :P
-		public static int[] getGmailUnreadCount(Context context) { 
-    	    
-    	    String account="anderweb@gmail.com";
-    	    Uri LABELS_URI = GMAIL_CONTENT_URI;
-    	    Uri ACCOUNT_URI = Uri.withAppendedPath(LABELS_URI, account);
-    	    ContentResolver contentResolver = context.getContentResolver();
-    	    String[] columns={GMAIL_CANONICAL_NAME,GMAIL_NUM_UNREAD_CONVERSATIONS};
-    	    Cursor cursor = contentResolver.query(ACCOUNT_URI,columns,null ,null, null);
-    	    int count = 0;
-    	    int unseen=0;
-    	    if(cursor==null)return new int[]{0,0};
-    	    if (cursor.moveToFirst()) {
-    	        int unreadColumn = cursor.getColumnIndex(GMAIL_NUM_UNREAD_CONVERSATIONS);
-    	        int nameColumn = cursor.getColumnIndex(GMAIL_CANONICAL_NAME);
-    	        do {
-    	        	String name = cursor.getString(nameColumn);
-    	            String unread = cursor.getString(unreadColumn);//here's the value you need
-    	            if(name.equals(GMAIL_LABEL_UNREAD)){
-    	            	count = Integer.parseInt(unread);
-    	            }
-    	            if(name.equals(GMAIL_LABEL_UNSEEN)){
-    	            	unseen = Integer.parseInt(unread);
-    	            }
-    	        } while (cursor.moveToNext());
-    	    }
-    	    cursor.close();
-    	    return new int[]{count,unseen};
-    	}
+	/**
+	 * Changin this to store the data inside the accounts arrayList.
+	 * @param context
+	 * @return
+	 */
+    public void getGmailUnreadCount(Context context) { 
+	    
+	    for(int i=0;i<mAccountList.size();i++){
+	    	String account=mAccountList.get(i).name;
+		    Uri LABELS_URI = GMAIL_CONTENT_URI;
+		    Uri ACCOUNT_URI = Uri.withAppendedPath(LABELS_URI, account);
+		    ContentResolver contentResolver = context.getContentResolver();
+		    String[] columns={GMAIL_CANONICAL_NAME,GMAIL_NUM_UNREAD_CONVERSATIONS};
+		    Cursor cursor = contentResolver.query(ACCOUNT_URI,columns,null ,null, null);
+		    int count = 0;
+		    int unseen=0;
+		    if(cursor==null){
+		    	mAccountList.get(i).unread=0;
+		    	mAccountList.get(i).unseen=0;
+		    }else if (cursor.moveToFirst()) {
+		        int unreadColumn = cursor.getColumnIndex(GMAIL_NUM_UNREAD_CONVERSATIONS);
+		        int nameColumn = cursor.getColumnIndex(GMAIL_CANONICAL_NAME);
+		        do {
+		        	String name = cursor.getString(nameColumn);
+		            String unread = cursor.getString(unreadColumn);//here's the value you need
+		            if(name.equals(GMAIL_LABEL_UNREAD)){
+		            	count = Integer.parseInt(unread);
+		            }
+		            if(name.equals(GMAIL_LABEL_UNSEEN)){
+		            	unseen = Integer.parseInt(unread);
+		            }
+		        } while (cursor.moveToNext());
+		    }
+		    cursor.close();
+		    mAccountList.get(i).unread=count;
+		    mAccountList.get(i).unseen=unseen;
+	    }
+	}
 
         private void setGmailCountText() {
         	if (utils.getCheckBoxPref(this, LockscreenSettings.GMAIL_COUNT_KEY, true)) {
-        		if (mGetGmailCount[0] <= 0 && mGetGmailCount[1] <= 0) {
-                    mGmailCount.setVisibility(View.GONE);
-                } else {
-            		mGmailCount.setVisibility(View.VISIBLE);
-            		String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count, mGetGmailCount[0]);
-            		mGmailCount.setText(String.format(emails, mGetGmailCount[0],mGetGmailCount[1]));
-                }
+        		getGmailUnreadCount(getBaseContext());
+        		for(GmailData data: mAccountList){
+        			if (data.unread <= 0 && data.unseen <= 0) {
+	                    data.view.setVisibility(View.GONE);
+	                } else {
+	            		data.view.setVisibility(View.VISIBLE);
+	            		String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count, data.unread);
+	            		data.view.setText(String.format(emails, data.name,data.unread,data.unseen));
+	                }
+        		}
         	} else {
-                mGmailCount.setVisibility(View.GONE);
+        		for(GmailData data: mAccountList){
+        			data.view.setVisibility(View.GONE);
+        		}
         	}
         }
 
@@ -1480,9 +1499,6 @@ public class mainActivity extends Activity {
 
 	        @Override
 	        public void onChange(boolean selfChange) {
-	    		mGetGmailCount = getGmailUnreadCount(getBaseContext());
-	    	    setSmsCountText();
-	    	    setMissedCountText();
 	    	    setGmailCountText();
 	            //super.onChange(selfChange);
 	        }
@@ -1495,5 +1511,30 @@ public class mainActivity extends Activity {
 			this.getApplicationContext().getContentResolver().
 				registerContentObserver (Uri.parse("content://gmail-ls/"), true, mGmailObserver);
 		}
-		
+		/**
+		 * Get the system accounts to later load gmail notifications
+		 */
+		private void loadAccounts(){
+			if(mAccountList==null)mAccountList=new ArrayList<GmailData>();
+			AccountManager ac=AccountManager.get(getApplicationContext());
+			String type="com.google";
+			Account[] accounts=ac.getAccountsByType(type);
+			for(Account a:accounts){
+				GmailData d=new GmailData(a.name);
+				mAccountList.add(d);
+			}
+		}
+		private class GmailData{
+			public GmailData(String name) {
+				this.name = name;
+			}
+			String name;
+			int unread=0;
+			int unseen=0;
+			TextView view=null;
+			@Override
+			public String toString(){
+				return "Account name="+name+" unread="+unread+" unseen="+unseen+" view="+view;
+			}
+		}
 }

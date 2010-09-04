@@ -10,8 +10,8 @@
         <item quantity="other"><xliff:g id="number">%d</xliff:g> Missed Calls</item>
     </plurals>
     <plurals name="lockscreen_email_count">
-        <item quantity="one"><xliff:g id="number">%d</xliff:g> Unread Email (<xliff:g id="number">%d</xliff:g> unseen)</item>
-        <item quantity="other"><xliff:g id="number">%d</xliff:g> Unread Emails (<xliff:g id="number">%d</xliff:g> unseen)</item>
+        <item quantity="one"><xliff:g id="string">%s</xliff:g>:<xliff:g id="number">%d</xliff:g> Unread Email (<xliff:g id="number">%d</xliff:g> unseen)</item>
+        <item quantity="other"><xliff:g id="string">%s</xliff:g>:<xliff:g id="number">%d</xliff:g> Unread Emails (<xliff:g id="number">%d</xliff:g> unseen)</item>
     </plurals>
     
     

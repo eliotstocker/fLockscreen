@@ -345,43 +345,10 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-	android:gravity="center"
-	android:layout_marginTop="70dip"
+		android:gravity="center"
+		android:layout_marginTop="70dip"
+		android:id="@+id/lock_notifications"
         >
-
-        <TextView android:id="@+id/smscount"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="center"
-                  android:textSize="15sp"
-                  android:textColor="#ffffffff"
-                  android:shadowColor="#ff000000"
-                  android:shadowDx="0"
-                  android:shadowDy="0"
-                  android:shadowRadius="3"/>
-
-        <TextView android:id="@+id/missedcount"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="center"
-                  android:textSize="15sp"
-                  android:textColor="#ffffffff"
-                  android:shadowColor="#ff000000"
-                  android:shadowDx="0"
-                  android:shadowDy="0"
-                  android:shadowRadius="3"/>
-
-        <TextView android:id="@+id/gmailcount"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="center"
-                  android:textSize="15sp"
-                  android:textColor="#ffffffff"
-                  android:shadowColor="#ff000000"
-                  android:shadowDx="0"
-                  android:shadowDy="0"
-                  android:shadowRadius="3"/>
-
     </LinearLayout>
 
 </LinearLayout>
