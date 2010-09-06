@@ -50,6 +50,19 @@
 		android:title="@string/players_title" android:summary="@string/players_summary"
 		android:dialogTitle="@string/players_dialog_title" android:defaultValue="1"/>
 		
+	<CheckBoxPreference android:key="gmail_labels"
+		android:defaultValue="true" android:title="@string/gmail_label_title"
+		android:summaryOn="@string/gmail_label_on" android:summaryOff="@string/gmail_label_off"/>
+		
+	<ListPreference android:key="gmail_view"
+		android:dialogTitle="@string/gmail_view_title_dia" android:entries="@array/gmail_view_ents"
+		android:entryValues="@array/gmail_view_vals" android:title="@string/gmail_view_title"
+		android:summary="@string/gmail_view_summary" android:defaultValue="1"/>
+		
+	<CheckBoxPreference android:key="gmail_merge"
+		android:title="@string/gmail_accounts_title" android:summaryOn="@string/gmail_accounts_on"
+		android:summaryOff="@string/gmail_accounts_off" android:defaultValue="false"/>
+	
 	<PreferenceScreen android:key="notifications"
 		android:title="Enable/Disble Notifications"
 		android:summary="Choose which notifications you wish you display on the lockscreen">

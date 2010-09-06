@@ -10,8 +10,16 @@
         <item quantity="other"><xliff:g id="number">%d</xliff:g> Missed Calls</item>
     </plurals>
     <plurals name="lockscreen_email_count">
-        <item quantity="one"><xliff:g id="string">%s</xliff:g>:<xliff:g id="number">%d</xliff:g> Unread Email (<xliff:g id="number">%d</xliff:g> unseen)</item>
-        <item quantity="other"><xliff:g id="string">%s</xliff:g>:<xliff:g id="number">%d</xliff:g> Unread Emails (<xliff:g id="number">%d</xliff:g> unseen)</item>
+        <item quantity="one"><xliff:g id="number">%d</xliff:g> Unread Email (<xliff:g id="number">%d</xliff:g> unseen)</item>
+        <item quantity="other"><xliff:g id="number">%d</xliff:g> Unread Emails (<xliff:g id="number">%d</xliff:g> unseen)</item>
+    </plurals>
+    <plurals name="lockscreen_email_unread_count">
+        <item quantity="one"><xliff:g id="number">%d</xliff:g> Unread Email</item>
+        <item quantity="other"><xliff:g id="number">%d</xliff:g> Unread Emails</item>
+    </plurals>
+    <plurals name="lockscreen_email_unseen_count">
+        <item quantity="one"><xliff:g id="number">%d</xliff:g> Unseen Email</item>
+        <item quantity="other"><xliff:g id="number">%d</xliff:g> Unseen Emails</item>
     </plurals>
     
     
@@ -125,6 +133,31 @@
 	
 	<string name="bluetooth_title">Bluetooth Icon</string>
 	<string name="bluetooth_summary">Display icon when Bluetooth is enabled</string>
+	
+	<!-- gmail settings -->
+	<string name="gmail_label_title">Gmail Account Labels</string>
+	<string name="gmail_label_on">Gmail Accounts displayed on fLockscreen will be labeled with there account address</string>
+	<string name="gmail_label_off">Gmail Acounts displayed on fLockscreen will have no account identification</string>
+	
+	<string name="gmail_view_title">Gmail Information layout</string>
+	<string name="gmail_view_title_dia">Select View Configuration</string>
+	<string name="gmail_view_summary">How you wish your gmail count to be displayed</string>
+	
+	<string-array name="gmail_view_ents">
+		<item>Unread Count Only</item>
+		<item>Unseen Count Only</item>
+		<item>Both Unread and Unseen</item>
+	</string-array>
+	
+	<string-array name="gmail_view_vals">
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+	</string-array>
+	
+	<string name="gmail_accounts_title">Merge Gmail Counts</string>
+	<string name="gmail_accounts_on">Counts for all Gmail accounts will be merged</string>
+	<string name="gmail_accounts_off">Counts for Gmail accounts will appear seperately</string>
     
     <!-- Settings Info -->
 	<string name="credits_cat">fLockscreen Info</string>
@@ -132,6 +165,7 @@
 	<string name="credits_name_summary">By Ander Webb and Eliot Stocker</string>
 	<string name="credits_version">v 0.5</string>
 	<string name="credits_version_summary">Early Access - Beta</string>
+	
 	<!-- Home chooser -->
 	<string name="home_chooser_title">Pick your default home application</string>
 	<string name="home_chooser_summary">Please pick your preferred home application </string>

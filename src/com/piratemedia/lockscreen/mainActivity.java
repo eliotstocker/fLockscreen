@@ -217,6 +217,8 @@ public class mainActivity extends Activity {
 		    mMissedCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
 		    mLayoutNotifications.addView(mMissedCount);
 		    for(GmailData data:mAccountList){
+		    	data.account=(TextView) layoutInflater.inflate(R.layout.gmail_account, mLayoutNotifications,false);
+		    	mLayoutNotifications.addView(data.account);
 		    	data.view=(TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
 		    	mLayoutNotifications.addView(data.view);
 		    }
@@ -925,11 +927,36 @@ public class mainActivity extends Activity {
         		getGmailUnreadCount(getBaseContext());
         		for(GmailData data: mAccountList){
         			if (data.unread <= 0 && data.unseen <= 0) {
+        				data.account.setVisibility(View.GONE);
 	                    data.view.setVisibility(View.GONE);
 	                } else {
+	                	if(utils.getCheckBoxPref(this, LockscreenSettings.GMAIL_ACCOUNT_KEY, true)){
+	                		data.account.setVisibility(View.VISIBLE);
+	                	} else {
+	                		data.account.setVisibility(View.GONE);
+	                	}
 	            		data.view.setVisibility(View.VISIBLE);
-	            		String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count, data.unread);
-	            		data.view.setText(String.format(emails, data.name,data.unread,data.unseen));
+	            		
+	            		String accounttxt = data.name;
+	            		data.account.setText(accounttxt);
+	            		
+	            		String gmail_view = utils.getStringPref(this , LockscreenSettings.GMAIL_VIEW_KEY, "1");
+	            		int gmail_view_int = Integer.parseInt(gmail_view);  
+	            		
+	            		switch(gmail_view_int) {
+	            		case 1:
+	            			String unread=getResources().getQuantityString(R.plurals.lockscreen_email_unread_count, data.unread);
+	            			data.view.setText(String.format(unread, data.unread));
+	            			break;
+	            		case 2:
+		            		String unseen=getResources().getQuantityString(R.plurals.lockscreen_email_unseen_count, data.unseen);
+		            		data.view.setText(String.format(unseen, data.unseen));
+		            		break;
+		            	default:
+		            		String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count, data.unread);
+		            		data.view.setText(String.format(emails, data.unread,data.unseen));
+		            		break;
+		            	}
 	                }
         		}
         	} else {
@@ -1531,10 +1558,11 @@ public class mainActivity extends Activity {
 			String name;
 			int unread=0;
 			int unseen=0;
+			TextView account=null;
 			TextView view=null;
 			@Override
 			public String toString(){
-				return "Account name="+name+" unread="+unread+" unseen="+unseen+" view="+view;
+				return "Account name="+name+" unread="+unread+" unseen="+unseen+" view="+view+"account="+account;
 			}
 		}
 }

@@ -62,6 +62,10 @@ public class LockscreenSettings extends PreferenceActivity {
 	static final String BLUETOOTH_MODE_KEY = "bluetooth_mode";
 	
 	static final String MUTE_MODE_KEY = "muteMode";
+	
+	static final String GMAIL_VIEW_KEY = "gmail_view";
+	
+	static final String GMAIL_ACCOUNT_KEY = "gmail_labels";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
