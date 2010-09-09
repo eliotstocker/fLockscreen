@@ -52,7 +52,7 @@ public class updateService extends Service {
         	mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         	CharSequence text = getText(R.string.service_notification);
             // Set the icon, scrolling text and timestamp
-            Notification notification = new Notification(R.drawable.ic_lock_idle_alarm, text,
+            Notification notification = new Notification(R.drawable.status_icon, text,
                     System.currentTimeMillis());
             // The PendingIntent to launch our activity if the user selects this notification
             Intent lockIntent=utils.getLockIntent(this);
