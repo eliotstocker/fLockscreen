@@ -47,6 +47,7 @@
 				<action android:name="android.media.RINGER_MODE_CHANGED"></action>
 				<action android:name="android.intent.action.BOOT_COMPLETED"></action>
 				<action android:name="android.net.wifi.STATE_CHANGE"></action>
+				<action android:name="com.piratemedia.lockscreen.forground"></action>
 			
 </intent-filter>
 		</receiver>

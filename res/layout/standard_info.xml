@@ -19,7 +19,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
-        android:background="#66000000"
+        android:background="@drawable/grey_bg"
 		android:paddingBottom="3dip"
 		android:paddingTop="2dip"
         >
@@ -75,6 +75,7 @@
         android:layout_height="wrap_content"
 		android:gravity="center"
         android:layout_gravity="center"
+        android:background="@drawable/trans_bg"
         >
 
         <!-- time and date -->

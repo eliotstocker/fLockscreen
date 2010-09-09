@@ -30,6 +30,8 @@ public class updateService extends Service {
 	public static final String PHONE_CHANGED = "com.piratemedia.lockscreen.phonechanged";
 	public static final String MUTE_CHANGED = "com.piratemedia.lockscreen.mutechanged";
 	public static final String WIFI_CHANGED = "com.piratemedia.lockscreen.wifichnaged";
+	public static final String START_STOP_FORGROUND = "com.piratemedia.lockscreen.forground";
+	public static final int NOTIFICATION_ID = 35625;
 	public IMediaPlaybackService mService = null;
 	public static boolean playing = false;
 	public String titleName;
@@ -47,9 +49,9 @@ public class updateService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+    	mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         //Start as foreground if user settings say so
     	if (utils.getCheckBoxPref(this, LockscreenSettings.SERVICE_FOREGROUND, true)) {
-        	mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         	CharSequence text = getText(R.string.service_notification);
             // Set the icon, scrolling text and timestamp
             Notification notification = new Notification(R.drawable.status_icon, text,
@@ -59,7 +61,7 @@ public class updateService extends Service {
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0,lockIntent, 0);
             // Set the info for the views that show in the notification panel.
             notification.setLatestEventInfo(this, getText(R.string.app_name),text, contentIntent);
-            startForeground(R.string.airplane_mode, notification);
+            startForeground(NOTIFICATION_ID, notification);
         }
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -257,6 +259,21 @@ public class updateService extends Service {
             	Intent lock=utils.getLockIntent(this);
             	lock.setAction(utils.ACTION_UNLOCK);
             	startActivity(lock);
+            } else if(aIntent.getAction().equals(START_STOP_FORGROUND)){
+            	if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.SERVICE_FOREGROUND, true)) {
+                	CharSequence text = getText(R.string.service_notification);
+                    // Set the icon, scrolling text and timestamp
+                    Notification notification = new Notification(R.drawable.status_icon, text,
+                            System.currentTimeMillis());
+                    // The PendingIntent to launch our activity if the user selects this notification
+                    Intent lockIntent=utils.getLockIntent(this);
+                    PendingIntent contentIntent = PendingIntent.getActivity(this, 0,lockIntent, 0);
+                    // Set the info for the views that show in the notification panel.
+                    notification.setLatestEventInfo(this, getText(R.string.app_name),text, contentIntent);
+                    startForeground(NOTIFICATION_ID, notification);
+            	} else {
+            		stopForeground(true);
+            	}
             }
         
         }

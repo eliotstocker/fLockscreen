@@ -9,5 +9,6 @@
 	android:shadowColor="#ff000000"
 	android:shadowDx="0"
 	android:shadowDy="0"
-	android:shadowRadius="3"/>
+	android:shadowRadius="3"
+	android:background="@drawable/trans_bg"/>
 

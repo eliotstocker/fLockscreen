@@ -163,8 +163,8 @@
 	<string name="credits_cat">fLockscreen Info</string>
 	<string name="credits_name">fLockscreen</string>
 	<string name="credits_name_summary">By Ander Webb and Eliot Stocker</string>
-	<string name="credits_version">v 0.5</string>
-	<string name="credits_version_summary">Early Access - Beta</string>
+	<string name="credits_version">v 0.7</string>
+	<string name="credits_version_summary">Almost Time for Private Beta - Beta</string>
 	
 	<!-- Home chooser -->
 	<string name="home_chooser_title">Pick your default home application</string>

@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.List;
 
 import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
@@ -88,6 +91,7 @@ public class LockscreenSettings extends PreferenceActivity {
         PreferenceScreen screen = this.getPreferenceScreen();
         Preference pick = (Preference) screen.findPreference(KEY_PICK_BG);
         Preference landscape = (Preference) screen.findPreference(KEY_LANDSCAPE);
+        Preference service_foreground = (Preference) screen.findPreference(SERVICE_FOREGROUND);
         Preference laction = (Preference) screen.findPreference(LEFT_ACTION_KEY);
         Preference raction = (Preference) screen.findPreference(RIGHT_ACTION_KEY);
         
@@ -110,7 +114,7 @@ public class LockscreenSettings extends PreferenceActivity {
             	pickImage();
             	return true;
         	}
-            });
+        });
         
         landscape.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -118,7 +122,14 @@ public class LockscreenSettings extends PreferenceActivity {
 				Toast.makeText(getBaseContext(), warning, 1700).show();
             	return true;
         	}
-            });
+        });
+        
+        service_foreground.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference arg0) {
+				StartStopForground();
+				return true;
+			}
+        });
         
         //ADW: Home app preference
         Preference homeApp=findPreference("user_home_app");
@@ -225,6 +236,15 @@ public class LockscreenSettings extends PreferenceActivity {
 	}
 	
 	// check if android music exists, will use this to set default music player
+	
+	private void StartStopForground() {
+		notifyChange(updateService.START_STOP_FORGROUND);
+	}
+	
+	private void notifyChange(String what) {
+        Intent i = new Intent(what);
+        sendBroadcast(i);
+    }
 	
     private void DefaultMusicApp() {
     	

@@ -2,6 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
+	
+	<!-- This is here because i was thinking that in theme options we could allow
+		themers to choose weather the art should move with the slider or
+		simply stay as the background. :) -->
+	
+	<ImageView android:id="@+id/Art2" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:scaleType="centerCrop" />
 		
 <LinearLayout
     android:orientation="vertical"
@@ -10,11 +17,12 @@
     
     <HorizontalScrollView android:id="@+id/mainSlide"
     	android:layout_width="fill_parent" android:layout_height="fill_parent"
-    	android:scrollbars="none" android:fadingEdge="none">
+    	android:scrollbars="none" android:fadingEdge="none"
+    	android:background="@drawable/trans_bg">
     
     	<LinearLayout android:id="@+id/full"
     		android:layout_height="fill_parent" android:layout_width="wrap_content"
-    		android:orientation="horizontal">
+    		android:orientation="horizontal" android:background="@drawable/trans_bg">
     		
     		<include layout="@layout/left_action" />
     		

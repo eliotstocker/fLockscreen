@@ -16,7 +16,7 @@
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-	android:background="#66000000"
+	android:background="@drawable/grey_bg"
 	android:paddingTop="5dp"
 	android:paddingBottom="5dp">
 	
