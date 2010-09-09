@@ -66,6 +66,10 @@ public class LockscreenSettings extends PreferenceActivity {
 	static final String GMAIL_VIEW_KEY = "gmail_view";
 	
 	static final String GMAIL_ACCOUNT_KEY = "gmail_labels";
+	
+	static final String GMAIL_MERGE_KEY = "gmail_merge";
+	
+	static final String SERVICE_FOREGROUND = "service_foreground";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

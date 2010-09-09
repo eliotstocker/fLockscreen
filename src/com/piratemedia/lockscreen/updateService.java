@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.app.KeyguardManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.app.KeyguardManager.KeyguardLock;
 import android.net.ConnectivityManager;
@@ -38,11 +41,26 @@ public class updateService extends Service {
 	public long songId;
 	public int batLevel;
 	public int batpercentage;
+	private boolean foreground=true;
+	private NotificationManager mNM;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        
+        //Start as foreground if user settings say so
+        if(foreground){
+        	mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        	CharSequence text = getText(R.string.service_notification);
+            // Set the icon, scrolling text and timestamp
+            Notification notification = new Notification(R.drawable.ic_lock_idle_alarm, text,
+                    System.currentTimeMillis());
+            // The PendingIntent to launch our activity if the user selects this notification
+            Intent lockIntent=utils.getLockIntent(this);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,lockIntent, 0);
+            // Set the info for the views that show in the notification panel.
+            notification.setLatestEventInfo(this, getText(R.string.app_name),text, contentIntent);
+            startForeground(R.string.airplane_mode, notification);
+        }
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         BroadcastReceiver mReceiver = new intentReceiver();

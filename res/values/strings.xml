@@ -169,4 +169,10 @@
 	<!-- Home chooser -->
 	<string name="home_chooser_title">Pick your default home application</string>
 	<string name="home_chooser_summary">Please pick your preferred home application </string>
+	
+	<!-- Service stuff -->
+	<string name="service_foreground_title">Start in foreground</string>
+	<string name="service_foreground_summary_on">Service will likely NOT be killed by android</string>
+	<string name="service_foreground_summary_off">Service will likely BE killed by android sometimes</string>
+	<string name="service_notification">Lock your phone</string>
 </resources>

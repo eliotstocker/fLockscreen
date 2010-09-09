@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -105,6 +106,7 @@ public class mainActivity extends Activity {
     
     private TextView mSmsCount;
     private TextView mMissedCount;
+    private TextView mGmailMergedCount;
     private LinearLayout mLayoutNotifications;
 
     private int mGetSmsCount = 0;
@@ -128,7 +130,9 @@ public class mainActivity extends Activity {
 		mLauncherActivity=utils.getStringPref(this, LockscreenSettings.KEY_HOME_APP_ACTIVITY, "");
 		//First check if we are locking or not.
 		Intent intent=getIntent();
-		if(intent.getAction().equals("android.intent.action.MAIN") && intent.getCategories().contains("android.intent.category.HOME")){
+		Set<String> categories=intent.getCategories();
+		if(categories!=null)
+		if(intent.getAction().equals("android.intent.action.MAIN") && categories.contains("android.intent.category.HOME")){
 			//Fire intent to the stock home
 			if(mLauncherPackage!="" && mLauncherActivity!=""){
 				Intent launcher = new Intent();
@@ -156,87 +160,89 @@ public class mainActivity extends Activity {
 				startActivity(chooser);
 			}
 	        finish();
-		}else{
-			setContentView(R.layout.slide_base);
-			
-			//Start Slider Stuff
-			
-	        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-	        Displaywidth = display.getWidth();
-			
-			mainFrame = (LinearLayout) findViewById(R.id.base);
-			LeftAction = (LinearLayout) findViewById(R.id.left_action);
-			RightAction = (LinearLayout) findViewById(R.id.right_action);
-			LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(Displaywidth, LinearLayout.LayoutParams.FILL_PARENT);
-			mainFrame.setLayoutParams(lp);
-			
-			slider = (HorizontalScrollView) findViewById(R.id.mainSlide);
-			
-			slider.setOnTouchListener(new OnTouchListener() {
-	            public boolean onTouch(View view, MotionEvent motionevent) {
-	            	if(unlocked)return true;
-	                if (motionevent.getAction() == MotionEvent.ACTION_UP || motionevent.getAction() == MotionEvent.ACTION_CANCEL) {
-	                	stopAllCounts();
-	                	Thread t = new Thread() {
-	                        public void run() {
-	                            mHandler.post(mScroll);
-	                        }
-	                    };
-	                    t.start();
-	                	return true;
-	                } else if (motionevent.getAction() == MotionEvent.ACTION_MOVE) {
-	                	int pos = slider.getScrollX();
-	                	int end = LeftAction.getWidth() + RightAction.getWidth();
-	                	if (pos == 0) {
-	                    	if (!left) {
-	                			left = true;
-	                			unlock_count = utils.getIntPref(getBaseContext(), LockscreenSettings.COUNT_KEY, 3);
-	                			startCount(false);
-	                    	}
-	                	} else if (pos == end) {
-	                		if (!right) {
-	                			right = true;
-	                			unlock_count = utils.getIntPref(getBaseContext(), LockscreenSettings.COUNT_KEY, 3);
-	                			startCount(true);
-	                		}
-	                	} else {
-	                		left = false;
-	                		right = false;
-	                		stopAllCounts();
-	                	}
-	                }
-					return false;
-	            };
-			});
-			loadAccounts();
-			//End Slider Stuff
-			LayoutInflater layoutInflater=getLayoutInflater();
-		    mLayoutNotifications = (LinearLayout) findViewById(R.id.lock_notifications);
-			mSmsCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
-			mLayoutNotifications.addView(mSmsCount);
-		    mMissedCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
-		    mLayoutNotifications.addView(mMissedCount);
-		    for(GmailData data:mAccountList){
-		    	data.account=(TextView) layoutInflater.inflate(R.layout.gmail_account, mLayoutNotifications,false);
-		    	mLayoutNotifications.addView(data.account);
-		    	data.view=(TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
-		    	mLayoutNotifications.addView(data.view);
-		    }
-		    mLayoutNotifications.requestLayout();
-		    BindMusicService();
-		    
-			setButtonIntents();
-			setPlayButton();
-			showHideControlsStart(false);
-			
-			ImageButton toggle = (ImageButton) findViewById(R.id.musicControlsToggle);
-			
-		    toggle.setOnClickListener(new View.OnClickListener() {
-		        public void onClick(View v) {
-		        	toggleMusic();
-		        }
-		    });
-		}		    
+	        return;
+		}
+		setContentView(R.layout.slide_base);
+		
+		//Start Slider Stuff
+		
+        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Displaywidth = display.getWidth();
+		
+		mainFrame = (LinearLayout) findViewById(R.id.base);
+		LeftAction = (LinearLayout) findViewById(R.id.left_action);
+		RightAction = (LinearLayout) findViewById(R.id.right_action);
+		LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(Displaywidth, LinearLayout.LayoutParams.FILL_PARENT);
+		mainFrame.setLayoutParams(lp);
+		
+		slider = (HorizontalScrollView) findViewById(R.id.mainSlide);
+		
+		slider.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View view, MotionEvent motionevent) {
+            	if(unlocked)return true;
+                if (motionevent.getAction() == MotionEvent.ACTION_UP || motionevent.getAction() == MotionEvent.ACTION_CANCEL) {
+                	stopAllCounts();
+                	Thread t = new Thread() {
+                        public void run() {
+                            mHandler.post(mScroll);
+                        }
+                    };
+                    t.start();
+                	return true;
+                } else if (motionevent.getAction() == MotionEvent.ACTION_MOVE) {
+                	int pos = slider.getScrollX();
+                	int end = LeftAction.getWidth() + RightAction.getWidth();
+                	if (pos == 0) {
+                    	if (!left) {
+                			left = true;
+                			unlock_count = utils.getIntPref(getBaseContext(), LockscreenSettings.COUNT_KEY, 3);
+                			startCount(false);
+                    	}
+                	} else if (pos == end) {
+                		if (!right) {
+                			right = true;
+                			unlock_count = utils.getIntPref(getBaseContext(), LockscreenSettings.COUNT_KEY, 3);
+                			startCount(true);
+                		}
+                	} else {
+                		left = false;
+                		right = false;
+                		stopAllCounts();
+                	}
+                }
+				return false;
+            };
+		});
+		loadAccounts();
+		//End Slider Stuff
+		LayoutInflater layoutInflater=getLayoutInflater();
+	    mLayoutNotifications = (LinearLayout) findViewById(R.id.lock_notifications);
+		mSmsCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
+		mLayoutNotifications.addView(mSmsCount);
+	    mMissedCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
+	    mLayoutNotifications.addView(mMissedCount);
+	    mGmailMergedCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
+	    mLayoutNotifications.addView(mGmailMergedCount);
+	    for(GmailData data:mAccountList){
+	    	data.account=(TextView) layoutInflater.inflate(R.layout.gmail_account, mLayoutNotifications,false);
+	    	mLayoutNotifications.addView(data.account);
+	    	data.view=(TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
+	    	mLayoutNotifications.addView(data.view);
+	    }
+	    mLayoutNotifications.requestLayout();
+	    BindMusicService();
+	    
+		setButtonIntents();
+		setPlayButton();
+		showHideControlsStart(false);
+		
+		ImageButton toggle = (ImageButton) findViewById(R.id.musicControlsToggle);
+		
+	    toggle.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	toggleMusic();
+	        }
+	    });
 	}
 	
 	public boolean onTrackballEvent(MotionEvent event) {
@@ -925,39 +931,77 @@ public class mainActivity extends Activity {
         private void setGmailCountText() {
         	if (utils.getCheckBoxPref(this, LockscreenSettings.GMAIL_COUNT_KEY, true)) {
         		getGmailUnreadCount(getBaseContext());
+        		int totalunread=0;
+        		int totalunseen=0;
+        		boolean merged=utils.getCheckBoxPref(this, LockscreenSettings.GMAIL_MERGE_KEY, false);
+        		String gmail_view = utils.getStringPref(this , LockscreenSettings.GMAIL_VIEW_KEY, "1");
+        		int gmail_view_int = Integer.parseInt(gmail_view);  
         		for(GmailData data: mAccountList){
         			if (data.unread <= 0 && data.unseen <= 0) {
         				data.account.setVisibility(View.GONE);
 	                    data.view.setVisibility(View.GONE);
 	                } else {
-	                	if(utils.getCheckBoxPref(this, LockscreenSettings.GMAIL_ACCOUNT_KEY, true)){
-	                		data.account.setVisibility(View.VISIBLE);
-	                	} else {
+	                	totalunread+=data.unread;
+	                	totalunseen+=data.unseen;
+	                	if(!merged){
+		                	if(utils.getCheckBoxPref(this, LockscreenSettings.GMAIL_ACCOUNT_KEY, true)){
+		                		data.account.setVisibility(View.VISIBLE);
+		                	} else {
+		                		data.account.setVisibility(View.GONE);
+		                	}
+		            		data.view.setVisibility(View.VISIBLE);
+		            		
+		            		String accounttxt = data.name;
+		            		data.account.setText(accounttxt);
+		            		
+		            		switch(gmail_view_int) {
+		            		case 1:
+		            			String unread=getResources().getQuantityString(R.plurals.lockscreen_email_unread_count, data.unread);
+		            			data.view.setText(String.format(unread, data.unread));
+		            			break;
+		            		case 2:
+			            		String unseen=getResources().getQuantityString(R.plurals.lockscreen_email_unseen_count, data.unseen);
+			            		data.view.setText(String.format(unseen, data.unseen));
+			            		break;
+			            	default:
+			            		String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count, data.unread);
+			            		data.view.setText(String.format(emails, data.unread,data.unseen));
+			            		break;
+			            	}
+	                	}else{
+	                		data.view.setVisibility(View.GONE);
 	                		data.account.setVisibility(View.GONE);
 	                	}
-	            		data.view.setVisibility(View.VISIBLE);
-	            		
-	            		String accounttxt = data.name;
-	            		data.account.setText(accounttxt);
-	            		
-	            		String gmail_view = utils.getStringPref(this , LockscreenSettings.GMAIL_VIEW_KEY, "1");
-	            		int gmail_view_int = Integer.parseInt(gmail_view);  
-	            		
-	            		switch(gmail_view_int) {
-	            		case 1:
-	            			String unread=getResources().getQuantityString(R.plurals.lockscreen_email_unread_count, data.unread);
-	            			data.view.setText(String.format(unread, data.unread));
-	            			break;
-	            		case 2:
-		            		String unseen=getResources().getQuantityString(R.plurals.lockscreen_email_unseen_count, data.unseen);
-		            		data.view.setText(String.format(unseen, data.unseen));
-		            		break;
-		            	default:
-		            		String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count, data.unread);
-		            		data.view.setText(String.format(emails, data.unread,data.unseen));
-		            		break;
-		            	}
 	                }
+        		}
+        		//merged count
+        		if(merged){
+        			mGmailMergedCount.setVisibility(View.GONE);
+            		switch(gmail_view_int) {
+            		case 1:
+            			if(totalunread>0){
+            				String unread=getResources().getQuantityString(R.plurals.lockscreen_email_unread_count, totalunread);
+            				mGmailMergedCount.setText(String.format(unread, totalunread));
+            				mGmailMergedCount.setVisibility(View.VISIBLE);
+            			}
+            			break;
+            		case 2:
+            			if(totalunseen>0){
+            				String unseen=getResources().getQuantityString(R.plurals.lockscreen_email_unseen_count, totalunseen);
+            				mGmailMergedCount.setText(String.format(unseen, totalunseen));
+            				mGmailMergedCount.setVisibility(View.VISIBLE);
+            			}
+	            		break;
+	            	default:
+	            		if(totalunread>0 || totalunseen>0){
+	            			String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count, totalunread);
+	            			mGmailMergedCount.setText(String.format(emails, totalunread,totalunseen));
+	            			mGmailMergedCount.setVisibility(View.VISIBLE);
+	            		}
+	            		break;
+	            	}
+        		}else{
+        			mGmailMergedCount.setVisibility(View.GONE);
         		}
         	} else {
         		for(GmailData data: mAccountList){
