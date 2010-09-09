@@ -104,7 +104,7 @@ public class LockscreenSettings extends PreferenceActivity {
         
         raction.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-            	//actionRight(newValue);
+            	actionRight(newValue);
             	return true;
             }
             });
