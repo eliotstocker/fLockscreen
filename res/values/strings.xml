@@ -60,7 +60,6 @@
     <string-array name="action_entries">
 		<item>Unlock</item>
 		<item>Mute Toggle</item>
-		<item>Brightness</item>
 		<item>Wifi Toggle</item>
 		<item>Bluetooth Toggle</item>
 	</string-array>
@@ -68,7 +67,6 @@
 	<string-array name="actionvals">
 		<item>1</item>
 		<item>2</item>
-		<item>3</item>
 		<item>4</item>
 		<item>5</item>
 	</string-array>

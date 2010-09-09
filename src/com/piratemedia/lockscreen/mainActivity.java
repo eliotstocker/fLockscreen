@@ -87,6 +87,7 @@ public class mainActivity extends Activity {
     public static final String SMS_ID = "_id";
     
 	Handler mHandler = new Handler();
+	public boolean AutomaticBrightness;
 
 	//Slider Initialisation Stuff
 	
@@ -1499,6 +1500,11 @@ public class mainActivity extends Activity {
 	    }
 	    
 	    private void toggleBrightness() {
+	    	
+	    	WindowManager.LayoutParams lp = getWindow().getAttributes();
+	    	lp.screenBrightness = 100 / 100.0f;
+	    	getWindow().setAttributes(lp);
+	    	
 			Toast.makeText(getBaseContext(), "This should toggle brightness", Toast.LENGTH_SHORT).show();
 	    }
 	    
