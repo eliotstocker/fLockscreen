@@ -1570,8 +1570,12 @@ public class mainActivity extends Activity {
 
 	        @Override
 	        public void onChange(boolean selfChange) {
-	    	    setGmailCountText();
-	            //super.onChange(selfChange);
+	    	    runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+			        	setGmailCountText();
+					}
+				});
 	        }
 
 	    }
