@@ -48,7 +48,7 @@ public class updateService extends Service {
     public void onCreate() {
         super.onCreate();
         //Start as foreground if user settings say so
-        if(foreground){
+    	if (utils.getCheckBoxPref(this, LockscreenSettings.SERVICE_FOREGROUND, true)) {
         	mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         	CharSequence text = getText(R.string.service_notification);
             // Set the icon, scrolling text and timestamp
