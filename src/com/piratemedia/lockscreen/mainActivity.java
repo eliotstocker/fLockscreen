@@ -91,7 +91,6 @@ public class mainActivity extends Activity {
 
 	//Slider Initialisation Stuff
 	
-	private int Displaywidth;
 	private HorizontalScrollView slider;
 	private LinearLayout LeftAction;
 	private LinearLayout RightAction;
@@ -132,8 +131,9 @@ public class mainActivity extends Activity {
 		//First check if we are locking or not.
 		Intent intent=getIntent();
 		Set<String> categories=intent.getCategories();
-		if(categories!=null)
-		if(intent.getAction().equals("android.intent.action.MAIN") && categories.contains("android.intent.category.HOME")){
+		String action=intent.getAction();
+		if(categories!=null && action!=null)
+		if(action.equals("android.intent.action.MAIN") && categories.contains("android.intent.category.HOME")){
 			//Fire intent to the stock home
 			if(mLauncherPackage!="" && mLauncherActivity!=""){
 				Intent launcher = new Intent();
@@ -168,12 +168,12 @@ public class mainActivity extends Activity {
 		//Start Slider Stuff
 		
         Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        Displaywidth = display.getWidth();
+        int displayWidth = display.getWidth();
 		
 		mainFrame = (LinearLayout) findViewById(R.id.base);
 		LeftAction = (LinearLayout) findViewById(R.id.left_action);
 		RightAction = (LinearLayout) findViewById(R.id.right_action);
-		LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(Displaywidth, LinearLayout.LayoutParams.FILL_PARENT);
+		LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(displayWidth, LinearLayout.LayoutParams.FILL_PARENT);
 		mainFrame.setLayoutParams(lp);
 		
 		slider = (HorizontalScrollView) findViewById(R.id.mainSlide);

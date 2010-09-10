@@ -43,7 +43,6 @@ public class updateService extends Service {
 	public long songId;
 	public int batLevel;
 	public int batpercentage;
-	private boolean foreground=true;
 	private NotificationManager mNM;
 
     @Override
@@ -51,29 +50,35 @@ public class updateService extends Service {
         super.onCreate();
     	mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         //Start as foreground if user settings say so
-    	if (utils.getCheckBoxPref(this, LockscreenSettings.SERVICE_FOREGROUND, true)) {
-        	CharSequence text = getText(R.string.service_notification);
-            // Set the icon, scrolling text and timestamp
-            Notification notification = new Notification(R.drawable.status_icon, text,
-                    System.currentTimeMillis());
-            // The PendingIntent to launch our activity if the user selects this notification
-            Intent lockIntent=utils.getLockIntent(this);
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,lockIntent, 0);
-            // Set the info for the views that show in the notification panel.
-            notification.setLatestEventInfo(this, getText(R.string.app_name),text, contentIntent);
-            startForeground(NOTIFICATION_ID, notification);
-        }
+    	foregroundStuff(utils.getCheckBoxPref(this, LockscreenSettings.SERVICE_FOREGROUND, true));
         IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         BroadcastReceiver mReceiver = new intentReceiver();
         registerReceiver(mReceiver, filter);
     }
-
+    private void foregroundStuff(boolean foreground){
+    	if(foreground){
+	    	CharSequence text = getText(R.string.service_notification);
+	        // Set the icon, scrolling text and timestamp
+	        Notification notification = new Notification(R.drawable.status_icon, text,
+	                System.currentTimeMillis());
+	        // The PendingIntent to launch our activity if the user selects this notification
+	        Intent lockIntent=utils.getLockIntent(this);
+	        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,lockIntent, 0);
+	        // Set the info for the views that show in the notification panel.
+	        notification.setLatestEventInfo(this, getText(R.string.app_name),text, contentIntent);
+	        startForeground(NOTIFICATION_ID, notification);
+    	}else{
+    		stopForeground(true);
+    	}
+    }
     public int onStartCommand(Intent aIntent, int aFlags, int aStartId) {
         
         onStart(aIntent, aStartId);
-
-        return 2;
+        return START_STICKY;
+        //Why did you use the "2"?
+        //AFAIK, 2=START_FLAG_RETRY
+        //return 2;
     }
 
     @Override
@@ -260,20 +265,7 @@ public class updateService extends Service {
             	lock.setAction(utils.ACTION_UNLOCK);
             	startActivity(lock);
             } else if(aIntent.getAction().equals(START_STOP_FORGROUND)){
-            	if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.SERVICE_FOREGROUND, true)) {
-                	CharSequence text = getText(R.string.service_notification);
-                    // Set the icon, scrolling text and timestamp
-                    Notification notification = new Notification(R.drawable.status_icon, text,
-                            System.currentTimeMillis());
-                    // The PendingIntent to launch our activity if the user selects this notification
-                    Intent lockIntent=utils.getLockIntent(this);
-                    PendingIntent contentIntent = PendingIntent.getActivity(this, 0,lockIntent, 0);
-                    // Set the info for the views that show in the notification panel.
-                    notification.setLatestEventInfo(this, getText(R.string.app_name),text, contentIntent);
-                    startForeground(NOTIFICATION_ID, notification);
-            	} else {
-            		stopForeground(true);
-            	}
+            	foregroundStuff(utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.SERVICE_FOREGROUND, true));
             }
         
         }
