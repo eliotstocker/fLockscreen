@@ -5,17 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.app.KeyguardManager.KeyguardLock;
-import android.net.ConnectivityManager;
-import android.os.Environment;
 import android.os.IBinder;
-import android.os.RemoteException;
-import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.content.ComponentName;
@@ -44,17 +38,40 @@ public class updateService extends Service {
 	public int batLevel;
 	public int batpercentage;
 	private NotificationManager mNM;
-
+	private BroadcastReceiver mReceiver;
     @Override
     public void onCreate() {
         super.onCreate();
     	mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         //Start as foreground if user settings say so
     	foregroundStuff(utils.getCheckBoxPref(this, LockscreenSettings.SERVICE_FOREGROUND, true));
-        IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        BroadcastReceiver mReceiver = new intentReceiver();
-        registerReceiver(mReceiver, filter);
+        //SCREEN ON/OFF suff
+    	if(mReceiver==null){
+	    	IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+	        filter.addAction(Intent.ACTION_SCREEN_OFF);
+	        mReceiver = new BroadcastReceiver() {
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					String action=intent.getAction();
+					if(action==null)return;
+		            if (action.equals(Intent.ACTION_SCREEN_ON)) {
+		            	Log.d("Lockscreen", "Screen On");
+		            	if (!inCall()){
+		            		ManageKeyguard.disableKeyguard(getApplicationContext()); 
+		            	}
+					} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+		            	Log.d("Lockscreen", "Screen Off");
+		            	if (!inCall()){
+		            		Intent lock=utils.getLockIntent(updateService.this);
+		            		lock.setAction(utils.ACTION_LOCK);
+		            		startActivity(lock);
+		            		ManageKeyguard.reenableKeyguard(); 
+		            	}
+					}	
+				}
+			};;;
+	        registerReceiver(mReceiver, filter);
+    	}
     }
     private void foregroundStuff(boolean foreground){
     	if(foreground){
@@ -246,19 +263,6 @@ public class updateService extends Service {
             	notifyChange(MUTE_CHANGED);
             } else if (action.equals("android.net.wifi.STATE_CHANGE")) {
             	notifyChange(WIFI_CHANGED);
-            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
-            	Log.d("Lockscreen", "Screen On");
-            	if (!inCall()){
-            		ManageKeyguard.disableKeyguard(getApplicationContext()); 
-            	}
-			} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-            	Log.d("Lockscreen", "Screen Off");
-            	if (!inCall()){
-            		Intent lock=utils.getLockIntent(this);
-            		lock.setAction(utils.ACTION_LOCK);
-            		startActivity(lock);
-            		ManageKeyguard.reenableKeyguard(); 
-            	}
             } else if(action.equals(Intent.ACTION_BOOT_COMPLETED)){
             	Log.d("Lockscreen", "Boot Completed");
             	Intent lock=utils.getLockIntent(this);
