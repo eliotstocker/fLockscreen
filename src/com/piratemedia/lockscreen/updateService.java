@@ -83,14 +83,15 @@ public class updateService extends Service {
 
     @Override
     public void onStart(Intent aIntent, int aStartId) {
-
-        if (aIntent.getAction().equals("com.android.music.playbackcomplete") && getPlayer() == 1) {
+    	final String action=aIntent.getAction();
+    	if (action==null)return;
+        if (action.equals("com.android.music.playbackcomplete") && getPlayer() == 1) {
             // The song has ended, stop the service
             stopSelf();
-        } else if (aIntent.getAction().equals("com.android.music.playstatechanged") 
-                || aIntent.getAction().equals("com.android.music.metachanged")
-                || aIntent.getAction().equals("com.android.music.queuechanged")
-                || aIntent.getAction().equals("com.android.music.playbackcomplete")
+        } else if (action.equals("com.android.music.playstatechanged") 
+                || action.equals("com.android.music.metachanged")
+                || action.equals("com.android.music.queuechanged")
+                || action.equals("com.android.music.playbackcomplete")
                 && getPlayer() == 1) {
 
             bindService(new Intent().setClassName("com.android.music", "com.android.music.MediaPlaybackService"), new ServiceConnection() {
@@ -135,13 +136,13 @@ public class updateService extends Service {
                 }
 
             }, 0);
-        	} else if (aIntent.getAction().equals("com.htc.music.playbackcomplete") && getPlayer() == 2) {
+        	} else if (action.equals("com.htc.music.playbackcomplete") && getPlayer() == 2) {
                 // The song has ended, stop the service
                 stopSelf();
-            } else if (aIntent.getAction().equals("com.htc.music.playstatechanged") 
-                    || aIntent.getAction().equals("com.htc.music.metachanged")
-                    || aIntent.getAction().equals("com.htc.music.queuechanged")
-                    || aIntent.getAction().equals("com.htc.music.playbackcomplete")
+            } else if (action.equals("com.htc.music.playstatechanged") 
+                    || action.equals("com.htc.music.metachanged")
+                    || action.equals("com.htc.music.queuechanged")
+                    || action.equals("com.htc.music.playbackcomplete")
                     && getPlayer() == 3) {
 
                 bindService(new Intent().setClassName("com.htc.music", "com.htc.music.MediaPlaybackService"), new ServiceConnection() {
@@ -186,13 +187,13 @@ public class updateService extends Service {
                     }
 
                 }, 0);
-        	} else if (aIntent.getAction().equals("com.piratemedia.musicmod.playbackcomplete") && getPlayer() == 3) {
+        	} else if (action.equals("com.piratemedia.musicmod.playbackcomplete") && getPlayer() == 3) {
                 // The song has ended, stop the service
                 stopSelf();
-            } else if (aIntent.getAction().equals("com.piratemedia.musicmod.playstatechanged") 
-                    || aIntent.getAction().equals("com.piratemedia.musicmod.metachanged")
-                    || aIntent.getAction().equals("com.piratemedia.musicmod.queuechanged")
-                    || aIntent.getAction().equals("com.piratemedia.musicmod.playbackcomplete")
+            } else if (action.equals("com.piratemedia.musicmod.playstatechanged") 
+                    || action.equals("com.piratemedia.musicmod.metachanged")
+                    || action.equals("com.piratemedia.musicmod.queuechanged")
+                    || action.equals("com.piratemedia.musicmod.playbackcomplete")
                     && getPlayer() == 3) {
 
                 bindService(new Intent().setClassName("com.piratemedia.musicmod", "com.piratemedia.musicmod.MediaPlaybackService"), new ServiceConnection() {
@@ -237,21 +238,20 @@ public class updateService extends Service {
                     }
 
                 }, 0);
-            } else if (aIntent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
+            } else if (action.equals("android.provider.Telephony.SMS_RECEIVED")) {
             	notifyChange(SMS_CHANGED);
-            } else if (aIntent.getAction().equals("android.intent.action.PHONE_STATE")) {
+            } else if (action.equals("android.intent.action.PHONE_STATE")) {
             	notifyChange(PHONE_CHANGED);
-            } else if (aIntent.getAction().equals("android.media.RINGER_MODE_CHANGED")) {
+            } else if (action.equals("android.media.RINGER_MODE_CHANGED")) {
             	notifyChange(MUTE_CHANGED);
-            } else if (aIntent.getAction().equals("android.net.wifi.STATE_CHANGE")) {
+            } else if (action.equals("android.net.wifi.STATE_CHANGE")) {
             	notifyChange(WIFI_CHANGED);
-            } else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
             	Log.d("Lockscreen", "Screen On");
             	if (!inCall()){
             		ManageKeyguard.disableKeyguard(getApplicationContext()); 
-
             	}
-			} else if (aIntent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+			} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
             	Log.d("Lockscreen", "Screen Off");
             	if (!inCall()){
             		Intent lock=utils.getLockIntent(this);
@@ -259,12 +259,12 @@ public class updateService extends Service {
             		startActivity(lock);
             		ManageKeyguard.reenableKeyguard(); 
             	}
-            } else if(aIntent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)){
+            } else if(action.equals(Intent.ACTION_BOOT_COMPLETED)){
             	Log.d("Lockscreen", "Boot Completed");
             	Intent lock=utils.getLockIntent(this);
             	lock.setAction(utils.ACTION_UNLOCK);
             	startActivity(lock);
-            } else if(aIntent.getAction().equals(START_STOP_FORGROUND)){
+            } else if(action.equals(START_STOP_FORGROUND)){
             	foregroundStuff(utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.SERVICE_FOREGROUND, true));
             }
         
