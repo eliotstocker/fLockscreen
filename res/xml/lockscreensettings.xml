@@ -3,40 +3,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	android:title="@string/settings" android:key="settings">
 	
-	<Preference android:key="user_home_app"
-		android:title="@string/home_chooser_title"
-		android:summary="@string/home_chooser_summary"/>
+	<PreferenceCategory android:title="@string/layout_settings_title">
 	
-	<CheckBoxPreference android:key="service_foreground"
-		android:defaultValue="true" android:title="@string/service_foreground_title"
-		android:summaryOn="@string/service_foreground_summary_on" android:summaryOff="@string/service_foreground_summary_off" />
-
-	<CheckBoxPreference android:key="fullscreen"
-		android:defaultValue="true" android:title="@string/fullscreen_title"
-		android:summaryOn="@string/fullscreen_summary_on" android:summaryOff="@string/fullscreen_summary_off" />
-		
 	<CheckBoxPreference android:key="albumart"
 		android:defaultValue="true" android:title="@string/albumart_title"
 		android:summary="@string/albumart_summary" />
-		
-	<com.piratemedia.lockscreen.DialogSeekBarPreference
-		android:title="@string/count_time" android:summary="@string/count_time_summary"
-		android:dialogMessage="@string/count_down_time" android:key="countDown"
-		android:defaultValue="3" android:max="5" />
-		
-	<ListPreference android:key="leftAction"
-		android:title="@string/left_action" android:summary="@string/left_action_summary"
-		android:dialogTitle="@string/left_action_title" android:entries="@array/action_entries"
-		android:entryValues="@array/actionvals" android:defaultValue="1"/>
-		
-	<ListPreference android:key="rightAction"
-		android:title="@string/right_action" android:summary="@string/right_action_summary"
-		android:dialogTitle="@string/right_action_title" android:entries="@array/action_entries"
-		android:entryValues="@array/actionvals" android:defaultValue="2"/>
-		
-	<CheckBoxPreference android:key="muteMode"
-		android:title="@string/Vibrate_title" android:summaryOn="@string/Vibrate_on"
-		android:summaryOff="@string/Vibrate_off" android:defaultValue="true"/>
 		
 	<CheckBoxPreference android:key="landscape"
 		android:defaultValue="false" android:title="@string/landscape_title"
@@ -49,11 +20,57 @@
 	<Preference android:key="bg_picker"
 		android:dependency="custom_bg" android:title="@string/bg_picker_title"
 		android:summary="@string/bg_picker_summary" />
-
+		
+	<CheckBoxPreference android:key="fullscreen"
+		android:defaultValue="true" android:title="@string/fullscreen_title"
+		android:summaryOn="@string/fullscreen_summary_on" android:summaryOff="@string/fullscreen_summary_off" />
+	
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="@string/application_settings_title">
+	
+	<Preference android:key="user_home_app"
+		android:title="@string/home_chooser_title"
+		android:summary="@string/home_chooser_summary"/>
+	
 	<ListPreference android:key="music_player_select"
 		android:entries="@array/players" android:entryValues="@array/players_val"
 		android:title="@string/players_title" android:summary="@string/players_summary"
 		android:dialogTitle="@string/players_dialog_title" android:defaultValue="1"/>
+	
+	<CheckBoxPreference android:key="service_foreground"
+		android:defaultValue="true" android:title="@string/service_foreground_title"
+		android:summaryOn="@string/service_foreground_summary_on" android:summaryOff="@string/service_foreground_summary_off" />
+	
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="@string/slide_actions">
+	
+	<ListPreference android:key="leftAction"
+		android:title="@string/left_action" android:summary="@string/left_action_summary"
+		android:dialogTitle="@string/left_action_title" android:entries="@array/action_entries"
+		android:entryValues="@array/actionvals" android:defaultValue="1"/>
+		
+	<ListPreference android:key="rightAction"
+		android:title="@string/right_action" android:summary="@string/right_action_summary"
+		android:dialogTitle="@string/right_action_title" android:entries="@array/action_entries"
+		android:entryValues="@array/actionvals" android:defaultValue="2"/>
+		
+	<com.piratemedia.lockscreen.DialogSeekBarPreference
+		android:title="@string/count_time" android:summary="@string/count_time_summary"
+		android:dialogMessage="@string/count_down_time" android:key="countDown"
+		android:defaultValue="3" android:max="5" />
+		
+	<CheckBoxPreference android:key="muteMode"
+		android:title="@string/Vibrate_title" android:summaryOn="@string/Vibrate_on"
+		android:summaryOff="@string/Vibrate_off" android:defaultValue="true"/>
+	
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="@string/notifications_cat_title">
+	
+	<PreferenceScreen android:key="gmail_settings"
+		android:title="@string/gmail_settings_title" android:summary="@string/gmail_settings_summary">
 		
 	<CheckBoxPreference android:key="gmail_labels"
 		android:defaultValue="true" android:title="@string/gmail_label_title"
@@ -67,6 +84,8 @@
 	<CheckBoxPreference android:key="gmail_merge"
 		android:title="@string/gmail_accounts_title" android:summaryOn="@string/gmail_accounts_on"
 		android:summaryOff="@string/gmail_accounts_off" android:defaultValue="false"/>
+		
+	</PreferenceScreen>
 	
 	<PreferenceScreen android:key="notifications"
 		android:title="Enable/Disble Notifications"
@@ -95,6 +114,8 @@
 			android:summary="@string/bluetooth_summary"/>
 			
 	</PreferenceScreen>
+
+	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/credits_cat">
 		<Preference android:key="name" android:title="@string/credits_name"

@@ -110,6 +110,13 @@
 	<string name="players_dialog_title">Music Player Select</string>
 	<string name="players_dialog_message">Select your preferred music player</string>
 	
+	<string name="notifications_cat_title">Notification Settings</string>
+	<string name="gmail_settings_title">Gmail Notification Settings</string>
+	<string name="gmail_settings_summary">Change the layout of the notification for emails in gmail accounts.</string>
+	<string name="slide_actions">Slider Action Settings</string>
+	<string name="application_settings_title">Application Settings</string>
+	<string name="layout_settings_title">Layout Settings</string>
+	
 	<!-- Settings Notification enable -->
 	<string name="sms_count_title">SMS Count</string>
 	<string name="sms_count_summary">Show Number of unread SMS</string>
