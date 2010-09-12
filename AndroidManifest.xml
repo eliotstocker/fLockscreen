@@ -16,8 +16,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".LockscreenSettings" android:label="@string/settings"
-			android:icon="@drawable/icon" android:taskAffinity=".LockscreenSettings"
-			android:screenOrientation="portrait">
+			android:icon="@drawable/icon" android:taskAffinity=".LockscreenSettings">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />

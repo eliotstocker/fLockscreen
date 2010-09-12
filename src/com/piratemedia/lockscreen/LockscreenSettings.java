@@ -1,6 +1,7 @@
 package com.piratemedia.lockscreen;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,17 +11,23 @@ import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.WallpaperManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
@@ -73,6 +80,8 @@ public class LockscreenSettings extends PreferenceActivity {
 	static final String GMAIL_MERGE_KEY = "gmail_merge";
 	
 	static final String SERVICE_FOREGROUND = "service_foreground";
+	
+	private static final String TEMP_PHOTO_FILE = "tempBG_Image.jpg";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -181,44 +190,94 @@ public class LockscreenSettings extends PreferenceActivity {
 		int height;
 	    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 	    intent.setType("image/*");
-		Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay(); 
+		Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
     	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_LANDSCAPE, false)) {
     		//for some reson these dont work unless the are halved, ie 800x480 is too big
     		//TODO: we need to fix this :)
-    		width = display.getHeight()/2;
-    		height = display.getWidth()/2;
+    		int orientation = getRequestedOrientation();
+    		if (orientation == Configuration.ORIENTATION_PORTRAIT ){
+    			width = display.getHeight();
+    			height = display.getWidth();
+    		} else {
+    			width = display.getWidth();
+    			height = display.getHeight();
+    		}
     	} else {
-    		width = display.getWidth()/2;
-    		height = display.getHeight()/2;
+    		int orientation = getRequestedOrientation();
+    		if (orientation == Configuration.ORIENTATION_PORTRAIT ){
+    			width = display.getHeight();
+    			height = display.getWidth();
+    		} else {
+    			width = display.getWidth();
+    			height = display.getHeight();
+    		}
     	}
         intent.putExtra("crop", "true");
-		intent.putExtra("outputX", width);
+        intent.putExtra("outputX", width);
 		intent.putExtra("outputY", height);
+		intent.putExtra("scale", true);
 		intent.putExtra("aspectX", width);
 		intent.putExtra("aspectY", height);
+		intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
         intent.putExtra("noFaceDetection", true);
-        intent.putExtra("return-data", true);
         
 		startActivityForResult(intent, 4);
 	}
+	
+    private Uri getTempUri() {
+		return Uri.fromFile(getTempFile());
+	}
+	
+	private File getTempFile() {
+		if (isSDCARDMounted()) {
+			
+			File f = new File(Environment.getExternalStorageDirectory(),TEMP_PHOTO_FILE);
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Toast.makeText(this, "Something Fucked Up", Toast.LENGTH_LONG).show();
+			}
+			return f;
+		} else {
+			return null;
+		}
+	}
+	
+	private boolean isSDCARDMounted(){
+        String status = Environment.getExternalStorageState();
+       
+        if (status.equals(Environment.MEDIA_MOUNTED))
+            return true;
+        return false;
+    }
 	
 	protected void  onActivityResult  (int requestCode, int resultCode, Intent data){
 		if (requestCode==4) {
 			if (resultCode == RESULT_OK) {
 				try {
 					
-					Bitmap BG_Image = (Bitmap) data.getParcelableExtra("data");
+					//get bitmap from temp uri
+					Bitmap BG_Image = null;
+					BG_Image = Media.getBitmap(this.getContentResolver(), getTempUri());
 
 				
 					final String FileName = "bg_pic";
 					FileOutputStream fileOutputStream = null;
 					int quality = 80;
-
+					
+					//save bitmap in app data
 					fileOutputStream = openFileOutput(FileName + ".jpg", getBaseContext().MODE_PRIVATE);
-					BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
+					BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream, 2000);
 					BG_Image.compress(CompressFormat.JPEG, quality, bos);
 					bos.flush();
 					bos.close();
+					
+					//delete the temp image
+					File file = new File(getTempUri().toString());
+					boolean deleted = file.delete();
+					
 					
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
@@ -230,7 +289,7 @@ public class LockscreenSettings extends PreferenceActivity {
 				
 			} if (resultCode == RESULT_CANCELED) {
 				String no_image = getString(R.string.custombg_none_selected);
-				Toast.makeText(getBaseContext(), no_image, 700).show();
+				Toast.makeText(getBaseContext(), no_image, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
