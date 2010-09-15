@@ -242,6 +242,7 @@ public class mainActivity extends Activity {
 	    TextView sufix = (TextView) findViewById(R.id.sufix);
 	    TextView date = (TextView) findViewById(R.id.date);
 	    TextView nextAlarmText = (TextView) findViewById(R.id.nextAlarmText);
+	    DigitalClock time = (DigitalClock) findViewById(R.id.time);
 	    
     	String themePackage=utils.getStringPref(this, LockscreenSettings.THEME_KEY, LockscreenSettings.THEME_DEFAULT);
     	PackageManager pm=getPackageManager();
@@ -304,6 +305,7 @@ public class mainActivity extends Activity {
 			    sufix.setTypeface(themeFont);
 			    date.setTypeface(themeFont);
 			    nextAlarmText.setTypeface(themeFont);
+			    time.setTypeface(themeFont);
 				
 			}catch (RuntimeException e) {
 			}
