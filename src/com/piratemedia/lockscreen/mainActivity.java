@@ -767,7 +767,13 @@ public class mainActivity extends Activity {
     }
     
     private void showHideArt() {
-    	ImageView AlbumArt = (ImageView) findViewById(R.id.Art);
+		ImageView AlbumArt;
+		// Set views
+		if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_ART_SLIDE_KEY, false)) {
+			AlbumArt = (ImageView) findViewById(R.id.Art);
+		} else {
+			AlbumArt = (ImageView) findViewById(R.id.Art2);
+		}
     	
     	if(playback) {
     		if(AlbumArt.getVisibility() != View.VISIBLE) {
@@ -1005,7 +1011,13 @@ public class mainActivity extends Activity {
     } 
     
     private void fadeArt(boolean visible, int anim) {
-    	ImageView AlbumArt = (ImageView) findViewById(R.id.Art);
+		ImageView AlbumArt;
+		// Set views
+		if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_ART_SLIDE_KEY, false)) {
+			AlbumArt = (ImageView) findViewById(R.id.Art);
+		} else {
+			AlbumArt = (ImageView) findViewById(R.id.Art2);
+		}
         AlbumArt.setVisibility(visible ? View.VISIBLE : View.GONE);
         AlbumArt.startAnimation(loadAnim(anim, null));
     }
