@@ -1,0 +1,7 @@
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:maxLevel="1" android:drawable="@drawable/count_1" />
+    <item android:maxLevel="2" android:drawable="@drawable/count_2" />
+    <item android:maxLevel="3" android:drawable="@drawable/count_3" />
+    <item android:maxLevel="4" android:drawable="@drawable/count_4" />
+    <item android:maxLevel="5" android:drawable="@drawable/count_5" />
+</level-list>

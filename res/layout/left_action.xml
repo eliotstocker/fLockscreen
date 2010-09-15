@@ -12,7 +12,7 @@
     	android:layout_height="wrap_content"/>
     	
     <ImageView android:id="@+id/mute_slide_left"
-    	android:src="@drawable/left_action_mute" android:paddingLeft="15dp"
+    	android:src="@drawable/left_action_muteunmute" android:paddingLeft="15dp"
     	android:paddingRight="15dp" android:layout_width="wrap_content"
     	android:layout_height="wrap_content"/>
     	

@@ -96,6 +96,7 @@ public class mainActivity extends Activity {
 	//Slider Initialisation Stuff
 	
 	private HorizontalScrollView slider;
+	
 	private LinearLayout LeftAction;
 	private LinearLayout RightAction;
 	private LinearLayout mainFrame;
@@ -130,6 +131,7 @@ public class mainActivity extends Activity {
 	//ADW Theme constants
 	public static final int THEME_ITEM_BACKGROUND=0;
 	public static final int THEME_ITEM_FOREGROUND=1;
+	public static final int THEME_ITEM_TEXT_DRAWABLE=2;
 	private Typeface themeFont=null;
  	
 	@Override
@@ -173,6 +175,139 @@ public class mainActivity extends Activity {
 	        return;
 		}
 		setContentView(R.layout.slide_base);
+		loadAccounts();
+		LayoutInflater layoutInflater=getLayoutInflater();
+	    mLayoutNotifications = (LinearLayout) findViewById(R.id.lock_notifications);
+		mSmsCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
+		mSmsCount.setTypeface(themeFont);
+		mLayoutNotifications.addView(mSmsCount);
+	    mMissedCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
+	    mMissedCount.setTypeface(themeFont);
+	    mLayoutNotifications.addView(mMissedCount);
+	    mGmailMergedCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
+	    mGmailMergedCount.setTypeface(themeFont);
+	    mLayoutNotifications.addView(mGmailMergedCount);
+	    for(GmailData data:mAccountList){
+	    	data.account=(TextView) layoutInflater.inflate(R.layout.gmail_account, mLayoutNotifications,false);
+	    	mLayoutNotifications.addView(data.account);
+	    	data.view=(TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
+	    	mLayoutNotifications.addView(data.view);
+	    }
+	    mLayoutNotifications.requestLayout();
+	    BindMusicService();
+	    
+		setButtonIntents();
+		setPlayButton();
+		showHideControlsStart(false);
+		
+		ImageButton toggle = (ImageButton) findViewById(R.id.musicControlsToggle);
+		
+	    toggle.setOnClickListener(new View.OnClickListener() {
+	        public void onClick(View v) {
+	        	toggleMusic();
+	        }
+	    });
+    	//ADW: Load the specified theme
+	    //SetViews For themeing
+	    HorizontalScrollView slide1 = (HorizontalScrollView) findViewById(R.id.mainSlide);
+	    LinearLayout slide2 = (LinearLayout) findViewById(R.id.full);
+	    LinearLayout lShadow = (LinearLayout) findViewById(R.id.left_action);
+	    LinearLayout rShadow = (LinearLayout) findViewById(R.id.right_action);
+	    LinearLayout networkinfo = (LinearLayout) findViewById(R.id.networkinfo);
+	    LinearLayout clockinfo = (LinearLayout) findViewById(R.id.clockinfo);
+	    LinearLayout notificationIcons = (LinearLayout) findViewById(R.id.notificationicons);
+	    LinearLayout musicControls = (LinearLayout) findViewById(R.id.musicControls);
+	    LinearLayout OuterMusicBox = (LinearLayout) findViewById(R.id.InfoBox);
+	    ImageView unlock_slide_left = (ImageView) findViewById(R.id.unlock_slide_left);
+	    ImageView unlock_slide_right = (ImageView) findViewById(R.id.unlock_slide_right);
+	    ImageView mute_slide_left = (ImageView) findViewById(R.id.mute_slide_left);
+	    ImageView mute_slide_right = (ImageView) findViewById(R.id.mute_slide_right);
+	    ImageView wifi_slide_left = (ImageView) findViewById(R.id.wifi_slide_left);
+	    ImageView wifi_slide_right = (ImageView) findViewById(R.id.wifi_slide_right);
+	    ImageView bluetooth_slide_left = (ImageView) findViewById(R.id.bluetooth_slide_left);
+	    ImageView bluetooth_slide_right = (ImageView) findViewById(R.id.bluetooth_slide_right);
+	    ImageButton play = (ImageButton) findViewById(R.id.playIcon);
+	    ImageButton pause = (ImageButton) findViewById(R.id.pauseIcon);
+	    ImageButton back = (ImageButton) findViewById(R.id.rewindIcon);
+	    ImageButton forward = (ImageButton) findViewById(R.id.forwardIcon);
+	    ImageView muteIcon = (ImageView) findViewById(R.id.mute);
+	    ImageView wifiIcon = (ImageView) findViewById(R.id.wifi);
+	    ImageView bluetoothIcon = (ImageView) findViewById(R.id.bluetooth);
+	    ImageView usb_msIcon = (ImageView) findViewById(R.id.usb_ms);
+	    ImageView count = (ImageView) findViewById(R.id.count);
+	    TextView MusicInfo = (TextView) findViewById(R.id.MusicInfo);
+	    TextView network = (TextView) findViewById(R.id.Network);
+	    TextView batteryInfo = (TextView) findViewById(R.id.batteryInfoText);
+	    TextView day = (TextView) findViewById(R.id.day);
+	    TextView sufix = (TextView) findViewById(R.id.sufix);
+	    TextView date = (TextView) findViewById(R.id.date);
+	    TextView nextAlarmText = (TextView) findViewById(R.id.nextAlarmText);
+	    
+    	String themePackage=utils.getStringPref(this, LockscreenSettings.THEME_KEY, LockscreenSettings.THEME_DEFAULT);
+    	PackageManager pm=getPackageManager();
+    	Resources themeResources=null;
+    	if(!themePackage.equals(LockscreenSettings.THEME_DEFAULT)){
+	    	try {
+				themeResources=pm.getResourcesForApplication(themePackage);
+			} catch (NameNotFoundException e) {
+			}
+    	}
+		if(themeResources!=null){
+			/*loadThemeResource(
+				themeResources,
+				themePackage,
+				"name of the drawable from the theme to load",
+				[view to apply it to],
+				{THEME_ITEM_BACKGROUND,THEME_ITEM_FOREGROUND}
+			);*/
+			//need to add an if here if theme_background_slide = true then:
+			if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_BACKGROUND_SLIDE_KEY, false)) {
+				loadThemeResource(themeResources,themePackage,"slide_bg",slide2,THEME_ITEM_BACKGROUND);
+			} else {
+				loadThemeResource(themeResources,themePackage,"slide_bg",slide1,THEME_ITEM_BACKGROUND);
+			}
+			loadThemeResource(themeResources,themePackage,"l_shadow",lShadow,THEME_ITEM_BACKGROUND);
+			loadThemeResource(themeResources,themePackage,"r_shadow",rShadow,THEME_ITEM_BACKGROUND);
+			loadThemeResource(themeResources,themePackage,"network_bg",networkinfo,THEME_ITEM_BACKGROUND);
+			loadThemeResource(themeResources,themePackage,"clock_bg",clockinfo,THEME_ITEM_BACKGROUND);
+			loadThemeResource(themeResources,themePackage,"notification_icons_bg",notificationIcons,THEME_ITEM_BACKGROUND);
+			loadThemeResource(themeResources,themePackage,"music_controls_bg",musicControls,THEME_ITEM_BACKGROUND);
+			loadThemeResource(themeResources,themePackage,"left_action_unlock",unlock_slide_left,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"right_action_unlock",unlock_slide_right,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"left_action_muteunmute",mute_slide_left,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"right_action_muteunmute",mute_slide_right,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"left_action_wifi",wifi_slide_left,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"right_action_wifi",wifi_slide_right,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"left_action_bluetooth",bluetooth_slide_left,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"right_action_bluetooth",bluetooth_slide_right,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"play_button",play,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"pause_button",pause,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"prev_button",back,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"next_button",forward,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"mute_icon",muteIcon,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"wifi_icon",wifiIcon,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"bt_icon",bluetoothIcon,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"usb_icon",usb_msIcon,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"count_down",count,THEME_ITEM_FOREGROUND);
+
+			Resources res = getResources();
+			int padDefault = res.getDimensionPixelSize(R.dimen.default_music_control_pad);			
+			OuterMusicBox.setPadding(0, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_CONTROL_KEY, padDefault));
+			
+			//I leave this just in case you wanna add custom fonts support?
+			try{
+				themeFont=Typeface.createFromAsset(themeResources.getAssets(), "themefont.ttf");
+				MusicInfo.setTypeface(themeFont);
+				network.setTypeface(themeFont);
+			    batteryInfo.setTypeface(themeFont);
+			    day.setTypeface(themeFont);
+			    sufix.setTypeface(themeFont);
+			    date.setTypeface(themeFont);
+			    nextAlarmText.setTypeface(themeFont);
+				
+			}catch (RuntimeException e) {
+			}
+		}
 		
 		//Start Slider Stuff
 		
@@ -223,61 +358,7 @@ public class mainActivity extends Activity {
 				return false;
             };
 		});
-		loadAccounts();
 		//End Slider Stuff
-		LayoutInflater layoutInflater=getLayoutInflater();
-	    mLayoutNotifications = (LinearLayout) findViewById(R.id.lock_notifications);
-		mSmsCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
-		mLayoutNotifications.addView(mSmsCount);
-	    mMissedCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
-	    mLayoutNotifications.addView(mMissedCount);
-	    mGmailMergedCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
-	    mLayoutNotifications.addView(mGmailMergedCount);
-	    for(GmailData data:mAccountList){
-	    	data.account=(TextView) layoutInflater.inflate(R.layout.gmail_account, mLayoutNotifications,false);
-	    	mLayoutNotifications.addView(data.account);
-	    	data.view=(TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
-	    	mLayoutNotifications.addView(data.view);
-	    }
-	    mLayoutNotifications.requestLayout();
-	    BindMusicService();
-	    
-		setButtonIntents();
-		setPlayButton();
-		showHideControlsStart(false);
-		
-		ImageButton toggle = (ImageButton) findViewById(R.id.musicControlsToggle);
-		
-	    toggle.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View v) {
-	        	toggleMusic();
-	        }
-	    });
-    	//ADW: Load the specified theme
-    	String themePackage=utils.getStringPref(this, LockscreenSettings.THEME_KEY, LockscreenSettings.THEME_DEFAULT);
-    	PackageManager pm=getPackageManager();
-    	Resources themeResources=null;
-    	if(!themePackage.equals(LockscreenSettings.THEME_DEFAULT)){
-	    	try {
-				themeResources=pm.getResourcesForApplication(themePackage);
-			} catch (NameNotFoundException e) {
-			}
-    	}
-		if(themeResources!=null){
-			/*loadThemeResource(
-				themeResources,
-				themePackage,
-				"name of the drawable from the theme to load",
-				[view to apply it to],
-				{THEME_ITEM_BACKGROUND,THEME_ITEM_FOREGROUND}
-			);*/
-			loadThemeResource(themeResources,themePackage,"slide_bg",slider,THEME_ITEM_BACKGROUND);
-			//I leave this just in case you wanna add custom fonts support?
-			try{
-				themeFont=Typeface.createFromAsset(themeResources.getAssets(), "themefont.ttf");
-			}catch (RuntimeException e) {
-			}
-		}
 	    
 	}
 	
@@ -535,35 +616,35 @@ public class mainActivity extends Activity {
 
     	switch (am.getRingerMode()) {
     	    case AudioManager.RINGER_MODE_SILENT:
-    	    	mute_slide_right.setImageResource(R.drawable.right_action_unmute);
-    	    	mute_slide_left.setImageResource(R.drawable.left_action_unmute);
+    	    	mute_slide_right.setImageLevel(1);
+    	    	mute_slide_left.setImageLevel(1);
     	    	if (utils.getCheckBoxPref(this, LockscreenSettings.MUTE_TOGGLE_KEY, true)) {
     	    		MuteIcon.setVisibility(View.VISIBLE);
     	    	} else {
     	    		MuteIcon.setVisibility(View.GONE);
     	    	}
     	    	if(!onstart) {
-    				whatsHappening(R.drawable.mute, 350);
+    				whatsHappening(R.drawable.mute, Toast.LENGTH_SHORT);
     	    	}
     	        break;
     	    case AudioManager.RINGER_MODE_VIBRATE:
-    	    	mute_slide_right.setImageResource(R.drawable.right_action_unmute);
-    	    	mute_slide_left.setImageResource(R.drawable.left_action_unmute);
+    	    	mute_slide_right.setImageLevel(1);
+    	    	mute_slide_left.setImageLevel(1);
     	    	if (utils.getCheckBoxPref(this, LockscreenSettings.MUTE_TOGGLE_KEY, true)) {
     	    		MuteIcon.setVisibility(View.VISIBLE);
     	    	} else {
     	    		MuteIcon.setVisibility(View.GONE);
     	    	}
     	    	if(!onstart) {
-    	    		whatsHappening(R.drawable.mute, 350);
+    	    		whatsHappening(R.drawable.mute, Toast.LENGTH_SHORT);
     	    	}
     	        break;
     	    case AudioManager.RINGER_MODE_NORMAL:
-    	    	mute_slide_right.setImageResource(R.drawable.right_action_mute);
-    	    	mute_slide_left.setImageResource(R.drawable.left_action_mute);
+    	    	mute_slide_right.setImageLevel(0);
+    	    	mute_slide_left.setImageLevel(0);
     	    	MuteIcon.setVisibility(View.GONE);
     	    	if(!onstart) {
-    	    		whatsHappening(R.drawable.unmute, 350);
+    	    		whatsHappening(R.drawable.unmute, Toast.LENGTH_SHORT);
     	    	}
     	        break;
     	}
@@ -662,9 +743,13 @@ public class mainActivity extends Activity {
     
     private void updateArt(long album, long song) {
     	try {
-    		
+    		ImageView AlbumArt;
     		// Set views
-    		ImageView AlbumArt = (ImageView) findViewById(R.id.Art);
+    		if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_ART_SLIDE_KEY, false)) {
+    			AlbumArt = (ImageView) findViewById(R.id.Art);
+    		} else {
+    			AlbumArt = (ImageView) findViewById(R.id.Art2);
+    		}
     		
     		// Get info from service
     		Bitmap art = utils.getArtwork(mainActivity.this, song, album, false);
@@ -983,6 +1068,8 @@ public class mainActivity extends Activity {
 	                } else {
 	                	totalunread+=data.unread;
 	                	totalunseen+=data.unseen;
+	                	data.account.setTypeface(themeFont);
+	                    data.view.setTypeface(themeFont);
 	                	if(!merged){
 		                	if(utils.getCheckBoxPref(this, LockscreenSettings.GMAIL_ACCOUNT_KEY, true)){
 		                		data.account.setVisibility(View.VISIBLE);
@@ -1256,23 +1343,23 @@ public class mainActivity extends Activity {
             	ImageView count = (ImageView) findViewById(R.id.count);
             switch(num) {
             	case 5:
-            		count.setImageResource(R.drawable.count_5);
+            		count.setImageLevel(5);
             		fadeCount(true, R.anim.fadeout_fast);
             		break;
             	case 4:
-            		count.setImageResource(R.drawable.count_4);
+            		count.setImageLevel(4);
             		fadeCount(true, R.anim.fadeout_fast);
             		break;
             	case 3:
-            		count.setImageResource(R.drawable.count_3);
+            		count.setImageLevel(3);
             		fadeCount(true, R.anim.fadeout_fast);
             		break;
             	case 2:
-            		count.setImageResource(R.drawable.count_2);
+            		count.setImageLevel(2);
             		fadeCount(true, R.anim.fadeout_fast);
             		break;
             	case 1:
-            		count.setImageResource(R.drawable.count_1);
+            		count.setImageLevel(1);
             		fadeCount(true, R.anim.fadeout_fast);
             		break;
             	case 0:
@@ -1676,6 +1763,26 @@ public class mainActivity extends Activity {
 							tmp=null;
 						}
 						((ImageView)item).setImageDrawable(d);
+					} else if(themeType==THEME_ITEM_TEXT_DRAWABLE && item instanceof TextView){
+							//ADW remove the old drawable
+							Drawable[] tmp=((TextView)item).getCompoundDrawables();
+							if(tmp[1]!=null){
+								tmp[1].setCallback(null);
+								tmp[1]=null;
+							}
+							if(tmp[2]!=null){
+								tmp[2].setCallback(null);
+								tmp[2]=null;
+							}
+							if(tmp[3]!=null){
+								tmp[3].setCallback(null);
+								tmp[3]=null;
+							}
+							if(tmp[4]!=null){
+								tmp[4].setCallback(null);
+								tmp[4]=null;
+							}
+							((TextView)item).setCompoundDrawables(null, null, null, d);
 					}else{
 						//ADW remove the old drawable
 						Drawable tmp=item.getBackground();

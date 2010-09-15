@@ -91,6 +91,13 @@ public class LockscreenSettings extends PreferenceActivity {
 	public static final String THEME_DEFAULT = "fLockScreen";
 	
 	static final String THEME_KEY = "themePackageName";
+	
+	static final String THEME_BACKGROUND_SLIDE_KEY = "theme_background_slide";
+	
+	static final String THEME_ART_SLIDE_KEY = "theme_allow_art_slide";
+	
+	static final String THEME_MUSIC_CONTROL_KEY = "theme_music_control_pad";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -423,6 +430,11 @@ public class LockscreenSettings extends PreferenceActivity {
     			if(tmpId!=0){
     				int notification_text_shadow_color=themeResources.getColor(tmpId);
     				editor.putInt("theme_notification_text_shadow_color", notification_text_shadow_color);
+    			}
+    			tmpId=themeResources.getIdentifier("music_control_pad", "dimen", packageName.toString());
+    			if(tmpId!=0){
+    				int music_control_pad=themeResources.getDimensionPixelSize(tmpId);
+    				editor.putInt("theme_music_control_pad", music_control_pad);
     			}
     			tmpId=themeResources.getIdentifier("background_slide", "bool", packageName.toString());
     			if(tmpId!=0){

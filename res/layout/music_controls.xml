@@ -10,7 +10,7 @@
 	android:layout_height="wrap_content"
 	android:paddingBottom="70dp">
 	
-<LinearLayout
+<LinearLayout android:id="@+id/musicControls"
 	android:layout_gravity="top"
 	android:gravity="center"
 	android:orientation="vertical"

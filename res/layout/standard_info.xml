@@ -14,7 +14,7 @@
         android:layout_height="fill_parent"
         android:layout_gravity="top|center_horizontal"
         >
-    <LinearLayout
+    <LinearLayout android:id="@+id/networkinfo"
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
 		android:gravity="center"
         android:layout_gravity="center"
         >
-    <LinearLayout
+    <LinearLayout android:id="@+id/clockinfo"
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

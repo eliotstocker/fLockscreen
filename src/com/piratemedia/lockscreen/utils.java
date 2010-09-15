@@ -199,6 +199,14 @@ public class utils {
     	return prefs.getInt(name, def);
     }
 	
+	//Get float Prefs
+	
+	static float getFloatPref(Context context, String name, float def) {
+    	SharedPreferences prefs =
+    		context.getSharedPreferences("com.piratemedia.lockscreen_preferences", Context.MODE_PRIVATE);
+    	return prefs.getFloat(name, def);
+    }
+	
 	//Get String Prefs (ListPrefs etc.)
 	
 	static String getStringPref(Context context, String name, String def) {
