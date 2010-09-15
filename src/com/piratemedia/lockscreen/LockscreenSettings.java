@@ -6,21 +6,25 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-
 import android.app.ActivityManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.WallpaperManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory.Options;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
@@ -30,6 +34,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -82,7 +87,10 @@ public class LockscreenSettings extends PreferenceActivity {
 	static final String SERVICE_FOREGROUND = "service_foreground";
 	
 	private static final String TEMP_PHOTO_FILE = "tempBG_Image.jpg";
-
+	
+	public static final String THEME_DEFAULT = "fLockScreen";
+	
+	static final String THEME_KEY = "themePackageName";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,7 +158,36 @@ public class LockscreenSettings extends PreferenceActivity {
 				return true;
 			}
 		});
+        //ADW: theme settings
+    	SharedPreferences sp=getPreferenceManager().getSharedPreferences();
+    	final String themePackage=sp.getString(THEME_KEY, LockscreenSettings.THEME_DEFAULT);
+        ListPreference themeLp = (ListPreference)findPreference(THEME_KEY);
+        themeLp.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+    			PreviewPreference themePreview=(PreviewPreference) findPreference("themePreview");
+    			themePreview.setTheme(newValue.toString());
+    			return false;
+            }
+        });
         
+		Intent intent=new Intent("com.piratemedia.lockscreen.THEMES");
+		intent.addCategory("android.intent.category.DEFAULT");
+		PackageManager pm=getPackageManager();
+		List<ResolveInfo> themes=pm.queryIntentActivities(intent, 0);
+		String[] entries = new String[themes.size()+1];
+		String[] values = new String[themes.size()+1];
+		entries[0]=LockscreenSettings.THEME_DEFAULT;
+		values[0]=LockscreenSettings.THEME_DEFAULT;
+		for(int i=0;i<themes.size();i++){
+			String appPackageName=(themes.get(i)).activityInfo.packageName.toString();
+			String themeName=(themes.get(i)).loadLabel(pm).toString();
+			entries[i+1]=themeName;
+			values[i+1]=appPackageName;
+		}
+		themeLp.setEntries(entries);
+		themeLp.setEntryValues(values);
+		PreviewPreference themePreview=(PreviewPreference) findPreference("themePreview");
+		themePreview.setTheme(themePackage);
 	}
 	
 	private void actionLeft(Object newVal) {
@@ -326,4 +363,87 @@ public class LockscreenSettings extends PreferenceActivity {
 			}
 		}
     }
+    /**
+     * ADW: Apply and store the theme stuff
+     * @param v
+     */
+	public void applyTheme(View v){
+		PreviewPreference themePreview=(PreviewPreference) findPreference("themePreview");
+		String packageName=themePreview.getValue().toString();
+		//this time we really save the themepackagename
+		SharedPreferences sp = getPreferenceManager().getSharedPreferences();
+	    SharedPreferences.Editor editor = sp.edit();
+	    editor.putString("themePackageName",packageName);
+	    //and update the preferences from the theme
+	    //TODO:ADW maybe this should be optional for the user
+        if(!packageName.equals(LockscreenSettings.THEME_DEFAULT)){
+        	Resources themeResources=null;
+        	try {
+    			themeResources=getPackageManager().getResourcesForApplication(packageName.toString());
+    		} catch (NameNotFoundException e) {
+    			//e.printStackTrace();
+    		}
+    		if(themeResources!=null){
+    			int tmpId=themeResources.getIdentifier("network_text_color", "color", packageName.toString());
+    			if(tmpId!=0){
+    				int network_text_color=themeResources.getColor(tmpId);
+    				editor.putInt("theme_network_text_color", network_text_color);
+    			}
+    			tmpId=themeResources.getIdentifier("network_text_color", "color", packageName.toString());
+    			if(tmpId!=0){
+    				int network_text_shadow_color=themeResources.getColor(tmpId);
+    				editor.putInt("theme_network_text_shadow_color", network_text_shadow_color);
+    			}
+    			tmpId=themeResources.getIdentifier("clock_text_color", "color", packageName.toString());
+    			if(tmpId!=0){
+    				int clock_text_color=themeResources.getColor(tmpId);
+    				editor.putInt("theme_clock_text_color", clock_text_color);
+    			}
+    			tmpId=themeResources.getIdentifier("clock_text_shadow_color", "color", packageName.toString());
+    			if(tmpId!=0){
+    				int clock_text_shadow_color=themeResources.getColor(tmpId);
+    				editor.putInt("theme_clock_text_shadow_color", clock_text_shadow_color);
+    			}
+    			tmpId=themeResources.getIdentifier("music_text_color", "color", packageName.toString());
+    			if(tmpId!=0){
+    				int music_text_color=themeResources.getColor(tmpId);
+    				editor.putInt("theme_music_text_color", music_text_color);
+    			}
+    			tmpId=themeResources.getIdentifier("music_text_shadow_color", "color", packageName.toString());
+    			if(tmpId!=0){
+    				int music_text_shadow_color=themeResources.getColor(tmpId);
+    				editor.putInt("theme_music_text_shadow_color", music_text_shadow_color);
+    			}
+    			tmpId=themeResources.getIdentifier("notification_text_color", "color", packageName.toString());
+    			if(tmpId!=0){
+    				int notification_text_color=themeResources.getColor(tmpId);
+    				editor.putInt("theme_notification_text_color", notification_text_color);
+    			}
+    			tmpId=themeResources.getIdentifier("notification_text_shadow_color", "color", packageName.toString());
+    			if(tmpId!=0){
+    				int notification_text_shadow_color=themeResources.getColor(tmpId);
+    				editor.putInt("theme_notification_text_shadow_color", notification_text_shadow_color);
+    			}
+    			tmpId=themeResources.getIdentifier("background_slide", "bool", packageName.toString());
+    			if(tmpId!=0){
+    				boolean background_slide=themeResources.getBoolean(tmpId);
+    				editor.putBoolean("theme_background_slide", background_slide);
+    			}
+    			tmpId=themeResources.getIdentifier("allow_art_slide", "bool", packageName.toString());
+    			if(tmpId!=0){
+    				boolean allow_art_slide=themeResources.getBoolean(tmpId);
+    				editor.putBoolean("theme_allow_art_slide", allow_art_slide);
+    			}
+    			tmpId=themeResources.getIdentifier("show_icons", "bool", packageName.toString());
+    			if(tmpId!=0){
+    				boolean show_icons=themeResources.getBoolean(tmpId);
+    				editor.putBoolean("theme_show_icons", show_icons);
+    			}
+    			
+    		}
+        }
+	    editor.commit();
+	    finish();
+	}
+    
 }

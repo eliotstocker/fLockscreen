@@ -123,6 +123,21 @@
 		<Preference android:key="version" android:title="@string/credits_version"
 			android:summary="@string/credits_version_summary" android:enabled="false" />
 	</PreferenceCategory>
+	
+	<PreferenceScreen
+		android:key="themePrefences"
+		android:summary="@string/pref_summary_theme_settings"
+		android:title="@string/pref_title_theme_settings">
+			<ListPreference
+			  android:key="themePackageName"
+			  android:title="@string/pref_title_theme_package"
+			  android:summary="@string/pref_summary_theme_package"
+			  />
+    		<com.piratemedia.lockscreen.PreviewPreference
+    			android:layout="@layout/theme_preview"
+	    		android:key="themePreview" />
+		
+	</PreferenceScreen>	
 
 
 </PreferenceScreen>

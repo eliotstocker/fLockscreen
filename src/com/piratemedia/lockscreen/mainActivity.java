@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
@@ -23,13 +22,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
@@ -123,6 +127,11 @@ public class mainActivity extends Activity {
  	
  	private boolean unlocked=false;
  	private ArrayList<GmailData> mAccountList;
+	//ADW Theme constants
+	public static final int THEME_ITEM_BACKGROUND=0;
+	public static final int THEME_ITEM_FOREGROUND=1;
+	private Typeface themeFont=null;
+ 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -244,6 +253,32 @@ public class mainActivity extends Activity {
 	        	toggleMusic();
 	        }
 	    });
+    	//ADW: Load the specified theme
+    	String themePackage=utils.getStringPref(this, LockscreenSettings.THEME_KEY, LockscreenSettings.THEME_DEFAULT);
+    	PackageManager pm=getPackageManager();
+    	Resources themeResources=null;
+    	if(!themePackage.equals(LockscreenSettings.THEME_DEFAULT)){
+	    	try {
+				themeResources=pm.getResourcesForApplication(themePackage);
+			} catch (NameNotFoundException e) {
+			}
+    	}
+		if(themeResources!=null){
+			/*loadThemeResource(
+				themeResources,
+				themePackage,
+				"name of the drawable from the theme to load",
+				[view to apply it to],
+				{THEME_ITEM_BACKGROUND,THEME_ITEM_FOREGROUND}
+			);*/
+			loadThemeResource(themeResources,themePackage,"slide_bg",slider,THEME_ITEM_BACKGROUND);
+			//I leave this just in case you wanna add custom fonts support?
+			try{
+				themeFont=Typeface.createFromAsset(themeResources.getAssets(), "themefont.ttf");
+			}catch (RuntimeException e) {
+			}
+		}
+	    
 	}
 	
 	public boolean onTrackballEvent(MotionEvent event) {
@@ -1615,6 +1650,42 @@ public class mainActivity extends Activity {
 			@Override
 			public String toString(){
 				return "Account name="+name+" unread="+unread+" unseen="+unseen+" view="+view+"account="+account;
+			}
+		}
+		/**
+		 * ADW: Load the specified theme resource
+		 * @param themeResources Resources from the theme package
+		 * @param themePackage the theme's package name 
+		 * @param item_name the theme item name to load
+		 * @param item the View Item to apply the theme into
+		 * @param themeType Specify if the themed element will be a background or a foreground item
+		 */
+		public static void loadThemeResource(Resources themeResources,
+				String themePackage, String item_name, View item,
+				int themeType) {
+			Drawable d=null;
+			if(themeResources!=null){
+				int resource_id=themeResources.getIdentifier (item_name, "drawable", themePackage);
+				if(resource_id!=0){
+					d=themeResources.getDrawable(resource_id);
+					if(themeType==THEME_ITEM_FOREGROUND && item instanceof ImageView){
+						//ADW remove the old drawable
+						Drawable tmp=((ImageView)item).getDrawable();
+						if(tmp!=null){
+							tmp.setCallback(null);
+							tmp=null;
+						}
+						((ImageView)item).setImageDrawable(d);
+					}else{
+						//ADW remove the old drawable
+						Drawable tmp=item.getBackground();
+						if(tmp!=null){
+							tmp.setCallback(null);
+							tmp=null;
+						}
+						item.setBackgroundDrawable(d);
+					}
+				}
 			}
 		}
 }

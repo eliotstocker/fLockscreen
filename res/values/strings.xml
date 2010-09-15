@@ -180,4 +180,17 @@
 	<string name="service_foreground_summary_on">Service will likely NOT be killed by android</string>
 	<string name="service_foreground_summary_off">Service will likely BE killed by android sometimes</string>
 	<string name="service_notification">Lock your phone</string>
+	
+    <!-- Theme preferences -->
+	<string name="pref_title_theme_settings">Themes Preferences</string>
+	<string name="pref_summary_theme_settings">Select themes for ADW.Launcher</string>
+	<string name="pref_title_theme_package">Select your theme</string>
+	<string name="pref_summary_theme_package">Choose your theme for ADW.Launcher</string>
+	<string name="pref_title_theme_preview">Theme Preview</string>
+	<string name="pref_summary_theme_preview">Preview of the selected theme</string>
+	<string name="pref_title_theme_icons">Use Theme Icons</string>
+	<string name="pref_summary_theme_icons">Deselect this to use standard OS icons</string>
+	<string name="pref_themes_apply_theme">Apply theme!</string>
+	<string name="pref_themes_get_themes">Get themes!</string>
+	
 </resources>
