@@ -160,6 +160,8 @@ public class LockscreenSettings extends PreferenceActivity {
             public boolean onPreferenceClick(Preference preference) {
             	String warning = getString(R.string.landscape_image_warning);
 				Toast.makeText(getBaseContext(), warning, 1700).show();
+				final String FileName = "bg_pic";
+				deleteFile(FileName + ".jpg");
             	return true;
         	}
         });

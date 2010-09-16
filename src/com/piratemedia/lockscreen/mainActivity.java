@@ -1736,11 +1736,7 @@ public class mainActivity extends Activity {
 								tmp[3].setCallback(null);
 								tmp[3]=null;
 							}
-							if(tmp[4]!=null){
-								tmp[4].setCallback(null);
-								tmp[4]=null;
-							}
-							((TextView)item).setCompoundDrawables(null, null, null, d);
+							((TextView)item).setCompoundDrawables(d, null, null, null);
 					}else{
 						//ADW remove the old drawable
 						Drawable tmp=item.getBackground();
