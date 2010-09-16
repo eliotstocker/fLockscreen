@@ -100,6 +100,9 @@ public class updateService extends Service {
 
     @Override
     public void onStart(Intent aIntent, int aStartId) {
+    	//This thing is needed when the service is restarted by the system, cause aIntent can be null
+    	//so null.getAction() will throw a NPE
+    	if(aIntent==null)return;
     	final String action=aIntent.getAction();
     	if (action==null)return;
         if (action.equals("com.android.music.playbackcomplete") && getPlayer() == 1) {
