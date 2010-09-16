@@ -98,6 +98,22 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	static final String THEME_MUSIC_CONTROL_KEY = "theme_music_control_pad";
 	
+	static final String THEME_NETWORK_TEXT_KEY = "theme_network_text_color";
+	
+	static final String THEME_NETWORK_SHADOW_KEY = "theme_network_text_shadow_color";
+	
+	static final String THEME_CLOCK_TEXT_KEY = "theme_clock_text_color";
+	
+	static final String THEME_CLOCK_SHADOW_KEY = "theme_clock_text_shadow_color";
+	
+	static final String THEME_MUSIC_TEXT_KEY = "theme_music_text_color";
+	
+	static final String THEME_MUSIC_SHADOW_KEY = "theme_music_text_shadow_color";
+	
+	static final String THEME_NOTIFICATION_TEXT_KEY = "theme_notification_text_color";
+	
+	static final String THEME_NOTIFICATION_SHADOW_KEY = "theme_notification_text_shadow_color";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -396,7 +412,7 @@ public class LockscreenSettings extends PreferenceActivity {
     				int network_text_color=themeResources.getColor(tmpId);
     				editor.putInt("theme_network_text_color", network_text_color);
     			}
-    			tmpId=themeResources.getIdentifier("network_text_color", "color", packageName.toString());
+    			tmpId=themeResources.getIdentifier("network_text_shadow_color", "color", packageName.toString());
     			if(tmpId!=0){
     				int network_text_shadow_color=themeResources.getColor(tmpId);
     				editor.putInt("theme_network_text_shadow_color", network_text_shadow_color);

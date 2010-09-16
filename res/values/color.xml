@@ -1,0 +1,10 @@
+<resources>
+<color name="network_text_color">#FFFFFFFF</color>
+<color name="network_text_shadow_color">#FF000000</color>
+<color name="clock_text_color">#FFFFFFFF</color>
+<color name="clock_text_shadow_color">#FF000000</color>
+<color name="music_text_color">#FFFFFFFF</color>
+<color name="music_text_shadow_color">#FF000000</color>
+<color name="notification_text_color">#FFFFFFFF</color>
+<color name="notification_text_shadow_color">#FF000000</color>
+</resources>

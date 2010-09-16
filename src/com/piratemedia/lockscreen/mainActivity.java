@@ -317,9 +317,27 @@ public class mainActivity extends Activity {
 			loadThemeResource(themeResources,themePackage,"usb_icon",usb_msIcon,THEME_ITEM_FOREGROUND);
 			loadThemeResource(themeResources,themePackage,"count_down",count,THEME_ITEM_FOREGROUND);
 			loadThemeResource(themeResources,themePackage,"actions",mToastPic,THEME_ITEM_FOREGROUND);
+			
 			Resources res = getResources();
 			int padDefault = res.getDimensionPixelSize(R.dimen.default_music_control_pad);			
 			OuterMusicBox.setPadding(0, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_CONTROL_KEY, padDefault));
+			
+			network.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NETWORK_TEXT_KEY, res.getColor(R.color.network_text_color)));
+			network.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NETWORK_SHADOW_KEY, res.getColor(R.color.network_text_shadow_color)));
+			batteryInfo.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NETWORK_TEXT_KEY, res.getColor(R.color.network_text_color)));
+			batteryInfo.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NETWORK_SHADOW_KEY, res.getColor(R.color.network_text_shadow_color)));
+			day.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_TEXT_KEY, res.getColor(R.color.clock_text_color)));
+			day.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_SHADOW_KEY, res.getColor(R.color.clock_text_shadow_color)));
+			sufix.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_TEXT_KEY, res.getColor(R.color.clock_text_color)));
+			sufix.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_SHADOW_KEY, res.getColor(R.color.clock_text_shadow_color)));
+			date.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_TEXT_KEY, res.getColor(R.color.clock_text_color)));
+			date.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_SHADOW_KEY, res.getColor(R.color.clock_text_shadow_color)));
+			time.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_TEXT_KEY, res.getColor(R.color.clock_text_color)));
+			time.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_SHADOW_KEY, res.getColor(R.color.clock_text_shadow_color)));
+			nextAlarmText.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_TEXT_KEY, res.getColor(R.color.clock_text_color)));
+			nextAlarmText.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_SHADOW_KEY, res.getColor(R.color.clock_text_shadow_color)));
+			MusicInfo.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_TEXT_KEY, res.getColor(R.color.music_text_color)));
+			MusicInfo.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_SHADOW_KEY, res.getColor(R.color.music_text_shadow_color)));
 			
 			//I leave this just in case you wanna add custom fonts support?
 			try{
@@ -738,7 +756,7 @@ public class mainActivity extends Activity {
     	try {
     		ImageView AlbumArt;
     		// Set views
-    		if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_ART_SLIDE_KEY, false)) {
+    		if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_ART_SLIDE_KEY, true)) {
     			AlbumArt = (ImageView) findViewById(R.id.Art);
     		} else {
     			AlbumArt = (ImageView) findViewById(R.id.Art2);
@@ -760,7 +778,7 @@ public class mainActivity extends Activity {
     private void showHideArt() {
 		ImageView AlbumArt;
 		// Set views
-		if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_ART_SLIDE_KEY, false)) {
+		if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_ART_SLIDE_KEY, true)) {
 			AlbumArt = (ImageView) findViewById(R.id.Art);
 		} else {
 			AlbumArt = (ImageView) findViewById(R.id.Art2);
@@ -1004,7 +1022,7 @@ public class mainActivity extends Activity {
     private void fadeArt(boolean visible, int anim) {
 		ImageView AlbumArt;
 		// Set views
-		if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_ART_SLIDE_KEY, false)) {
+		if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_ART_SLIDE_KEY, true)) {
 			AlbumArt = (ImageView) findViewById(R.id.Art);
 		} else {
 			AlbumArt = (ImageView) findViewById(R.id.Art2);
