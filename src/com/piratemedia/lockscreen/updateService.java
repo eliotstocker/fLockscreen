@@ -1,5 +1,6 @@
 package com.piratemedia.lockscreen;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +24,8 @@ public class updateService extends Service {
 	public static final String SMS_CHANGED = "com.piratemedia.lockscreen.smschanged";
 	public static final String PHONE_CHANGED = "com.piratemedia.lockscreen.phonechanged";
 	public static final String MUTE_CHANGED = "com.piratemedia.lockscreen.mutechanged";
-	public static final String WIFI_CHANGED = "com.piratemedia.lockscreen.wifichnaged";
+	public static final String WIFI_CHANGED = "com.piratemedia.lockscreen.wifichanged";
+	public static final String BT_CHANGED = "com.piratemedia.lockscreen.btchanged";
 	public static final String START_STOP_FORGROUND = "com.piratemedia.lockscreen.forground";
 	public static final int NOTIFICATION_ID = 35625;
 	public IMediaPlaybackService mService = null;
@@ -266,6 +268,10 @@ public class updateService extends Service {
             	notifyChange(MUTE_CHANGED);
             } else if (action.equals("android.net.wifi.STATE_CHANGE")) {
             	notifyChange(WIFI_CHANGED);
+            } else if (action.equals("android.net.wifi.WIFI_STATE_CHANGED")) {
+            	notifyChange(WIFI_CHANGED);
+            } else if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+            	notifyChange(BT_CHANGED);
             } else if(action.equals(Intent.ACTION_BOOT_COMPLETED)){
             	Log.d("Lockscreen", "Boot Completed");
             	Intent lock=utils.getLockIntent(this);

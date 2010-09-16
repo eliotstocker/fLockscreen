@@ -38,6 +38,7 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.net.NetworkInfo.State;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -92,6 +93,7 @@ public class mainActivity extends Activity {
     public static final String SMS_ID = "_id";
     
 	Handler mHandler = new Handler();
+	Handler mUnlockHandler = new Handler();
 	public boolean AutomaticBrightness;
 
 	//Slider Initialisation Stuff
@@ -417,6 +419,7 @@ public class mainActivity extends Activity {
         f.addAction(updateService.PHONE_CHANGED);
         f.addAction(updateService.MUTE_CHANGED);
         f.addAction(updateService.WIFI_CHANGED);
+        f.addAction(updateService.BT_CHANGED);
         f.addAction(Intent.ACTION_BATTERY_CHANGED);
         f.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         f.addAction(Intent.ACTION_DATE_CHANGED);
@@ -552,6 +555,10 @@ public class mainActivity extends Activity {
             	
             	wifiMode();
             	
+            } else if (action.equals(updateService.BT_CHANGED)) {
+            	
+            	bluetoothMode();
+            	
             } 
         };
     };
@@ -653,13 +660,11 @@ public class mainActivity extends Activity {
     }
     
     private void bluetoothMode() {
-	    BluetoothAdapter bta = (BluetoothAdapter)
-	    BluetoothAdapter.getDefaultAdapter();
+	    BluetoothAdapter bta = (BluetoothAdapter) BluetoothAdapter.getDefaultAdapter();
 	    ImageView BluetoothIcon = (ImageView) findViewById(R.id.bluetooth);
 
 	    if(bta!=null){
 		    boolean on = bta.isEnabled();
-		    
 		    if (utils.getCheckBoxPref(this, LockscreenSettings.BLUETOOTH_MODE_KEY, true)) {
 		    	if(on){
 		    		BluetoothIcon.setVisibility(View.VISIBLE);
@@ -675,10 +680,13 @@ public class mainActivity extends Activity {
     }
     
     private void wifiMode() {
-    	ConnectivityManager connManager =((ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE));
-    	boolean state = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
-    	
+    	WifiManager wifiMgr=(WifiManager) getBaseContext().getSystemService(Context.WIFI_SERVICE);
     	ImageView wifiIcon = (ImageView) findViewById(R.id.wifi);
+    	if(wifiMgr==null){
+    		wifiIcon.setVisibility(View.GONE);
+    		return;
+    	}
+    	boolean state=wifiMgr.isWifiEnabled();
     	if (utils.getCheckBoxPref(this, LockscreenSettings.WIFI_MODE_KEY, true)) {
     		if (state) {
     			wifiIcon.setVisibility(View.VISIBLE);
@@ -1397,81 +1405,24 @@ public class mainActivity extends Activity {
         		actleft = true;
         	}
         	timer.scheduleAtFixedRate( new TimerTask() {
-
-        	public void run() {
-        		Thread start;
-
-        	switch(unlock_count) {
-        	case 5:
-                start = new Thread() {
-                    public void run() {
-                        mHandler.post(mUnlockToast);
-                    }
-                };
-                start.start();
-        		unlock_count = 4;
-        		break;
-        	case 4:
-                start = new Thread() {
-                    public void run() {
-                        mHandler.post(mUnlockToast);
-                    }
-                };
-                start.start();
-        		unlock_count = 3;
-        		break;
-        	case 3:
-                start = new Thread() {
-                    public void run() {
-                        mHandler.post(mUnlockToast);
-                    }
-                };
-                start.start();
-        		unlock_count = 2;
-        		break;
-        	case 2:
-                start = new Thread() {
-                    public void run() {
-                        mHandler.post(mUnlockToast);
-                    }
-                };
-                start.start();
-        		unlock_count = 1;
-        		break;
-        	case 1:
-                start = new Thread() {
-                    public void run() {
-                        mHandler.post(mUnlockToast);
-                    }
-                };
-                start.start();
-        		unlock_count = 0;
-        		break;
-        	case 0:
-                start = new Thread() {
-                    public void run() {
-                        mHandler.post(mUnlockToast);
-                    }
-                };
-                start.start();
-        		unlock_count = -1;
-        		break;
-        	}
-
-        	}
-
+	        	public void run() {
+	        		if(mUnlockHandler!=null)
+	        			mUnlockHandler.removeCallbacks(mUnlockToast);
+	        		unlock_count--;
+	        		mUnlockHandler.post(mUnlockToast);
+	        	}
         	}, 0, 500);
-        	; }
+        }
         
         private void stopAllCounts() {
         	ImageView count = (ImageView) findViewById(R.id.count);
         	count.setVisibility(View.GONE);
         	if (timer != null){
-        	timer.cancel();
-        	timer = new Timer();
+        		timer.cancel();
+        		timer = new Timer();
         	}
 
-        	}
+        }
         //end slidyness stuff
 
 		/**
@@ -1645,6 +1596,7 @@ public class mainActivity extends Activity {
 	    private void toggleWifi() {
 	    	WifiManager wifim = (WifiManager)
 	    	this.getSystemService(Context.WIFI_SERVICE);
+	    	if(wifim==null)return;
 	    	boolean on = wifim.isWifiEnabled();
 	    	
 	    	if(on){
@@ -1661,6 +1613,7 @@ public class mainActivity extends Activity {
 	    private void toggleBluetooth() {
 	    	BluetoothAdapter bta = (BluetoothAdapter)
 	    	BluetoothAdapter.getDefaultAdapter();
+	    	if(bta==null)return;
 	    	boolean on = bta.isEnabled();
 	    	
 	    	if(on){
