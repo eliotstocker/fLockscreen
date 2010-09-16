@@ -137,6 +137,16 @@ public class mainActivity extends Activity {
 	public static final int THEME_ITEM_TEXT_DRAWABLE=2;
 	private Typeface themeFont=null;
  	private int slider_padding=0;
+ 	//ADW action constants
+ 	private static final int ACTION_UNLOCK=1;
+ 	private static final int ACTION_WIFI_OFF=2;
+ 	private static final int ACTION_WIFI_ON=3;
+ 	private static final int ACTION_BT_OFF=4;
+ 	private static final int ACTION_BT_ON=5;
+ 	private static final int ACTION_SOUND_OFF=6;
+ 	private static final int ACTION_SOUND_ON=7;
+ 	private View mToastLayout;
+ 	private ImageView mToastPic;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -220,7 +230,10 @@ public class mainActivity extends Activity {
 		mainFrame.setLayoutParams(lp);
 		
 		slider = (HorizontalScrollView) findViewById(R.id.mainSlide);
-	    
+		mToastLayout = layoutInflater.inflate(R.layout.cooltoast,
+                (ViewGroup) findViewById(R.id.toast_layout_root));
+		mToastPic = (ImageView) mToastLayout.findViewById(R.id.image);
+
     	//ADW: Load the specified theme
     	String themePackage=utils.getStringPref(this, LockscreenSettings.THEME_KEY, LockscreenSettings.THEME_DEFAULT);
     	PackageManager pm=getPackageManager();
@@ -303,7 +316,7 @@ public class mainActivity extends Activity {
 			loadThemeResource(themeResources,themePackage,"bt_icon",bluetoothIcon,THEME_ITEM_FOREGROUND);
 			loadThemeResource(themeResources,themePackage,"usb_icon",usb_msIcon,THEME_ITEM_FOREGROUND);
 			loadThemeResource(themeResources,themePackage,"count_down",count,THEME_ITEM_FOREGROUND);
-
+			loadThemeResource(themeResources,themePackage,"actions",mToastPic,THEME_ITEM_FOREGROUND);
 			Resources res = getResources();
 			int padDefault = res.getDimensionPixelSize(R.dimen.default_music_control_pad);			
 			OuterMusicBox.setPadding(0, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_CONTROL_KEY, padDefault));
@@ -603,7 +616,7 @@ public class mainActivity extends Activity {
     	    		MuteIcon.setVisibility(View.GONE);
     	    	}
     	    	if(!onstart) {
-    				whatsHappening(R.drawable.mute, Toast.LENGTH_SHORT);
+    				whatsHappening(ACTION_SOUND_OFF, Toast.LENGTH_SHORT);
     	    	}
     	        break;
     	    case AudioManager.RINGER_MODE_VIBRATE:
@@ -615,7 +628,7 @@ public class mainActivity extends Activity {
     	    		MuteIcon.setVisibility(View.GONE);
     	    	}
     	    	if(!onstart) {
-    	    		whatsHappening(R.drawable.mute, Toast.LENGTH_SHORT);
+    	    		whatsHappening(ACTION_SOUND_OFF, Toast.LENGTH_SHORT);
     	    	}
     	        break;
     	    case AudioManager.RINGER_MODE_NORMAL:
@@ -623,7 +636,7 @@ public class mainActivity extends Activity {
     	    	mute_slide_left.setImageLevel(0);
     	    	MuteIcon.setVisibility(View.GONE);
     	    	if(!onstart) {
-    	    		whatsHappening(R.drawable.unmute, Toast.LENGTH_SHORT);
+    	    		whatsHappening(ACTION_SOUND_ON, Toast.LENGTH_SHORT);
     	    	}
     	        break;
     	}
@@ -1424,7 +1437,7 @@ public class mainActivity extends Activity {
 		 */
 		private void unlockScreen(){
 			unlocked=true;
-			whatsHappening(R.drawable.unlock, Toast.LENGTH_SHORT);
+			whatsHappening(ACTION_UNLOCK, Toast.LENGTH_SHORT);
 	        Handler handler=new Handler();
 	        handler.postDelayed(new Runnable() {
 				public void run() {
@@ -1442,18 +1455,13 @@ public class mainActivity extends Activity {
 		 * Just to show a nice graphic when unlocking or
 		 * muting etc.
 		 */
-		private void whatsHappening(int imageRes, int dur) {
-			LayoutInflater inflater = getLayoutInflater();
-			View layout = inflater.inflate(R.layout.cooltoast,
-			                               (ViewGroup) findViewById(R.id.toast_layout_root));
-
-			ImageView image = (ImageView) layout.findViewById(R.id.image);
-			image.setImageResource(imageRes);
+		private void whatsHappening(int action, int dur) {
+			mToastPic.setImageLevel(action);
 
 			Toast toast = new Toast(getApplicationContext());
 			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.setDuration(dur);
-			toast.setView(layout);
+			toast.setView(mToastLayout);
 			toast.show();
 		}
 		
@@ -1566,10 +1574,10 @@ public class mainActivity extends Activity {
 	    	
 	    	if(on){
 	    		wifim.setWifiEnabled(false);
-				whatsHappening(R.drawable.wifi, Toast.LENGTH_SHORT);
+				whatsHappening(ACTION_WIFI_OFF, Toast.LENGTH_SHORT);
 	    	} else {
 	    		wifim.setWifiEnabled(true);
-				whatsHappening(R.drawable.wifi, Toast.LENGTH_SHORT);
+				whatsHappening(ACTION_WIFI_ON, Toast.LENGTH_SHORT);
 	    	}
 	    	
 	    	wifiMode();
@@ -1583,10 +1591,10 @@ public class mainActivity extends Activity {
 	    	
 	    	if(on){
 	    		bta.disable();
-				whatsHappening(R.drawable.bluetooth, Toast.LENGTH_SHORT);
+				whatsHappening(ACTION_BT_OFF, Toast.LENGTH_SHORT);
 	    	} else {
 	    		bta.enable();
-				whatsHappening(R.drawable.bluetooth_on, Toast.LENGTH_SHORT);
+				whatsHappening(ACTION_BT_ON, Toast.LENGTH_SHORT);
 	    	}
 	    	
 	    	bluetoothMode();
