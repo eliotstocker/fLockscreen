@@ -331,12 +331,7 @@ public class mainActivity extends Activity {
             	if(unlocked)return true;
                 if (motionevent.getAction() == MotionEvent.ACTION_UP || motionevent.getAction() == MotionEvent.ACTION_CANCEL) {
                 	stopAllCounts();
-                	Thread t = new Thread() {
-                        public void run() {
-                            mHandler.post(mScroll);
-                        }
-                    };
-                    t.start();
+                    mHandler.post(mScroll);
                 	return true;
                 } else if (motionevent.getAction() == MotionEvent.ACTION_MOVE) {
                 	int pos = slider.getScrollX();
@@ -398,12 +393,7 @@ public class mainActivity extends Activity {
 	@Override
 	public void onAttachedToWindow() {
 		super.onAttachedToWindow();
-		Thread start = new Thread() {
-			public void run() {
-				mHandler.post(mScrollStart);
-			}
-		};
-		start.start();
+		mHandler.post(mScrollStart);
 	}
 
     @Override
@@ -1387,12 +1377,7 @@ public class mainActivity extends Activity {
             	case 0:
             		count.setVisibility(View.GONE);
             		doAction();
-                	Thread t = new Thread() {
-                        public void run() {
-                            mHandler.post(mScroll);
-                        }
-                    };
-                    t.start();
+                    mHandler.post(mScroll);
             		break;
             }
             }
