@@ -30,6 +30,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -133,7 +134,7 @@ public class mainActivity extends Activity {
 	public static final int THEME_ITEM_FOREGROUND=1;
 	public static final int THEME_ITEM_TEXT_DRAWABLE=2;
 	private Typeface themeFont=null;
- 	
+ 	private int slider_padding=0;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -207,43 +208,18 @@ public class mainActivity extends Activity {
 	        	toggleMusic();
 	        }
 	    });
-    	//ADW: Load the specified theme
-	    //SetViews For themeing
-	    HorizontalScrollView slide1 = (HorizontalScrollView) findViewById(R.id.mainSlide);
-	    LinearLayout slide2 = (LinearLayout) findViewById(R.id.full);
-	    LinearLayout lShadow = (LinearLayout) findViewById(R.id.left_action);
-	    LinearLayout rShadow = (LinearLayout) findViewById(R.id.right_action);
-	    LinearLayout networkinfo = (LinearLayout) findViewById(R.id.networkinfo);
-	    LinearLayout clockinfo = (LinearLayout) findViewById(R.id.clockinfo);
-	    LinearLayout notificationIcons = (LinearLayout) findViewById(R.id.notificationicons);
-	    LinearLayout musicControls = (LinearLayout) findViewById(R.id.musicControls);
-	    LinearLayout OuterMusicBox = (LinearLayout) findViewById(R.id.InfoBox);
-	    ImageView unlock_slide_left = (ImageView) findViewById(R.id.unlock_slide_left);
-	    ImageView unlock_slide_right = (ImageView) findViewById(R.id.unlock_slide_right);
-	    ImageView mute_slide_left = (ImageView) findViewById(R.id.mute_slide_left);
-	    ImageView mute_slide_right = (ImageView) findViewById(R.id.mute_slide_right);
-	    ImageView wifi_slide_left = (ImageView) findViewById(R.id.wifi_slide_left);
-	    ImageView wifi_slide_right = (ImageView) findViewById(R.id.wifi_slide_right);
-	    ImageView bluetooth_slide_left = (ImageView) findViewById(R.id.bluetooth_slide_left);
-	    ImageView bluetooth_slide_right = (ImageView) findViewById(R.id.bluetooth_slide_right);
-	    ImageButton play = (ImageButton) findViewById(R.id.playIcon);
-	    ImageButton pause = (ImageButton) findViewById(R.id.pauseIcon);
-	    ImageButton back = (ImageButton) findViewById(R.id.rewindIcon);
-	    ImageButton forward = (ImageButton) findViewById(R.id.forwardIcon);
-	    ImageView muteIcon = (ImageView) findViewById(R.id.mute);
-	    ImageView wifiIcon = (ImageView) findViewById(R.id.wifi);
-	    ImageView bluetoothIcon = (ImageView) findViewById(R.id.bluetooth);
-	    ImageView usb_msIcon = (ImageView) findViewById(R.id.usb_ms);
-	    ImageView count = (ImageView) findViewById(R.id.count);
-	    TextView MusicInfo = (TextView) findViewById(R.id.MusicInfo);
-	    TextView network = (TextView) findViewById(R.id.Network);
-	    TextView batteryInfo = (TextView) findViewById(R.id.batteryInfoText);
-	    TextView day = (TextView) findViewById(R.id.day);
-	    TextView sufix = (TextView) findViewById(R.id.sufix);
-	    TextView date = (TextView) findViewById(R.id.date);
-	    TextView nextAlarmText = (TextView) findViewById(R.id.nextAlarmText);
-	    DigitalClock time = (DigitalClock) findViewById(R.id.time);
+        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int displayWidth = display.getWidth();
+		
+		mainFrame = (LinearLayout) findViewById(R.id.base);
+		LeftAction = (LinearLayout) findViewById(R.id.left_action);
+		RightAction = (LinearLayout) findViewById(R.id.right_action);
+		LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(displayWidth, LinearLayout.LayoutParams.FILL_PARENT);
+		mainFrame.setLayoutParams(lp);
+		
+		slider = (HorizontalScrollView) findViewById(R.id.mainSlide);
 	    
+    	//ADW: Load the specified theme
     	String themePackage=utils.getStringPref(this, LockscreenSettings.THEME_KEY, LockscreenSettings.THEME_DEFAULT);
     	PackageManager pm=getPackageManager();
     	Resources themeResources=null;
@@ -254,6 +230,39 @@ public class mainActivity extends Activity {
 			}
     	}
 		if(themeResources!=null){
+		    //SetViews For themeing
+		    LinearLayout slide2 = (LinearLayout) findViewById(R.id.full);
+		    LinearLayout networkinfo = (LinearLayout) findViewById(R.id.networkinfo);
+		    LinearLayout clockinfo = (LinearLayout) findViewById(R.id.clockinfo);
+		    LinearLayout notificationIcons = (LinearLayout) findViewById(R.id.notificationicons);
+		    LinearLayout musicControls = (LinearLayout) findViewById(R.id.musicControls);
+		    LinearLayout OuterMusicBox = (LinearLayout) findViewById(R.id.InfoBox);
+		    ImageView unlock_slide_left = (ImageView) findViewById(R.id.unlock_slide_left);
+		    ImageView unlock_slide_right = (ImageView) findViewById(R.id.unlock_slide_right);
+		    ImageView mute_slide_left = (ImageView) findViewById(R.id.mute_slide_left);
+		    ImageView mute_slide_right = (ImageView) findViewById(R.id.mute_slide_right);
+		    ImageView wifi_slide_left = (ImageView) findViewById(R.id.wifi_slide_left);
+		    ImageView wifi_slide_right = (ImageView) findViewById(R.id.wifi_slide_right);
+		    ImageView bluetooth_slide_left = (ImageView) findViewById(R.id.bluetooth_slide_left);
+		    ImageView bluetooth_slide_right = (ImageView) findViewById(R.id.bluetooth_slide_right);
+		    ImageButton play = (ImageButton) findViewById(R.id.playIcon);
+		    ImageButton pause = (ImageButton) findViewById(R.id.pauseIcon);
+		    ImageButton back = (ImageButton) findViewById(R.id.rewindIcon);
+		    ImageButton forward = (ImageButton) findViewById(R.id.forwardIcon);
+		    ImageView muteIcon = (ImageView) findViewById(R.id.mute);
+		    ImageView wifiIcon = (ImageView) findViewById(R.id.wifi);
+		    ImageView bluetoothIcon = (ImageView) findViewById(R.id.bluetooth);
+		    ImageView usb_msIcon = (ImageView) findViewById(R.id.usb_ms);
+		    ImageView count = (ImageView) findViewById(R.id.count);
+		    TextView MusicInfo = (TextView) findViewById(R.id.MusicInfo);
+		    TextView network = (TextView) findViewById(R.id.Network);
+		    TextView batteryInfo = (TextView) findViewById(R.id.batteryInfoText);
+		    TextView day = (TextView) findViewById(R.id.day);
+		    TextView sufix = (TextView) findViewById(R.id.sufix);
+		    TextView date = (TextView) findViewById(R.id.date);
+		    TextView nextAlarmText = (TextView) findViewById(R.id.nextAlarmText);
+		    DigitalClock time = (DigitalClock) findViewById(R.id.time);
+			
 			/*loadThemeResource(
 				themeResources,
 				themePackage,
@@ -264,11 +273,13 @@ public class mainActivity extends Activity {
 			//need to add an if here if theme_background_slide = true then:
 			if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_BACKGROUND_SLIDE_KEY, false)) {
 				loadThemeResource(themeResources,themePackage,"slide_bg",slide2,THEME_ITEM_BACKGROUND);
+				slider_padding=slide2.getPaddingRight()+slide2.getPaddingLeft();
 			} else {
-				loadThemeResource(themeResources,themePackage,"slide_bg",slide1,THEME_ITEM_BACKGROUND);
+				loadThemeResource(themeResources,themePackage,"slide_bg",slider,THEME_ITEM_BACKGROUND);
+				slider_padding=slider.getPaddingRight()+slider.getPaddingLeft();
 			}
-			loadThemeResource(themeResources,themePackage,"l_shadow",lShadow,THEME_ITEM_BACKGROUND);
-			loadThemeResource(themeResources,themePackage,"r_shadow",rShadow,THEME_ITEM_BACKGROUND);
+			loadThemeResource(themeResources,themePackage,"l_shadow",LeftAction,THEME_ITEM_BACKGROUND);
+			loadThemeResource(themeResources,themePackage,"r_shadow",RightAction,THEME_ITEM_BACKGROUND);
 			loadThemeResource(themeResources,themePackage,"network_bg",networkinfo,THEME_ITEM_BACKGROUND);
 			loadThemeResource(themeResources,themePackage,"clock_bg",clockinfo,THEME_ITEM_BACKGROUND);
 			loadThemeResource(themeResources,themePackage,"notification_icons_bg",notificationIcons,THEME_ITEM_BACKGROUND);
@@ -313,17 +324,6 @@ public class mainActivity extends Activity {
 		
 		//Start Slider Stuff
 		
-        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        int displayWidth = display.getWidth();
-		
-		mainFrame = (LinearLayout) findViewById(R.id.base);
-		LeftAction = (LinearLayout) findViewById(R.id.left_action);
-		RightAction = (LinearLayout) findViewById(R.id.right_action);
-		LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(displayWidth, LinearLayout.LayoutParams.FILL_PARENT);
-		mainFrame.setLayoutParams(lp);
-		
-		slider = (HorizontalScrollView) findViewById(R.id.mainSlide);
-		
 		slider.setOnTouchListener(new OnTouchListener() {
             public boolean onTouch(View view, MotionEvent motionevent) {
             	if(unlocked)return true;
@@ -338,7 +338,7 @@ public class mainActivity extends Activity {
                 	return true;
                 } else if (motionevent.getAction() == MotionEvent.ACTION_MOVE) {
                 	int pos = slider.getScrollX();
-                	int end = LeftAction.getWidth() + RightAction.getWidth();
+                	int end=LeftAction.getWidth() + RightAction.getWidth()+slider_padding;
                 	if (pos == 0) {
                     	if (!left) {
                 			left = true;
