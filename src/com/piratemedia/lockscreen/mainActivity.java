@@ -481,45 +481,25 @@ public class mainActivity extends Activity {
             	}
 
             } else if (action.equals(updateService.SMS_CHANGED)) {
-            	
-            	new Thread(new Runnable() {
+                mHandler.postDelayed(new Runnable() {
+
                     @Override
                     public void run() {
-                            try {
-                                Thread.sleep(1000);
-                                mHandler.post(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                		mGetSmsCount = getUnreadSmsCount(getBaseContext());
-                                		setSmsCountText();
-                                    }
-                                });
-                            } catch (Exception e) {
-                            }
+                		mGetSmsCount = getUnreadSmsCount(getBaseContext());
+                		setSmsCountText();
                     }
-                }).start();
-            	
+                },1000);
         	    
             } else if (action.equals(updateService.PHONE_CHANGED)) {
         	
-            	new Thread(new Runnable() {
+                mHandler.postDelayed(new Runnable() {
+
                     @Override
                     public void run() {
-                            try {
-                                Thread.sleep(1000);
-                                mHandler.post(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                		mGetMissedCount = getMissedCallCount(getBaseContext());
-                                		setMissedCountText();
-                                    }
-                                });
-                            } catch (Exception e) {
-                            }
+                		mGetMissedCount = getMissedCallCount(getBaseContext());
+                		setMissedCountText();
                     }
-                }).start();
+                },1000);
             	
             } else if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
             	
