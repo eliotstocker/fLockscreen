@@ -13,6 +13,10 @@
         <item quantity="one"><xliff:g id="number">%d</xliff:g> Unread Email (<xliff:g id="number">%d</xliff:g> unseen)</item>
         <item quantity="other"><xliff:g id="number">%d</xliff:g> Unread Emails (<xliff:g id="number">%d</xliff:g> unseen)</item>
     </plurals>
+        <plurals name="lockscreen_email_count_small">
+        <item quantity="one"><xliff:g id="number">%d</xliff:g> (<xliff:g id="number">%d</xliff:g>)</item>
+        <item quantity="other"><xliff:g id="number">%d</xliff:g> (<xliff:g id="number">%d</xliff:g>)</item>
+    </plurals>
     <plurals name="lockscreen_email_unread_count">
         <item quantity="one"><xliff:g id="number">%d</xliff:g> Unread Email</item>
         <item quantity="other"><xliff:g id="number">%d</xliff:g> Unread Emails</item>
@@ -116,6 +120,9 @@
 	<string name="slide_actions">Slider Action Settings</string>
 	<string name="application_settings_title">Application Settings</string>
 	<string name="layout_settings_title">Layout Settings</string>
+	
+	<string name="small_text_notif_title">Use Short Notifications</string>
+	<string name="small_text_notif_summary">Use Just a Number and icon for Text Notifications</string>
 	
 	<!-- Settings Notification enable -->
 	<string name="sms_count_title">SMS Count</string>

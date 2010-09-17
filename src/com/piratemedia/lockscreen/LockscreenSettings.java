@@ -88,6 +88,8 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	static final String SERVICE_FOREGROUND = "service_foreground";
 	
+	static final String SMALL_TEXT_KEY = "small_text_notif";
+	
 	private static final String TEMP_PHOTO_FILE = "tempBG_Image.png";
 	
 	public static final String BG_PHOTO_FILE ="bg_pic.png";

@@ -249,6 +249,7 @@ public class mainActivity extends Activity {
 		    LinearLayout notificationIcons = (LinearLayout) findViewById(R.id.notificationicons);
 		    LinearLayout musicControls = (LinearLayout) findViewById(R.id.musicControls);
 		    LinearLayout OuterMusicBox = (LinearLayout) findViewById(R.id.InfoBox);
+		    LinearLayout LockNotifications = (LinearLayout) findViewById(R.id.lock_notifications);
 		    ImageView unlock_slide_left = (ImageView) findViewById(R.id.unlock_slide_left);
 		    ImageView unlock_slide_right = (ImageView) findViewById(R.id.unlock_slide_right);
 		    ImageView mute_slide_left = (ImageView) findViewById(R.id.mute_slide_left);
@@ -335,6 +336,12 @@ public class mainActivity extends Activity {
 			nextAlarmText.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_SHADOW_KEY, res.getColor(R.color.clock_text_shadow_color)));
 			MusicInfo.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_TEXT_KEY, res.getColor(R.color.music_text_color)));
 			MusicInfo.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_SHADOW_KEY, res.getColor(R.color.music_text_shadow_color)));
+			
+			if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
+				LockNotifications.setOrientation(LinearLayout.HORIZONTAL);
+			} else {
+				LockNotifications.setOrientation(LinearLayout.VERTICAL);
+			}
 			
 			mSmsCount.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
 			mSmsCount.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
@@ -1150,27 +1157,44 @@ public class mainActivity extends Activity {
         		}
         		//merged count
         		if(merged){
+            		Resources res = getResources();
         			mGmailMergedCount.setVisibility(View.GONE);
             		switch(gmail_view_int) {
             		case 1:
             			if(totalunread>0){
-            				String unread=getResources().getQuantityString(R.plurals.lockscreen_email_unread_count, totalunread);
-            				mGmailMergedCount.setText(String.format(unread, totalunread));
             				mGmailMergedCount.setVisibility(View.VISIBLE);
+                        	if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
+                        		mGmailMergedCount.setText("  " + Integer.toString(totalunread));
+                        		mGmailMergedCount.setPadding(0, 0, res.getDimensionPixelSize(R.dimen.padding_right_small_notif), 0);
+                        	} else {
+                        		String unread=getResources().getQuantityString(R.plurals.lockscreen_email_unread_count, totalunread);
+                        		mGmailMergedCount.setText(String.format(unread, totalunread));
+                        	}
             			}
             			break;
             		case 2:
             			if(totalunseen>0){
-            				String unseen=getResources().getQuantityString(R.plurals.lockscreen_email_unseen_count, totalunseen);
-            				mGmailMergedCount.setText(String.format(unseen, totalunseen));
             				mGmailMergedCount.setVisibility(View.VISIBLE);
+                        	if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
+                        		mGmailMergedCount.setText("  " + Integer.toString(totalunseen));
+                        		mGmailMergedCount.setPadding(0, 0, res.getDimensionPixelSize(R.dimen.padding_right_small_notif), 0);
+                        	} else {
+                        		String unseen=getResources().getQuantityString(R.plurals.lockscreen_email_unseen_count, totalunseen);
+                        		mGmailMergedCount.setText(String.format(unseen, totalunseen));
+                        	}
             			}
 	            		break;
 	            	default:
 	            		if(totalunread>0 || totalunseen>0){
-	            			String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count, totalunread);
-	            			mGmailMergedCount.setText(String.format(emails, totalunread,totalunseen));
 	            			mGmailMergedCount.setVisibility(View.VISIBLE);
+                        	if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
+                        		String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count_small, totalunread);
+    	            			mGmailMergedCount.setText("  " +  String.format(emails, totalunread,totalunseen));
+                        		mGmailMergedCount.setPadding(0, 0, res.getDimensionPixelSize(R.dimen.padding_right_small_notif), 0);	
+                        	} else {
+                        		String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count, totalunread);
+                        		mGmailMergedCount.setText(String.format(emails, totalunread,totalunseen));
+                        	}
 	            		}
 	            		break;
 	            	}
@@ -1208,13 +1232,19 @@ public class mainActivity extends Activity {
        }
 
         private void setMissedCountText() {
+    		Resources res = getResources();
         	if (utils.getCheckBoxPref(this, LockscreenSettings.MISSED_CALL_KEY, true)) {
         		if (mGetMissedCount <= 0) {
         			mMissedCount.setVisibility(View.GONE);
                 } else {
                 		mMissedCount.setVisibility(View.VISIBLE);
+                    	if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
+                    		mMissedCount.setText("  " + Integer.toString(mGetMissedCount));
+                    		mMissedCount.setPadding(0, 0, res.getDimensionPixelSize(R.dimen.padding_right_small_notif), 0);
+                    	} else {
                 		mMissedCount.setText(
                             String.format(getResources().getQuantityString(R.plurals.lockscreen_missed_count, mGetMissedCount),mGetMissedCount));
+                    	}
                 }
         	} else {
         		mMissedCount.setVisibility(View.GONE);
@@ -1245,12 +1275,18 @@ public class mainActivity extends Activity {
 
         private void setSmsCountText() {
         	if (utils.getCheckBoxPref(this, LockscreenSettings.SMS_COUNT_KEY, true)) {
+        		Resources res = getResources();
         		if (mGetSmsCount <= 0) {
                     mSmsCount.setVisibility(View.GONE);
                 } else {
                 	mSmsCount.setVisibility(View.VISIBLE);
-                    mSmsCount.setText(
-                            getBaseContext().getString(R.string.lockscreen_sms_count, mGetSmsCount));
+                	if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
+                		mSmsCount.setText("  " + Integer.toString(mGetSmsCount));
+                		mSmsCount.setPadding(0, 0, res.getDimensionPixelSize(R.dimen.padding_right_small_notif), 0);
+                	} else {
+                		mSmsCount.setText(
+                				getBaseContext().getString(R.string.lockscreen_sms_count, mGetSmsCount));
+                	}
                 }
         	} else {
                 mSmsCount.setVisibility(View.GONE);
