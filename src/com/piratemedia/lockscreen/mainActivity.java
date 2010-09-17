@@ -339,18 +339,22 @@ public class mainActivity extends Activity {
 			mSmsCount.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
 			mSmsCount.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
 			loadThemeResource(themeResources,themePackage,"notification_label_sms",mSmsCount,THEME_ITEM_TEXT_DRAWABLE);
+			loadThemeResource(themeResources,themePackage,"text_notification_bg",mSmsCount,THEME_ITEM_BACKGROUND);
 			mMissedCount.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
 			mMissedCount.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
 			loadThemeResource(themeResources,themePackage,"notification_label_phone",mMissedCount,THEME_ITEM_TEXT_DRAWABLE);
+			loadThemeResource(themeResources,themePackage,"text_notification_bg",mMissedCount,THEME_ITEM_BACKGROUND);
 			mGmailMergedCount.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
 			mGmailMergedCount.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
 			loadThemeResource(themeResources,themePackage,"notification_label_mail",mGmailMergedCount,THEME_ITEM_TEXT_DRAWABLE);
+			loadThemeResource(themeResources,themePackage,"text_notification_bg",mGmailMergedCount,THEME_ITEM_BACKGROUND);
 		    for(GmailData data:mAccountList){
 		    	data.account.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
 		    	data.account.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
 		    	data.view.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
 		    	data.view.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
 				loadThemeResource(themeResources,themePackage,"notification_label_mail",data.view,THEME_ITEM_TEXT_DRAWABLE);
+				loadThemeResource(themeResources,themePackage,"text_notification_bg",data.view,THEME_ITEM_BACKGROUND);
 		    }
 			//I leave this just in case you wanna add custom fonts support?
 			try{
@@ -1424,13 +1428,13 @@ public class mainActivity extends Activity {
         }
         
         private void stopAllCounts() {
-        	ImageView count = (ImageView) findViewById(R.id.count);
-        	count.setVisibility(View.GONE);
         	if (timer != null){
         		timer.cancel();
         		timer = new Timer();
         	}
-
+        	mUnlockHandler.removeCallbacks(mUnlockToast);
+        	ImageView count = (ImageView) findViewById(R.id.count);
+        	count.setVisibility(View.GONE);
         }
         //end slidyness stuff
 
