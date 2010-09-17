@@ -231,6 +231,14 @@ public class mainActivity extends Activity {
                 (ViewGroup) findViewById(R.id.toast_layout_root));
 		mToastPic = (ImageView) mToastLayout.findViewById(R.id.image);
 
+	    LinearLayout LockNotifications = (LinearLayout) findViewById(R.id.lock_notifications);
+		
+		if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
+			LockNotifications.setOrientation(LinearLayout.HORIZONTAL);
+		} else {
+			LockNotifications.setOrientation(LinearLayout.VERTICAL);
+		}
+		
     	//ADW: Load the specified theme
     	String themePackage=utils.getStringPref(this, LockscreenSettings.THEME_KEY, LockscreenSettings.THEME_DEFAULT);
     	PackageManager pm=getPackageManager();
@@ -249,7 +257,6 @@ public class mainActivity extends Activity {
 		    LinearLayout notificationIcons = (LinearLayout) findViewById(R.id.notificationicons);
 		    LinearLayout musicControls = (LinearLayout) findViewById(R.id.musicControls);
 		    LinearLayout OuterMusicBox = (LinearLayout) findViewById(R.id.InfoBox);
-		    LinearLayout LockNotifications = (LinearLayout) findViewById(R.id.lock_notifications);
 		    ImageView unlock_slide_left = (ImageView) findViewById(R.id.unlock_slide_left);
 		    ImageView unlock_slide_right = (ImageView) findViewById(R.id.unlock_slide_right);
 		    ImageView mute_slide_left = (ImageView) findViewById(R.id.mute_slide_left);
@@ -319,6 +326,7 @@ public class mainActivity extends Activity {
 			Resources res = getResources();
 			int padDefault = res.getDimensionPixelSize(R.dimen.default_music_control_pad);			
 			OuterMusicBox.setPadding(0, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_CONTROL_KEY, padDefault));
+			LockNotifications.setPadding(0, utils.getIntPref(this, LockscreenSettings.THEME_TEXT_NOTIF_KEY, padDefault), 0, 0);
 			
 			network.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NETWORK_TEXT_KEY, res.getColor(R.color.network_text_color)));
 			network.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NETWORK_SHADOW_KEY, res.getColor(R.color.network_text_shadow_color)));
@@ -336,12 +344,6 @@ public class mainActivity extends Activity {
 			nextAlarmText.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_CLOCK_SHADOW_KEY, res.getColor(R.color.clock_text_shadow_color)));
 			MusicInfo.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_TEXT_KEY, res.getColor(R.color.music_text_color)));
 			MusicInfo.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_SHADOW_KEY, res.getColor(R.color.music_text_shadow_color)));
-			
-			if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
-				LockNotifications.setOrientation(LinearLayout.HORIZONTAL);
-			} else {
-				LockNotifications.setOrientation(LinearLayout.VERTICAL);
-			}
 			
 			mSmsCount.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
 			mSmsCount.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));

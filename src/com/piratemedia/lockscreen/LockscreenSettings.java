@@ -104,6 +104,8 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	static final String THEME_MUSIC_CONTROL_KEY = "theme_music_control_pad";
 	
+	static final String THEME_TEXT_NOTIF_KEY = "theme_text_notif_pad";
+	
 	static final String THEME_NETWORK_TEXT_KEY = "theme_network_text_color";
 	
 	static final String THEME_NETWORK_SHADOW_KEY = "theme_network_text_shadow_color";
@@ -457,6 +459,11 @@ public class LockscreenSettings extends PreferenceActivity {
     			if(tmpId!=0){
     				int music_control_pad=themeResources.getDimensionPixelSize(tmpId);
     				editor.putInt("theme_music_control_pad", music_control_pad);
+    			}
+    			tmpId=themeResources.getIdentifier("text_notif_pad", "dimen", packageName.toString());
+    			if(tmpId!=0){
+    				int text_notif_pad=themeResources.getDimensionPixelSize(tmpId);
+    				editor.putInt("theme_text_notif_pad", text_notif_pad);
     			}
     			tmpId=themeResources.getIdentifier("background_slide", "bool", packageName.toString());
     			if(tmpId!=0){

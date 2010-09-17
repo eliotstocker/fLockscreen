@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
 		android:gravity="center"
-		android:layout_marginTop="70dip"
+		android:paddingTop="70dip"
 		android:id="@+id/lock_notifications"
         >
     </LinearLayout>
