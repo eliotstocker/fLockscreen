@@ -192,13 +192,10 @@ public class mainActivity extends Activity {
 		LayoutInflater layoutInflater=getLayoutInflater();
 	    mLayoutNotifications = (LinearLayout) findViewById(R.id.lock_notifications);
 		mSmsCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
-		mSmsCount.setTypeface(themeFont);
 		mLayoutNotifications.addView(mSmsCount);
 	    mMissedCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
-	    mMissedCount.setTypeface(themeFont);
 	    mLayoutNotifications.addView(mMissedCount);
 	    mGmailMergedCount = (TextView) layoutInflater.inflate(R.layout.unread_counter, mLayoutNotifications,false);
-	    mGmailMergedCount.setTypeface(themeFont);
 	    mLayoutNotifications.addView(mGmailMergedCount);
 	    for(GmailData data:mAccountList){
 	    	data.account=(TextView) layoutInflater.inflate(R.layout.gmail_account, mLayoutNotifications,false);
@@ -339,6 +336,22 @@ public class mainActivity extends Activity {
 			MusicInfo.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_TEXT_KEY, res.getColor(R.color.music_text_color)));
 			MusicInfo.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_SHADOW_KEY, res.getColor(R.color.music_text_shadow_color)));
 			
+			mSmsCount.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
+			mSmsCount.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
+			loadThemeResource(themeResources,themePackage,"notification_label_sms",mSmsCount,THEME_ITEM_TEXT_DRAWABLE);
+			mMissedCount.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
+			mMissedCount.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
+			loadThemeResource(themeResources,themePackage,"notification_label_phone",mMissedCount,THEME_ITEM_TEXT_DRAWABLE);
+			mGmailMergedCount.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
+			mGmailMergedCount.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
+			loadThemeResource(themeResources,themePackage,"notification_label_mail",mGmailMergedCount,THEME_ITEM_TEXT_DRAWABLE);
+		    for(GmailData data:mAccountList){
+		    	data.account.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
+		    	data.account.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
+		    	data.view.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
+		    	data.view.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
+				loadThemeResource(themeResources,themePackage,"notification_label_mail",data.view,THEME_ITEM_TEXT_DRAWABLE);
+		    }
 			//I leave this just in case you wanna add custom fonts support?
 			try{
 				themeFont=Typeface.createFromAsset(themeResources.getAssets(), "themefont.ttf");
@@ -350,7 +363,11 @@ public class mainActivity extends Activity {
 			    date.setTypeface(themeFont);
 			    nextAlarmText.setTypeface(themeFont);
 			    time.setTypeface(themeFont);
-				
+				mSmsCount.setTypeface(themeFont);
+			    for(GmailData data:mAccountList){
+			    	data.account.setTypeface(themeFont);
+			    	data.view.setTypeface(themeFont);
+			    }				
 			}catch (RuntimeException e) {
 			}
 		}
@@ -1091,8 +1108,6 @@ public class mainActivity extends Activity {
 	                } else {
 	                	totalunread+=data.unread;
 	                	totalunseen+=data.unseen;
-	                	data.account.setTypeface(themeFont);
-	                    data.view.setTypeface(themeFont);
 	                	if(!merged){
 		                	if(utils.getCheckBoxPref(this, LockscreenSettings.GMAIL_ACCOUNT_KEY, true)){
 		                		data.account.setVisibility(View.VISIBLE);
@@ -1736,7 +1751,7 @@ public class mainActivity extends Activity {
 								tmp[3].setCallback(null);
 								tmp[3]=null;
 							}
-							((TextView)item).setCompoundDrawables(d, null, null, null);
+							((TextView)item).setCompoundDrawablesWithIntrinsicBounds(d, null, null, null);
 					}else{
 						//ADW remove the old drawable
 						Drawable tmp=item.getBackground();
