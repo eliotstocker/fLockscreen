@@ -122,7 +122,7 @@
 	<string name="layout_settings_title">Layout Settings</string>
 	
 	<string name="small_text_notif_title">Use Short Notifications</string>
-	<string name="small_text_notif_summary">Use Just a Number and icon for Text Notifications</string>
+	<string name="small_text_notif_summary">Use Just a Number and icon for Text Notifications (Dependent on selected theme)</string>
 	
 	<!-- Settings Notification enable -->
 	<string name="sms_count_title">SMS Count</string>

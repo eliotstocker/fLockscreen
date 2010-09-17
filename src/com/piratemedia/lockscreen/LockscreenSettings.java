@@ -142,6 +142,7 @@ public class LockscreenSettings extends PreferenceActivity {
         Preference service_foreground = (Preference) screen.findPreference(SERVICE_FOREGROUND);
         Preference laction = (Preference) screen.findPreference(LEFT_ACTION_KEY);
         Preference raction = (Preference) screen.findPreference(RIGHT_ACTION_KEY);
+        Preference smallNotif = (Preference) screen.findPreference(SMALL_TEXT_KEY);
         
         laction.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -177,6 +178,20 @@ public class LockscreenSettings extends PreferenceActivity {
         service_foreground.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference arg0) {
 				StartStopForground();
+				return true;
+			}
+        });
+        
+        smallNotif.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference arg0) {
+				//change some vals
+				if(utils.getCheckBoxPref(getBaseContext(), SMALL_TEXT_KEY, false)) {
+				utils.setCheckBoxPref(getBaseContext(), GMAIL_ACCOUNT_KEY, false);
+				utils.setCheckBoxPref(getBaseContext(), GMAIL_MERGE_KEY, true);
+				startActivity(new Intent(getBaseContext(),
+				LockscreenSettings.class));
+				finish();
+				}
 				return true;
 			}
         });

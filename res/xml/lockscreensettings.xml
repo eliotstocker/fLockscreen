@@ -103,7 +103,8 @@
 	</PreferenceScreen>
 	
 	<CheckBoxPreference android:key="small_text_notif"
-		android:title="@string/small_text_notif_title" android:summary="@string/small_text_notif_summary"/>
+		android:title="@string/small_text_notif_title" android:summary="@string/small_text_notif_summary"
+		android:defaultValue="false"/>
 	
 	<PreferenceScreen android:key="notifications"
 		android:title="Enable/Disble Notifications"
