@@ -1289,7 +1289,7 @@ public class mainActivity extends Activity {
     // Set Custom Background Image
     	public void setCustomBackground() {
         	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_SHOW_CUSTOM_BG, false)) {
-        		String BG_FILE = getFilesDir().toString() + File.separator+"bg_pic.jpg";
+        		String BG_FILE = getFilesDir().toString() + File.separator+LockscreenSettings.BG_PHOTO_FILE;
         		Bitmap bgBitmap = BitmapFactory.decodeFile(BG_FILE);
         		BitmapDrawable background = new BitmapDrawable(getResources(),bgBitmap);
         		background.setGravity(Gravity.CENTER);

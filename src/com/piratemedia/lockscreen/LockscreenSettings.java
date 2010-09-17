@@ -88,9 +88,9 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	static final String SERVICE_FOREGROUND = "service_foreground";
 	
-	private static final String TEMP_PHOTO_FILE = "tempBG_Image.jpg";
+	private static final String TEMP_PHOTO_FILE = "tempBG_Image.png";
 	
-	private static final String BG_PHOTO_FILE ="bg_pic.jpg";
+	public static final String BG_PHOTO_FILE ="bg_pic.png";
 	
 	public static final String THEME_DEFAULT = "fLockScreen";
 	
@@ -284,7 +284,7 @@ public class LockscreenSettings extends PreferenceActivity {
 		intent.putExtra("scale", true);
 		intent.putExtra("aspectX", width);
 		intent.putExtra("aspectY", height);
-		intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+		intent.putExtra("outputFormat", Bitmap.CompressFormat.PNG.toString());
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, getTempUri());
         intent.putExtra("noFaceDetection", true);
         
