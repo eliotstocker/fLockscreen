@@ -122,6 +122,8 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	static final String THEME_NOTIFICATION_SHADOW_KEY = "theme_notification_text_shadow_color";
 	
+	static final String THEME_SHOW_ICONS_KEY =  "theme_show_icons";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,6 +145,15 @@ public class LockscreenSettings extends PreferenceActivity {
         Preference laction = (Preference) screen.findPreference(LEFT_ACTION_KEY);
         Preference raction = (Preference) screen.findPreference(RIGHT_ACTION_KEY);
         Preference smallNotif = (Preference) screen.findPreference(SMALL_TEXT_KEY);
+        
+        
+        //TODO: need to disable this for default theme
+		if(utils.getCheckBoxPref(getBaseContext(), THEME_SHOW_ICONS_KEY, false)) {
+			smallNotif.setEnabled(true);
+		} else {
+			smallNotif.setEnabled(false);
+			utils.setCheckBoxPref(getBaseContext(), SMALL_TEXT_KEY, false);
+		}
         
         laction.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -499,6 +510,8 @@ public class LockscreenSettings extends PreferenceActivity {
     		}
         }
 	    editor.commit();
+		startActivity(new Intent(getBaseContext(),
+				LockscreenSettings.class));
 	    finish();
 	}
     
