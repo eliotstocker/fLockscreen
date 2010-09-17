@@ -1167,7 +1167,6 @@ public class mainActivity extends Activity {
             				mGmailMergedCount.setVisibility(View.VISIBLE);
                         	if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
                         		mGmailMergedCount.setText("  " + Integer.toString(totalunread));
-                        		mGmailMergedCount.setPadding(0, 0, res.getDimensionPixelSize(R.dimen.padding_right_small_notif), 0);
                         	} else {
                         		String unread=getResources().getQuantityString(R.plurals.lockscreen_email_unread_count, totalunread);
                         		mGmailMergedCount.setText(String.format(unread, totalunread));
@@ -1179,7 +1178,6 @@ public class mainActivity extends Activity {
             				mGmailMergedCount.setVisibility(View.VISIBLE);
                         	if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
                         		mGmailMergedCount.setText("  " + Integer.toString(totalunseen));
-                        		mGmailMergedCount.setPadding(0, 0, res.getDimensionPixelSize(R.dimen.padding_right_small_notif), 0);
                         	} else {
                         		String unseen=getResources().getQuantityString(R.plurals.lockscreen_email_unseen_count, totalunseen);
                         		mGmailMergedCount.setText(String.format(unseen, totalunseen));
@@ -1192,7 +1190,6 @@ public class mainActivity extends Activity {
                         	if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
                         		String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count_small, totalunread);
     	            			mGmailMergedCount.setText("  " +  String.format(emails, totalunread,totalunseen));
-                        		mGmailMergedCount.setPadding(0, 0, res.getDimensionPixelSize(R.dimen.padding_right_small_notif), 0);	
                         	} else {
                         		String emails=getResources().getQuantityString(R.plurals.lockscreen_email_count, totalunread);
                         		mGmailMergedCount.setText(String.format(emails, totalunread,totalunseen));
