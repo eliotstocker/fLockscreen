@@ -748,6 +748,10 @@ public class mainActivity extends Activity {
         //get day suffix (ie. 'th')
         
     	String fullday = (String) DateFormat.format("dd", now);
+    	int fullNum = java.lang.Integer.parseInt(fullday);
+    	if(fullNum == 11 || fullNum == 12 || fullNum == 13) {
+    		suffix.setText("th ");
+    	} else {
     	String halfday = fullday.substring(1);
     	int dayNum = java.lang.Integer.parseInt(halfday);
     	
@@ -770,6 +774,7 @@ public class mainActivity extends Activity {
     	case 9:
     		suffix.setText("th ");
     		break;
+    	}
     	}
     }
     
