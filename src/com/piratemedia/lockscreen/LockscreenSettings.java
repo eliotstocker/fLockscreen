@@ -2,9 +2,11 @@ package com.piratemedia.lockscreen;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.List;
 import android.app.ActivityManager;
 import android.app.WallpaperManager;
@@ -87,6 +89,8 @@ public class LockscreenSettings extends PreferenceActivity {
 	static final String SERVICE_FOREGROUND = "service_foreground";
 	
 	private static final String TEMP_PHOTO_FILE = "tempBG_Image.jpg";
+	
+	private static final String BG_PHOTO_FILE ="bg_pic.jpg";
 	
 	public static final String THEME_DEFAULT = "fLockScreen";
 	
@@ -295,12 +299,13 @@ public class LockscreenSettings extends PreferenceActivity {
 		if (isSDCARDMounted()) {
 			
 			File f = new File(Environment.getExternalStorageDirectory(),TEMP_PHOTO_FILE);
-			try {
-				f.createNewFile();
-			} catch (IOException e) {
+			//try {
+				//f.createNewFile();
+			//} catch (IOException e) {
 				// TODO Auto-generated catch block
-				Toast.makeText(this, "Something Fucked Up", Toast.LENGTH_LONG).show();
-			}
+				//e.printStackTrace();
+				//Toast.makeText(this, "Something Fucked Up", Toast.LENGTH_LONG).show();
+			//}
 			return f;
 		} else {
 			return null;
@@ -314,32 +319,29 @@ public class LockscreenSettings extends PreferenceActivity {
             return true;
         return false;
     }
-	
+    public static void copyFile(File src, File dst) throws IOException {
+        FileChannel inChannel = new FileInputStream(src).getChannel();
+        FileChannel outChannel = new FileOutputStream(dst).getChannel();
+
+        try {
+            inChannel.transferTo(0, inChannel.size(), outChannel);
+        } finally {
+
+        if (inChannel != null)
+            inChannel.close();
+        if (outChannel != null)
+            outChannel.close();
+        }
+    }	
 	protected void  onActivityResult  (int requestCode, int resultCode, Intent data){
 		if (requestCode==4) {
 			if (resultCode == RESULT_OK) {
 				try {
 					
-					//get bitmap from temp uri
-					Bitmap BG_Image = null;
-					BG_Image = Media.getBitmap(this.getContentResolver(), getTempUri());
-
-				
-					final String FileName = "bg_pic";
-					FileOutputStream fileOutputStream = null;
-					int quality = 80;
-					
-					//save bitmap in app data
-					fileOutputStream = openFileOutput(FileName + ".jpg", getBaseContext().MODE_PRIVATE);
-					BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream, 2000);
-					BG_Image.compress(CompressFormat.JPEG, quality, bos);
-					bos.flush();
-					bos.close();
-					
-					//delete the temp image
-					File file = new File(getTempUri().toString());
-					boolean deleted = file.delete();
-					
+					File src=getTempFile();
+					File dst= new File(getFilesDir(),BG_PHOTO_FILE);
+					copyFile(src, dst);
+					boolean deleted = src.delete();
 					
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block

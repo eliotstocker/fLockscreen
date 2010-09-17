@@ -1290,11 +1290,9 @@ public class mainActivity extends Activity {
     	public void setCustomBackground() {
         	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_SHOW_CUSTOM_BG, false)) {
         		String BG_FILE = getFilesDir().toString() + File.separator+"bg_pic.jpg";
-				BitmapFactory.Options options=new BitmapFactory.Options();
-				options.inSampleSize = 5;
-        		Bitmap bgBitmap = BitmapFactory.decodeFile(BG_FILE,options);
+        		Bitmap bgBitmap = BitmapFactory.decodeFile(BG_FILE);
         		BitmapDrawable background = new BitmapDrawable(getResources(),bgBitmap);
-        		background.setGravity(Gravity.FILL);
+        		background.setGravity(Gravity.CENTER);
         		
         		getWindow().setBackgroundDrawable(background);
         	}else{
