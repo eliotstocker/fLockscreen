@@ -345,19 +345,29 @@ public class mainActivity extends Activity {
 			MusicInfo.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_TEXT_KEY, res.getColor(R.color.music_text_color)));
 			MusicInfo.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_MUSIC_SHADOW_KEY, res.getColor(R.color.music_text_shadow_color)));
 			
+			if(utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
+				loadThemeResource(themeResources,themePackage,"text_notification_bg",LockNotifications,THEME_ITEM_BACKGROUND);
+			}
+			
 			mSmsCount.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
 			mSmsCount.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
 			loadThemeResource(themeResources,themePackage,"notification_label_sms",mSmsCount,THEME_ITEM_TEXT_DRAWABLE);
+			if(!utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
 			loadThemeResource(themeResources,themePackage,"text_notification_bg",mSmsCount,THEME_ITEM_BACKGROUND);
+			}
 			mMissedCount.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
 			mMissedCount.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
 			loadThemeResource(themeResources,themePackage,"notification_label_phone",mMissedCount,THEME_ITEM_TEXT_DRAWABLE);
+			if(!utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
 			loadThemeResource(themeResources,themePackage,"text_notification_bg",mMissedCount,THEME_ITEM_BACKGROUND);
+			}
 			mGmailMergedCount.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
 			mGmailMergedCount.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
 			loadThemeResource(themeResources,themePackage,"notification_label_mail",mGmailMergedCount,THEME_ITEM_TEXT_DRAWABLE);
+			if(!utils.getCheckBoxPref(this, LockscreenSettings.SMALL_TEXT_KEY, false)){
 			loadThemeResource(themeResources,themePackage,"text_notification_bg",mGmailMergedCount,THEME_ITEM_BACKGROUND);
-		    for(GmailData data:mAccountList){
+			}
+			for(GmailData data:mAccountList){
 		    	data.account.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));
 		    	data.account.setShadowLayer(3, 0, 0, utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_SHADOW_KEY, res.getColor(R.color.notification_text_shadow_color)));
 		    	data.view.setTextColor(utils.getIntPref(this, LockscreenSettings.THEME_NOTIFICATION_TEXT_KEY, res.getColor(R.color.notification_text_color)));

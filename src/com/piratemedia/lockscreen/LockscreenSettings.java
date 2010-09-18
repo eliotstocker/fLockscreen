@@ -145,7 +145,8 @@ public class LockscreenSettings extends PreferenceActivity {
         Preference laction = (Preference) screen.findPreference(LEFT_ACTION_KEY);
         Preference raction = (Preference) screen.findPreference(RIGHT_ACTION_KEY);
         Preference smallNotif = (Preference) screen.findPreference(SMALL_TEXT_KEY);
-        
+        Preference gmailAccounts = (Preference) screen.findPreference(GMAIL_ACCOUNT_KEY);
+        Preference gmailMerge = (Preference) screen.findPreference(GMAIL_MERGE_KEY);
         
         //TODO: need to disable this for default theme
 		if(utils.getCheckBoxPref(getBaseContext(), THEME_SHOW_ICONS_KEY, false)) {
@@ -153,6 +154,14 @@ public class LockscreenSettings extends PreferenceActivity {
 		} else {
 			smallNotif.setEnabled(false);
 			utils.setCheckBoxPref(getBaseContext(), SMALL_TEXT_KEY, false);
+		}
+		
+		if(utils.getCheckBoxPref(getBaseContext(), SMALL_TEXT_KEY, false)){
+			gmailAccounts.setEnabled(false);
+			gmailMerge.setEnabled(false);
+		} else {
+			gmailAccounts.setEnabled(true);
+			gmailMerge.setEnabled(true);
 		}
         
         laction.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -506,7 +515,6 @@ public class LockscreenSettings extends PreferenceActivity {
     				boolean show_icons=themeResources.getBoolean(tmpId);
     				editor.putBoolean("theme_show_icons", show_icons);
     			}
-    			
     		}
         }
 	    editor.commit();
