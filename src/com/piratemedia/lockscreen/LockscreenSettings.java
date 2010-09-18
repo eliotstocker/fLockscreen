@@ -515,7 +515,28 @@ public class LockscreenSettings extends PreferenceActivity {
     				boolean show_icons=themeResources.getBoolean(tmpId);
     				editor.putBoolean("theme_show_icons", show_icons);
     			}
+    			tmpId=themeResources.getIdentifier("simple_text_notif", "bool", packageName.toString());
+    			if(tmpId!=0){
+    				boolean simple_text_notif=themeResources.getBoolean(tmpId);
+    				editor.putBoolean("small_text_notif", simple_text_notif);
+    			}
     		}
+        } else {
+        	editor.remove("small_text_notif");
+        	editor.remove("theme_show_icons");
+        	editor.remove("theme_allow_art_slide");
+        	editor.remove("theme_background_slide");
+        	editor.remove("theme_text_notif_pad");
+        	editor.remove("theme_music_control_pad");
+        	editor.remove("theme_notification_text_shadow_color");
+        	editor.remove("theme_notification_text_color");
+        	editor.remove("theme_music_text_shadow_color");
+        	editor.remove("theme_music_text_color");
+        	editor.remove("theme_clock_text_shadow_color");
+        	editor.remove("theme_clock_text_color");
+        	editor.remove("theme_network_text_shadow_color");
+        	editor.remove("theme_network_text_color");
+
         }
 	    editor.commit();
 		startActivity(new Intent(getBaseContext(),
