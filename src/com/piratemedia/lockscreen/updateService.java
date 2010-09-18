@@ -27,6 +27,7 @@ public class updateService extends Service {
 	public static final String WIFI_CHANGED = "com.piratemedia.lockscreen.wifichanged";
 	public static final String BT_CHANGED = "com.piratemedia.lockscreen.btchanged";
 	public static final String START_STOP_FORGROUND = "com.piratemedia.lockscreen.forground";
+	public static final String STOP_SERVICE = "com.piratemedia.lockscreen.kill";
 	public static final int NOTIFICATION_ID = 35625;
 	public IMediaPlaybackService mService = null;
 	public static boolean playing = false;
@@ -279,6 +280,8 @@ public class updateService extends Service {
             	startActivity(lock);
             } else if(action.equals(START_STOP_FORGROUND)){
             	foregroundStuff(utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.SERVICE_FOREGROUND, true));
+            } else if(action.equals(STOP_SERVICE)){
+            	stopSelf();
             }
         
         }

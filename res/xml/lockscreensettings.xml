@@ -3,6 +3,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	android:title="@string/settings" android:key="settings">
 	
+	<CheckBoxPreference android:key="enable_disable"
+		android:defaultValue="true" android:title="@string/enable_disble_title"
+		android:summaryOn="@string/enabled" android:summaryOff="@string/disabled"/>
+	
 	<PreferenceCategory android:title="@string/layout_settings_title">
 	
 	<CheckBoxPreference android:key="albumart"

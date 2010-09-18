@@ -49,6 +49,7 @@
 				<action android:name="android.net.wifi.STATE_CHANGE"/>
 				<action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
 				<action android:name="com.piratemedia.lockscreen.forground"/>
+				<action android:name="com.piratemedia.lockscreen.kill"/>
 				<action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>
 			
 </intent-filter>

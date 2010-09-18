@@ -8,7 +8,6 @@ public class intentReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context aContext, Intent aIntent) {
-
         LockScreenApp.getInstance().startService(aContext, aIntent);
     }
 }

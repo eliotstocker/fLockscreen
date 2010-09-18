@@ -38,6 +38,11 @@
     <!-- Settings Strings -->
     <string name="settings">fLockscreen Settings</string>
     
+    <!-- Enable/Disble Flockscreen -->
+    <string name="enable_disble_title">Enable fLockscreen</string>
+    <string name="enabled">fLockscreen is On</string>
+    <string name="disabled">fLockscreen is Off</string>
+    
     <!-- Settings Fullscreen -->
     <string name="fullscreen_title">Fullscreen fLockscreen</string>
     <string name="fullscreen_summary_on">Fullscreen is enabled</string>

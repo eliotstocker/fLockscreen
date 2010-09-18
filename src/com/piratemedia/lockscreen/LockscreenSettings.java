@@ -90,6 +90,8 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	static final String SMALL_TEXT_KEY = "small_text_notif";
 	
+	static final String ENABLE_KEY = "enable_disable";
+	
 	private static final String TEMP_PHOTO_FILE = "tempBG_Image.png";
 	
 	public static final String BG_PHOTO_FILE ="bg_pic.png";
@@ -124,19 +126,14 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	static final String THEME_SHOW_ICONS_KEY =  "theme_show_icons";
 	
+	private Intent ServiceStrt;
+	
+	private Intent serviceIntent;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.lockscreensettings);
-        
-      //make sure service is running
-        Intent ServiceStrt = new Intent("com.piratemedia.lockscreen.startservice");
-        Intent serviceIntent = new Intent(this, updateService.class);
-		serviceIntent.setAction(ServiceStrt.getAction());
-		serviceIntent.putExtras(ServiceStrt);
-		getBaseContext().startService(serviceIntent);
-		
-		DefaultMusicApp();
         
         PreferenceScreen screen = this.getPreferenceScreen();
         Preference pick = (Preference) screen.findPreference(KEY_PICK_BG);
@@ -147,6 +144,18 @@ public class LockscreenSettings extends PreferenceActivity {
         Preference smallNotif = (Preference) screen.findPreference(SMALL_TEXT_KEY);
         Preference gmailAccounts = (Preference) screen.findPreference(GMAIL_ACCOUNT_KEY);
         Preference gmailMerge = (Preference) screen.findPreference(GMAIL_MERGE_KEY);
+        Preference Enable = (Preference) screen.findPreference(ENABLE_KEY);
+        
+      //make sure service is running
+        ServiceStrt = new Intent("com.piratemedia.lockscreen.startservice");
+        serviceIntent = new Intent(this, updateService.class);
+        if(utils.getCheckBoxPref(getBaseContext(), ENABLE_KEY, true)) {
+		serviceIntent.setAction(ServiceStrt.getAction());
+		serviceIntent.putExtras(ServiceStrt);
+		getBaseContext().startService(serviceIntent);
+        }
+		
+		DefaultMusicApp();
         
         //TODO: need to disable this for default theme
 		if(utils.getCheckBoxPref(getBaseContext(), THEME_SHOW_ICONS_KEY, false)) {
@@ -164,6 +173,21 @@ public class LockscreenSettings extends PreferenceActivity {
 			gmailMerge.setEnabled(true);
 		}
         
+		Enable.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+        		String NewVal = newValue.toString();
+        		boolean Enabled = Boolean.parseBoolean(NewVal);
+            	if(!Enabled) {
+            		notifyChange(updateService.STOP_SERVICE);
+            	} else {
+            		serviceIntent.setAction(ServiceStrt.getAction());
+            		serviceIntent.putExtras(ServiceStrt);
+            		getBaseContext().startService(serviceIntent);
+            	}
+            	return true;
+        	}
+        });
+		
         laction.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
             	actionLeft(newValue);
