@@ -563,6 +563,10 @@ public class LockscreenSettings extends PreferenceActivity {
 
         }
 	    editor.commit();
+		if(utils.getCheckBoxPref(getBaseContext(), SMALL_TEXT_KEY, false)) {
+			utils.setCheckBoxPref(getBaseContext(), GMAIL_ACCOUNT_KEY, false);
+			utils.setCheckBoxPref(getBaseContext(), GMAIL_MERGE_KEY, true);
+			}
 		startActivity(new Intent(getBaseContext(),
 				LockscreenSettings.class));
 	    finish();
