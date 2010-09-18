@@ -130,6 +130,10 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	private Intent serviceIntent;
 	
+	private Preference gmailAccounts;
+	
+    private Preference gmailMerge;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,8 +146,8 @@ public class LockscreenSettings extends PreferenceActivity {
         Preference laction = (Preference) screen.findPreference(LEFT_ACTION_KEY);
         Preference raction = (Preference) screen.findPreference(RIGHT_ACTION_KEY);
         Preference smallNotif = (Preference) screen.findPreference(SMALL_TEXT_KEY);
-        Preference gmailAccounts = (Preference) screen.findPreference(GMAIL_ACCOUNT_KEY);
-        Preference gmailMerge = (Preference) screen.findPreference(GMAIL_MERGE_KEY);
+        gmailAccounts = (Preference) screen.findPreference(GMAIL_ACCOUNT_KEY);
+        gmailMerge = (Preference) screen.findPreference(GMAIL_MERGE_KEY);
         Preference Enable = (Preference) screen.findPreference(ENABLE_KEY);
         
       //make sure service is running
@@ -235,6 +239,9 @@ public class LockscreenSettings extends PreferenceActivity {
 				startActivity(new Intent(getBaseContext(),
 				LockscreenSettings.class));
 				finish();
+				} else {
+					gmailAccounts.setEnabled(true);
+					gmailMerge.setEnabled(true);
 				}
 				return true;
 			}
