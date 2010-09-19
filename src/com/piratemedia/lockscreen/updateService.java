@@ -44,7 +44,11 @@ public class updateService extends Service {
 	private BroadcastReceiver mReceiver;
     @Override
     public void onCreate() {
-        super.onCreate();
+        super.onCreate();        
+    	if(!utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.ENABLE_KEY, true)) {
+    		stopSelf();
+    	}
+
     	mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         //Start as foreground if user settings say so
     	foregroundStuff(utils.getCheckBoxPref(this, LockscreenSettings.SERVICE_FOREGROUND, true));
