@@ -124,8 +124,6 @@ public class mainActivity extends Activity {
  	private String toggleString;
  	private String nextString;
  	
- 	private boolean state = true;
-	
  	private String mLauncherPackage;
  	private String mLauncherActivity;
  	
@@ -614,12 +612,12 @@ public class mainActivity extends Activity {
     		      getBaseContext().getContentResolver(),
     		      Settings.System.AIRPLANE_MODE_ON, 0) == 1;
     	ConnectivityManager connManager =((ConnectivityManager) getBaseContext().getSystemService(Context.CONNECTIVITY_SERVICE));
-    	state = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isAvailable();
+    	Boolean state = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isAvailable();
     	if(airplane) {
 	    	Network.setText(
                     getBaseContext().getString(R.string.airplane_mode));
     	} else {
-    		if(state = true) {
+    		if(state) {
     			Network.setText(operatorName);
     		} else {
     			Network.setText(
