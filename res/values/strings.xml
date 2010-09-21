@@ -203,4 +203,6 @@
 	<string name="pref_themes_apply_theme">Apply theme!</string>
 	<string name="pref_themes_get_themes">Get themes!</string>
 	
+	<string name="activity_not_found">Android Market can\'t be found!</string>
+	
 </resources>

@@ -11,6 +11,7 @@ import java.util.List;
 import android.app.ActivityManager;
 import android.app.WallpaperManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -460,6 +461,24 @@ public class LockscreenSettings extends PreferenceActivity {
 			}
 		}
     }
+    
+    public void getThemes(View v){
+    	//TODO:warn theme devs to use "fLockTheme" as keyword.
+    	Uri marketUri = Uri.parse("market://search?q=fLockTheme");
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW).setData(marketUri);
+        try {
+            startActivity(marketIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, R.string.activity_not_found, Toast.LENGTH_SHORT).show();
+        } catch (SecurityException e) {
+            Toast.makeText(this, R.string.activity_not_found, Toast.LENGTH_SHORT).show();
+            Log.e("ADW", "Launcher does not have the permission to launch " + marketIntent +
+                    ". Make sure to create a MAIN intent-filter for the corresponding activity " +
+                    "or use the exported attribute for this activity.", e);
+        }
+        finish();
+    }
+    
     /**
      * ADW: Apply and store the theme stuff
      * @param v
