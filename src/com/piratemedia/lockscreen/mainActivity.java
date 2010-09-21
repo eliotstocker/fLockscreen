@@ -569,6 +569,7 @@ public class mainActivity extends Activity {
                     public void run() {
                 		mGetMissedCount = getMissedCallCount(getBaseContext());
                 		setMissedCountText();
+                		updateNetworkInfo();
                     }
                 },1000);
             	
