@@ -337,4 +337,12 @@ private void notifyChange(String what) {
 	    	}
 	    	return false;
 		}
+        @Override
+        public void onDestroy() {
+            if(mReceiver!=null){
+                unregisterReceiver(mReceiver);
+                mReceiver=null;
+            }
+            super.onDestroy();
+        }
 }
