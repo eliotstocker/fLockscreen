@@ -145,6 +145,7 @@ public class mainActivity extends Activity {
  	private static final int ACTION_SOUND_ON=7;
  	private View mToastLayout;
  	private ImageView mToastPic;
+ 	private Bitmap bgBitmap=null;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -1032,19 +1033,22 @@ public class mainActivity extends Activity {
     
     public boolean onKeyDown(int keyCode, KeyEvent event) 
     { 
-           if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-               Intent intent;
-               intent = new Intent("com.android.music.musicservicecommand.previous");
-               getBaseContext().sendBroadcast(intent);
-                   return true; 
-           } else if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) { 
-               Intent intent;
-               intent = new Intent("com.android.music.musicservicecommand.next");
-               getBaseContext().sendBroadcast(intent);
-                   return true; 
-           } else { 
-                   return super.onKeyDown(keyCode, event); 
-           } 
+        Intent intent;
+        switch (keyCode) {
+        case KeyEvent.KEYCODE_VOLUME_DOWN:
+            intent = new Intent("com.android.music.musicservicecommand.previous");
+            getBaseContext().sendBroadcast(intent);
+            return true;
+        case KeyEvent.KEYCODE_VOLUME_UP: 
+            intent = new Intent("com.android.music.musicservicecommand.next");
+            getBaseContext().sendBroadcast(intent);
+            return true;
+        case KeyEvent.KEYCODE_BACK:
+        case KeyEvent.KEYCODE_HOME:
+            return true;
+        default:
+           return super.onKeyDown(keyCode, event); 
+       } 
     } 
 
     
@@ -1344,8 +1348,15 @@ public class mainActivity extends Activity {
     // Set Custom Background Image
     	public void setCustomBackground() {
         	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_SHOW_CUSTOM_BG, false)) {
+        	    //First clean our old data
+        	    if(bgBitmap!=null){
+        	        bgBitmap.recycle();
+        	        bgBitmap=null;
+        	        System.gc();
+        	    }
+        	    //now load the proper bg
         		String BG_FILE = getFilesDir().toString() + File.separator+LockscreenSettings.BG_PHOTO_FILE;
-        		Bitmap bgBitmap = BitmapFactory.decodeFile(BG_FILE);
+        		bgBitmap = BitmapFactory.decodeFile(BG_FILE);
         		BitmapDrawable background = new BitmapDrawable(getResources(),bgBitmap);
         		background.setGravity(Gravity.CENTER);
         		
