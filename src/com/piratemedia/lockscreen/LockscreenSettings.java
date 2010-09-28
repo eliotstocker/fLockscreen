@@ -53,6 +53,8 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	static final String KEY_PICK_BG = "bg_picker";
 	
+	static final String KEY_SENSOR_ROTATE = "sensor_rotate";
+	
 	static final String KEY_LANDSCAPE = "landscape";
 
 	static final String KEY_HOME_APP_PACKAGE = "user_home_app_package";
@@ -140,6 +142,8 @@ public class LockscreenSettings extends PreferenceActivity {
 	private Preference gmailAccounts;
 	
     private Preference gmailMerge;
+    
+    private Preference landscape;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +152,7 @@ public class LockscreenSettings extends PreferenceActivity {
         
         PreferenceScreen screen = this.getPreferenceScreen();
         Preference pick = (Preference) screen.findPreference(KEY_PICK_BG);
-        Preference landscape = (Preference) screen.findPreference(KEY_LANDSCAPE);
+        landscape = (Preference) screen.findPreference(KEY_LANDSCAPE);
         Preference service_foreground = (Preference) screen.findPreference(SERVICE_FOREGROUND);
         Preference laction = (Preference) screen.findPreference(LEFT_ACTION_KEY);
         Preference raction = (Preference) screen.findPreference(RIGHT_ACTION_KEY);
@@ -156,6 +160,7 @@ public class LockscreenSettings extends PreferenceActivity {
         gmailAccounts = (Preference) screen.findPreference(GMAIL_ACCOUNT_KEY);
         gmailMerge = (Preference) screen.findPreference(GMAIL_MERGE_KEY);
         Preference Enable = (Preference) screen.findPreference(ENABLE_KEY);
+        Preference sensor = (Preference) screen.findPreference(KEY_SENSOR_ROTATE);
         
       //make sure service is running
         ServiceStrt = new Intent("com.piratemedia.lockscreen.startservice");
@@ -183,6 +188,19 @@ public class LockscreenSettings extends PreferenceActivity {
 			gmailAccounts.setEnabled(true);
 			gmailMerge.setEnabled(true);
 		}
+		
+		sensor.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+        		String NewVal = newValue.toString();
+        		boolean Enabled = Boolean.parseBoolean(NewVal);
+            	if(Enabled) {
+            		landscape.setEnabled(false);
+            	} else {
+            		landscape.setEnabled(true);
+            	}
+            	return true;
+        	}
+        });
         
 		Enable.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {

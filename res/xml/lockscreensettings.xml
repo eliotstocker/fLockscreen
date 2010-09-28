@@ -13,6 +13,10 @@
 		android:defaultValue="true" android:title="@string/albumart_title"
 		android:summary="@string/albumart_summary" />
 		
+	<CheckBoxPreference android:key="sensor_rotate"
+		android:defaultValue="false" android:title="@string/sensor_rotate_title"
+		android:summaryOn="@string/sensor_rotate_on" android:summaryOff="@string/sensor_rotate_off" />
+		
 	<CheckBoxPreference android:key="landscape"
 		android:defaultValue="false" android:title="@string/landscape_title"
 		android:summaryOn="@string/landscape_on" android:summaryOff="@string/landscape_off" />

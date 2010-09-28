@@ -86,6 +86,10 @@
 	<string name="Vibrate_off">When phone is set to Mute Mode, Vibration is off</string>
     
     <!-- Settings Landscape -->
+    <string name="sensor_rotate_title">Sensor Rotation</string>
+    <string name="sensor_rotate_on">fLockscreen will rotate based on the orientation of the phone</string>
+    <string name="sensor_rotate_off">fLockscreen will not rotate based on the orientation of the phone</string>
+    
     <string name="landscape_title">Landscape Mode</string>
     <string name="landscape_on">fLockscreen will always show in Landscape mode</string>
     <string name="landscape_off">fLockscreen will always show in Portrait Mode</string>

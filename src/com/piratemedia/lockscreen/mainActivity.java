@@ -1377,10 +1377,14 @@ public class mainActivity extends Activity {
         
     // set landscape/portrait based on settings
         private void setLandscape() {
+        	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_SENSOR_ROTATE, false)) {
+        		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        	} else {
         	if (utils.getCheckBoxPref(this, LockscreenSettings.KEY_LANDSCAPE, false)) {
         		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         	} else {
         		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        	}
         	}
         }
         
