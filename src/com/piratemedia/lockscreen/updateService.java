@@ -114,8 +114,7 @@ public class updateService extends Service {
     	final String action=aIntent.getAction();
     	if (action==null)return;
         if (action.equals("com.android.music.playbackcomplete") && getPlayer() == 1) {
-            // The song has ended, stop the service
-            stopSelf();
+            // The song has ended
         } else if ((action.equals("com.android.music.playstatechanged") 
                 || action.equals("com.android.music.metachanged")
                 || action.equals("com.android.music.queuechanged")
@@ -165,8 +164,7 @@ public class updateService extends Service {
 
             }, 0);
         	} else if (action.equals("com.htc.music.playbackcomplete") && getPlayer() == 2) {
-                // The song has ended, stop the service
-                stopSelf();
+                // The song has ended
             } else if ((action.equals("com.htc.music.playstatechanged") 
                     || action.equals("com.htc.music.metachanged")
                     || action.equals("com.htc.music.queuechanged")
@@ -216,8 +214,7 @@ public class updateService extends Service {
 
                 }, 0);
         	} else if (action.equals("com.piratemedia.musicmod.playbackcomplete") && getPlayer() == 3) {
-                // The song has ended, stop the service
-                stopSelf();
+                // The song has ended
             } else if ((action.equals("com.piratemedia.musicmod.playstatechanged") 
                     || action.equals("com.piratemedia.musicmod.metachanged")
                     || action.equals("com.piratemedia.musicmod.queuechanged")
@@ -267,8 +264,7 @@ public class updateService extends Service {
 
                 }, 0);
         	} else if (action.equals("com.tbig.playerpro.playbackcomplete") && getPlayer() == 4) {
-                // The song has ended, stop the service
-                stopSelf();
+                // The song has ended
             } else if ((action.equals("com.tbig.playerpro.playstatechanged") 
                     || action.equals("com.tbig.playerpro.metachanged")
                     || action.equals("com.tbig.playerpro.queuechanged")
