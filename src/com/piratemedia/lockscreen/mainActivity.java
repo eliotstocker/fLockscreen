@@ -525,6 +525,14 @@ public class mainActivity extends Activity {
     		this.bindService(i, conn, BIND_AUTO_CREATE);
     		break;
     	}
+    	case 4: {
+    		Intent i = new Intent();
+    		i.setClassName("com.tbig.playerpro", "com.tbig.playerpro.MediaPlaybackService");
+    		startService(i);
+    		conn = new MediaPlayerServiceConnectionPirate();
+    		this.bindService(i, conn, BIND_AUTO_CREATE);
+    		break;
+    	}
     }
     }
     
@@ -1038,6 +1046,11 @@ public class mainActivity extends Activity {
      		toggleString = "com.piratemedia.musicmod.musicservicecommand.togglepause";
      		nextString = "com.piratemedia.musicmod.musicservicecommand.next";
      		break;
+     	case 4:
+     		prevString = "com.tbig.playerpro.musicservicecommand.previous";
+     		toggleString = "com.tbig.playerpro.musicservicecommand.togglepause";
+     		nextString = "com.tbig.playerpro.musicservicecommand.next";
+     		break;
         }
     	
     	back.setOnClickListener(new View.OnClickListener() {
@@ -1073,6 +1086,7 @@ public class mainActivity extends Activity {
              }
           });
     }
+    
     
     public boolean onKeyDown(int keyCode, KeyEvent event) 
     { 
@@ -1374,18 +1388,7 @@ public class mainActivity extends Activity {
     	public int getPlayer() {
     		String playerString = utils.getStringPref(this , LockscreenSettings.KEY_MUSIC_PLAYER, DefaultMusicApp());
     		int player = Integer.parseInt(playerString);  
-    		switch(player) {
-    			case 1:
-    				//Set Stock Music Player
-    				return 1;
-    			case 2:
-    				//Set HTC Music as Player
-    				return 2;
-    			case 3:
-    				//Set Music Mod as Player
-    				return 3;
-    		}
-    		return 1;
+    		return player;
     	}
     	
     // Set Custom Background Image

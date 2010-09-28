@@ -102,7 +102,8 @@ public class updateService extends Service {
         return START_STICKY;
         //Why did you use the "2"?
         //AFAIK, 2=START_FLAG_RETRY
-        //return 2;
+        
+        //Cos i like 2! its all lie 3 isnt the magic number! 2 is!!!!!! AWWWWWW YEAAHHHHH MOTHER FUKA HA HA
     }
 
     @Override
@@ -115,10 +116,10 @@ public class updateService extends Service {
         if (action.equals("com.android.music.playbackcomplete") && getPlayer() == 1) {
             // The song has ended, stop the service
             stopSelf();
-        } else if (action.equals("com.android.music.playstatechanged") 
+        } else if ((action.equals("com.android.music.playstatechanged") 
                 || action.equals("com.android.music.metachanged")
                 || action.equals("com.android.music.queuechanged")
-                || action.equals("com.android.music.playbackcomplete")
+                || action.equals("com.android.music.playbackcomplete"))
                 && getPlayer() == 1) {
 
             bindService(new Intent().setClassName("com.android.music", "com.android.music.MediaPlaybackService"), new ServiceConnection() {
@@ -166,11 +167,11 @@ public class updateService extends Service {
         	} else if (action.equals("com.htc.music.playbackcomplete") && getPlayer() == 2) {
                 // The song has ended, stop the service
                 stopSelf();
-            } else if (action.equals("com.htc.music.playstatechanged") 
+            } else if ((action.equals("com.htc.music.playstatechanged") 
                     || action.equals("com.htc.music.metachanged")
                     || action.equals("com.htc.music.queuechanged")
-                    || action.equals("com.htc.music.playbackcomplete")
-                    && getPlayer() == 3) {
+                    || action.equals("com.htc.music.playbackcomplete"))
+                    && getPlayer() == 2) {
 
                 bindService(new Intent().setClassName("com.htc.music", "com.htc.music.MediaPlaybackService"), new ServiceConnection() {
             
@@ -217,10 +218,10 @@ public class updateService extends Service {
         	} else if (action.equals("com.piratemedia.musicmod.playbackcomplete") && getPlayer() == 3) {
                 // The song has ended, stop the service
                 stopSelf();
-            } else if (action.equals("com.piratemedia.musicmod.playstatechanged") 
+            } else if ((action.equals("com.piratemedia.musicmod.playstatechanged") 
                     || action.equals("com.piratemedia.musicmod.metachanged")
                     || action.equals("com.piratemedia.musicmod.queuechanged")
-                    || action.equals("com.piratemedia.musicmod.playbackcomplete")
+                    || action.equals("com.piratemedia.musicmod.playbackcomplete"))
                     && getPlayer() == 3) {
 
                 bindService(new Intent().setClassName("com.piratemedia.musicmod", "com.piratemedia.musicmod.MediaPlaybackService"), new ServiceConnection() {
@@ -228,6 +229,57 @@ public class updateService extends Service {
                     public void onServiceConnected(ComponentName aName, IBinder aService) {
                     	com.piratemedia.musicmod.IMediaPlaybackService mService =
             				com.piratemedia.musicmod.IMediaPlaybackService.Stub.asInterface(aService);
+                    	
+                    	try {
+                    		if (mService.isPlaying()){
+                    		
+                    		// Get info from service
+                    		playing = true;
+                    		titleName = mService.getTrackName();
+                    		artistName = mService.getArtistName();
+                    		albumName = mService.getAlbumName();
+                    		pos = mService.position();
+                    		dur = mService.duration();
+                    		albumId = mService.getAlbumId();
+                    		songId = mService.getAudioId();
+                    		
+                    		
+                    		if (mService.isPlaying()) {
+                    			notifyChange(MUSIC_CHANGED);
+                    			playing = true;
+                    		}
+                            } else {
+                            	notifyChange(MUSIC_STOPPED);
+                            	playing = false;
+                            }
+                    		
+                    	} catch (Exception e) {
+                    	e.printStackTrace();
+                    	throw new RuntimeException(e);
+                    	}
+
+                        unbindService(this);
+                    }
+                    public void onServiceDisconnected(ComponentName aName) {
+                        	playing = false;
+                        	notifyChange(MUSIC_STOPPED);
+                    }
+
+                }, 0);
+        	} else if (action.equals("com.tbig.playerpro.playbackcomplete") && getPlayer() == 4) {
+                // The song has ended, stop the service
+                stopSelf();
+            } else if ((action.equals("com.tbig.playerpro.playstatechanged") 
+                    || action.equals("com.tbig.playerpro.metachanged")
+                    || action.equals("com.tbig.playerpro.queuechanged")
+                    || action.equals("com.tbig.playerpro.playbackcomplete"))
+                    && getPlayer() == 4) {
+
+                bindService(new Intent().setClassName("com.tbig.playerpro", "com.tbig.playerpro.MediaPlaybackService"), new ServiceConnection() {
+            
+                    public void onServiceConnected(ComponentName aName, IBinder aService) {
+                    	com.tbig.playerpro.IMediaPlaybackService mService =
+                    		com.tbig.playerpro.IMediaPlaybackService.Stub.asInterface(aService);
                     	
                     	try {
                     		if (mService.isPlaying()){
@@ -309,18 +361,7 @@ private void notifyChange(String what) {
         	public int getPlayer() {
         		String playerString = utils.getStringPref(this , LockscreenSettings.KEY_MUSIC_PLAYER, "1");
         		int player = Integer.parseInt(playerString);  
-        		switch(player) {
-        			case 1:
-        				//Set Stock Music Player
-        				return 1;
-        			case 2:
-        				//Set HTC Music as Player
-        				return 2;
-        			case 3:
-        				//Set Music Mod as Player
-        				return 3;
-        		}
-        		return 1;
+        		return player;
         	}
 		
 		private boolean inCall() {
