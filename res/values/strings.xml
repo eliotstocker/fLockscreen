@@ -106,6 +106,7 @@
 		<item>Stock Android Music</item>
 		<item>HTC Music</item>
 		<item>Music Mod (Market)</item>
+		<item>PlayerPro</item>
 	</string-array>
 	
 	<string-array name="players_val">
