@@ -637,19 +637,19 @@ public class mainActivity extends Activity {
     	TextView Mentions = (TextView) findViewById(R.id.mentions_number);
     	TextView Direct = (TextView) findViewById(R.id.direct_number);
 
-    	if(tweets != 0){
+    	if(tweets != 0 && utils.getCheckBoxPref(this, LockscreenSettings.TWEET_MODE_KEY, true)){
     		TweetFrame.setVisibility(View.VISIBLE);
     		Tweets.setText(String.valueOf(tweets));
     	} else {
     		TweetFrame.setVisibility(View.GONE);
     	}
-    	if(mentions != 0){
+    	if(mentions != 0 && utils.getCheckBoxPref(this, LockscreenSettings.MENTION_MODE_KEY, true)){
     		MentionFrame.setVisibility(View.VISIBLE);
     		Mentions.setText(String.valueOf(mentions));
     	} else {
     		MentionFrame.setVisibility(View.GONE);
     	}
-    	if(direct != 0){
+    	if(direct != 0 && utils.getCheckBoxPref(this, LockscreenSettings.DIRECT_MODE_KEY, true)){
     		DirectFrame.setVisibility(View.VISIBLE);
     		Direct.setText(String.valueOf(direct));
     	} else {

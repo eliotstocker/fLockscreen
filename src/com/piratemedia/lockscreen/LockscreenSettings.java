@@ -81,6 +81,12 @@ public class LockscreenSettings extends PreferenceActivity {
 	
 	static final String MUTE_MODE_KEY = "muteMode";
 	
+	static final String TWEET_MODE_KEY = "tweets_mode";
+	
+	static final String MENTION_MODE_KEY = "mention_mode";
+	
+	static final String DIRECT_MODE_KEY = "direct_mode";
+	
 	static final String GMAIL_VIEW_KEY = "gmail_view";
 	
 	static final String GMAIL_ACCOUNT_KEY = "gmail_labels";

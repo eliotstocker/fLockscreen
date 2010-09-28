@@ -135,6 +135,15 @@
 		<CheckBoxPreference android:key="bluetooth_mode"
 			android:defaultValue="true" android:title="@string/bluetooth_title"
 			android:summary="@string/bluetooth_summary"/>
+		<CheckBoxPreference android:key="tweets_mode"
+			android:defaultValue="true" android:title="@string/twitter_tweet_title"
+			android:summary="@string/twitter_tweet_summary"/>
+		<CheckBoxPreference android:key="mention_mode"
+			android:defaultValue="true" android:title="@string/twitter_mention_title"
+			android:summary="@string/twitter_mention_summary"/>
+		<CheckBoxPreference android:key="direct_mode"
+			android:defaultValue="true" android:title="@string/twitter_direct_title"
+			android:summary="@string/twitter_direct_summary"/>
 			
 	</PreferenceScreen>
 

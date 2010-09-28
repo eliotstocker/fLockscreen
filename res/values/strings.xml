@@ -153,6 +153,15 @@
 	<string name="bluetooth_title">Bluetooth Icon</string>
 	<string name="bluetooth_summary">Display icon when Bluetooth is enabled</string>
 	
+	<string name="twitter_tweet_title">Twitter - Tweets</string>
+	<string name="twitter_tweet_summary">Show Twitter tweet unread count</string>
+	
+	<string name="twitter_mention_title">Twitter - Mentions</string>
+	<string name="twitter_mention_summary">Show Twitter mention unread count</string>
+	
+	<string name="twitter_direct_title">Twitter - Direct Messages</string>
+	<string name="twitter_direct_summary">Show Twitter Direct Message unread count</string>
+	
 	<!-- gmail settings -->
 	<string name="gmail_label_title">Gmail Account Labels</string>
 	<string name="gmail_label_on">Gmail Accounts displayed on fLockscreen will be labeled with there account address</string>
