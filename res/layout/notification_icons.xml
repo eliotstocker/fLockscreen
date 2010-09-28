@@ -10,6 +10,66 @@
  	android:paddingBottom="5dp"
  	android:background="@drawable/trans_bg">
  	
+ 	<FrameLayout android:id="@+id/tweets_frame"
+ 	android:layout_width="wrap_content"
+ 	android:layout_height="wrap_content"
+ 	android:visibility="gone">
+ 	
+ 	<ImageView android:id="@+id/tweets"
+ 	android:src="@drawable/mute_icon"
+ 	android:layout_width="wrap_content"
+ 	android:layout_height="wrap_content"
+ 	android:paddingRight="5dp"/>
+ 	
+ 	<TextView android:id="@+id/tweet_number"
+ 		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:gravity="center"
+		android:textSize="14sp"
+		android:textColor="#ff000000"/>
+ 	
+ 	</FrameLayout>
+ 
+  	<FrameLayout android:id="@+id/mentions_frame"
+ 	android:layout_width="wrap_content"
+ 	android:layout_height="wrap_content"
+ 	android:visibility="gone">
+ 		
+ 	<ImageView android:id="@+id/mentions"
+ 	android:src="@drawable/mute_icon"
+ 	android:layout_width="wrap_content"
+ 	android:layout_height="wrap_content"
+ 	android:paddingRight="5dp"/>
+ 	
+ 	<TextView android:id="@+id/mentions_number"
+ 		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:gravity="center"
+		android:textSize="14sp"
+		android:textColor="#ff000000"/>
+ 	
+ 	</FrameLayout>
+ 	
+   	<FrameLayout android:id="@+id/direct_frame"
+ 	android:layout_width="wrap_content"
+ 	android:layout_height="wrap_content"
+ 	android:visibility="gone">
+ 	
+ 	<ImageView android:id="@+id/direct"
+ 	android:src="@drawable/mute_icon"
+ 	android:layout_width="wrap_content"
+ 	android:layout_height="wrap_content"
+ 	android:paddingRight="5dp"/>
+ 	
+ 	<TextView android:id="@+id/direct_number"
+ 		android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:gravity="center"
+		android:textSize="14sp"
+		android:textColor="#ff000000"/>
+ 	
+ 	</FrameLayout>
+ 	
  	<ImageView android:id="@+id/mute"
  	android:src="@drawable/mute_icon"
  	android:layout_width="wrap_content"

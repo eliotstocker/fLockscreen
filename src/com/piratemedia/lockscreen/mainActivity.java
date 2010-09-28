@@ -61,6 +61,7 @@ import android.view.WindowManager;
 import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -460,6 +461,10 @@ public class mainActivity extends Activity {
 	    getDate();
 	    updateNetworkInfo();
 	    muteMode(true);
+	    
+	    Intent intent;
+        intent = new Intent("com.levelup.touiteur.intent.action.GET_STATUS");
+        getBaseContext().sendBroadcast(intent);
 	}
 
 	@Override
@@ -485,6 +490,7 @@ public class mainActivity extends Activity {
         f.addAction(Intent.ACTION_BATTERY_CHANGED);
         f.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         f.addAction(Intent.ACTION_DATE_CHANGED);
+        f.addAction("com.levelup.touiteur.action.GLOBALNOTIF");
         registerReceiver(mStatusListener, new IntentFilter(f));
     }
     
@@ -602,9 +608,46 @@ public class mainActivity extends Activity {
             	
             	bluetoothMode();
             	
-            } 
+            } else if (action.equals("com.levelup.touiteur.action.GLOBALNOTIF")) {
+            	
+            	int Tweets = intent.getIntExtra("UnreadT", 0);
+            	int Mentions = intent.getIntExtra("UnreadM", 0);
+            	int Direct = intent.getIntExtra("UnreadD", 0);
+            	
+            	twitterUpdate(Tweets, Mentions, Direct);
+            	
+            	Log.d("fLockscreen Touiteur", "Recieveing Twitter Update");
+            }
         };
     };
+    
+    private void twitterUpdate(int tweets, int mentions, int direct) {
+    	FrameLayout TweetFrame = (FrameLayout) findViewById(R.id.tweets_frame);
+    	FrameLayout MentionFrame = (FrameLayout) findViewById(R.id.mentions_frame);
+    	FrameLayout DirectFrame = (FrameLayout) findViewById(R.id.direct_frame);
+    	TextView Tweets = (TextView) findViewById(R.id.tweet_number);
+    	TextView Mentions = (TextView) findViewById(R.id.mentions_number);
+    	TextView Direct = (TextView) findViewById(R.id.direct_number);
+
+    	if(tweets != 0){
+    		TweetFrame.setVisibility(View.VISIBLE);
+    		Tweets.setText(String.valueOf(tweets));
+    	} else {
+    		TweetFrame.setVisibility(View.GONE);
+    	}
+    	if(mentions != 0){
+    		MentionFrame.setVisibility(View.VISIBLE);
+    		Mentions.setText(String.valueOf(mentions));
+    	} else {
+    		MentionFrame.setVisibility(View.GONE);
+    	}
+    	if(direct != 0){
+    		DirectFrame.setVisibility(View.VISIBLE);
+    		Direct.setText(String.valueOf(direct));
+    	} else {
+    		DirectFrame.setVisibility(View.GONE);
+    	}
+    }
     
     private void updateNetworkInfo() {
     	TextView Network = (TextView) findViewById(R.id.Network);
