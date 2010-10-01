@@ -40,6 +40,14 @@
 				<action android:name="com.piratemedia.musicmod.playbackcomplete" />
 				<action android:name="com.piratemedia.musicmod.metachanged" />
 				<action android:name="com.piratemedia.musicmod.queuechanged" />
+				<action android:name="com.tbig.playerpro.playstatechanged" />
+                <action android:name="com.tbig.playerpro.metachanged" />
+                <action android:name="com.tbig.playerpro.queuechanged" />
+                <action android:name="com.tbig.playerpro.playbackcomplete" />
+				<action android:name="org.abrantix.rockon.rockonnggl.playstatechanged" /> 
+                <action android:name="org.abrantix.rockon.rockonnggl.metachanged" />
+                <action android:name="org.abrantix.rockon.rockonnggl.queuechanged" />
+                <action android:name="org.abrantix.rockon.rockonnggl.playbackcomplete" />
 				<action android:name="android.provider.Telephony.SMS_RECEIVED" />
 				<action android:name="android.intent.action.PHONE_STATE"/>
 				<action android:name="android.intent.action.BATTERY_CHANGED"/>

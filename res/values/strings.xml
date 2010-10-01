@@ -111,6 +111,7 @@
 		<item>HTC Music</item>
 		<item>Music Mod (Market)</item>
 		<item>Music PlayerPro</item>
+		<item>3 Music Player</item>
 	</string-array>
 	
 	<string-array name="players_val">
@@ -118,6 +119,7 @@
 		<item>2</item>
 		<item>3</item>
 		<item>4</item>
+		<item>5</item>
 	</string-array>
 	
 	<string name="players_title">Music Player Select</string>
@@ -195,8 +197,8 @@
 	<string name="credits_cat">fLockscreen Info</string>
 	<string name="credits_name">fLockscreen</string>
 	<string name="credits_name_summary">By Ander Webb and Eliot Stocker</string>
-	<string name="credits_version">v 0.9</string>
-	<string name="credits_version_summary">Private Tester Version - Beta 1</string>
+	<string name="credits_version">v 0.9.1</string>
+	<string name="credits_version_summary">Private Tester Version - Beta 2</string>
 	
 	<!-- Home chooser -->
 	<string name="home_chooser_title">Pick your default home application</string>

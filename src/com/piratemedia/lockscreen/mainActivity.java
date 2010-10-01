@@ -529,7 +529,15 @@ public class mainActivity extends Activity {
     		Intent i = new Intent();
     		i.setClassName("com.tbig.playerpro", "com.tbig.playerpro.MediaPlaybackService");
     		startService(i);
-    		conn = new MediaPlayerServiceConnectionPirate();
+    		conn = new MediaPlayerServiceConnectionPro();
+    		this.bindService(i, conn, BIND_AUTO_CREATE);
+    		break;
+    	}
+    	case 5: {
+    		Intent i = new Intent();
+    		i.setClassName("org.abrantix.rockon.rockonnggl", "org.abrantix.rockon.rockonnggl.RockOnNextGenService");
+    		startService(i);
+    		conn = new MediaPlayerServiceConnectionthree();
     		this.bindService(i, conn, BIND_AUTO_CREATE);
     		break;
     	}
@@ -985,6 +993,66 @@ public class mainActivity extends Activity {
         	public void onServiceDisconnected(ComponentName name) {
         	}
         	}
+        
+      //Get starting info (Player Pro)
+        private class MediaPlayerServiceConnectionPro implements ServiceConnection {
+        	public void onServiceConnected(ComponentName name, IBinder service) {
+
+        		com.tbig.playerpro.IMediaPlaybackService pro =
+        			com.tbig.playerpro.IMediaPlaybackService.Stub.asInterface(service);
+        	
+        			try {
+        				if (pro.isPlaying()) {
+        					playback = true;
+        					if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.KEY_SHOW_ART, true)) {
+        					updateArt(pro.getAlbumId(), pro.getAudioId());
+        					}
+        					updateInfo(pro.getArtistName(), pro.getAlbumName(), pro.getTrackName());
+        					setPlayButton();
+        					showHideControlsStart(true);
+        				} else {
+        					showHideControlsStart(false);
+        				}
+        			} catch (RemoteException e) {
+        			// TODO Auto-generated catch block
+        			e.printStackTrace();
+        			}
+        	
+        	
+        	}
+        	public void onServiceDisconnected(ComponentName name) {
+        	}
+        	}
+        
+        //Get starting info (Three)
+        private class MediaPlayerServiceConnectionthree implements ServiceConnection {
+        	public void onServiceConnected(ComponentName name, IBinder service) {
+
+        			org.abrantix.rockon.rockonnggl.IRockOnNextGenService three =
+                		org.abrantix.rockon.rockonnggl.IRockOnNextGenService.Stub.asInterface(service);
+        	
+        			try {
+        				if (three.isPlaying()) {
+        					playback = true;
+        					if (utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.KEY_SHOW_ART, true)) {
+        					updateArt(three.getAlbumId(), three.getAudioId());
+        					}
+        					updateInfo(three.getArtistName(), three.getAlbumName(), three.getTrackName());
+        					setPlayButton();
+        					showHideControlsStart(true);
+        				} else {
+        					showHideControlsStart(false);
+        				}
+        			} catch (RemoteException e) {
+        			// TODO Auto-generated catch block
+        			e.printStackTrace();
+        			}
+        	
+        	
+        	}
+        	public void onServiceDisconnected(ComponentName name) {
+        	}
+        	}
     
     //set button intents
     private void setPlayButton() {
@@ -1050,6 +1118,11 @@ public class mainActivity extends Activity {
      		prevString = "com.tbig.playerpro.musicservicecommand.previous";
      		toggleString = "com.tbig.playerpro.musicservicecommand.togglepause";
      		nextString = "com.tbig.playerpro.musicservicecommand.next";
+     		break;
+     	case 5:
+     		prevString = "org.abrantix.rockon.rockonnggl.musicservicecommand.previous";
+     		toggleString = "org.abrantix.rockon.rockonnggl.musicservicecommand.togglepause";
+     		nextString = "org.abrantix.rockon.rockonnggl.musicservicecommand.next";
      		break;
         }
     	
@@ -1595,6 +1668,9 @@ public class mainActivity extends Activity {
 			}, 500);
 	        mHandler.removeCallbacks(mScroll);
 	        mHandler.post(mScroll);
+	        Intent levelup;
+        	levelup = new Intent("com.teslacoilsw.widgetlocker.intent.UNLOCKED");
+            getBaseContext().sendBroadcast(levelup);
 		}
 		/**
 		 * ***Cool Custom Toast for unlock, mute etc ***

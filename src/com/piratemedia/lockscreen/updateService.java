@@ -313,6 +313,56 @@ public class updateService extends Service {
                     }
 
                 }, 0);
+        	} else if (action.equals("org.abrantix.rockon.rockonnggl.playbackcomplete") && getPlayer() == 4) {
+                // The song has ended
+            } else if ((action.equals("org.abrantix.rockon.rockonnggl.playstatechanged") 
+                    || action.equals("org.abrantix.rockon.rockonnggl.metachanged")
+                    || action.equals("org.abrantix.rockon.rockonnggl.queuechanged")
+                    || action.equals("org.abrantix.rockon.rockonnggl.playbackcomplete"))
+                    && getPlayer() == 5) {
+
+                bindService(new Intent().setClassName("org.abrantix.rockon.rockonnggl", "org.abrantix.rockon.rockonnggl.RockOnNextGenService"), new ServiceConnection() {
+            
+                    public void onServiceConnected(ComponentName aName, IBinder aService) {
+                    	org.abrantix.rockon.rockonnggl.IRockOnNextGenService mService =
+                    		org.abrantix.rockon.rockonnggl.IRockOnNextGenService.Stub.asInterface(aService);
+                    	
+                    	try {
+                    		if (mService.isPlaying()){
+                    		
+                    		// Get info from service
+                    		playing = true;
+                    		titleName = mService.getTrackName();
+                    		artistName = mService.getArtistName();
+                    		albumName = mService.getAlbumName();
+                    		pos = mService.position();
+                    		dur = mService.duration();
+                    		albumId = mService.getAlbumId();
+                    		songId = mService.getAudioId();
+                    		
+                    		
+                    		if (mService.isPlaying()) {
+                    			notifyChange(MUSIC_CHANGED);
+                    			playing = true;
+                    		}
+                            } else {
+                            	notifyChange(MUSIC_STOPPED);
+                            	playing = false;
+                            }
+                    		
+                    	} catch (Exception e) {
+                    	e.printStackTrace();
+                    	throw new RuntimeException(e);
+                    	}
+
+                        unbindService(this);
+                    }
+                    public void onServiceDisconnected(ComponentName aName) {
+                        	playing = false;
+                        	notifyChange(MUSIC_STOPPED);
+                    }
+
+                }, 0);
             } else if (action.equals("android.provider.Telephony.SMS_RECEIVED")) {
             	notifyChange(SMS_CHANGED);
             } else if (action.equals("android.intent.action.PHONE_STATE")) {
@@ -330,6 +380,9 @@ public class updateService extends Service {
             	Intent lock=utils.getLockIntent(this);
             	lock.setAction(utils.ACTION_UNLOCK);
             	startActivity(lock);
+            	Intent levelup;
+            	levelup = new Intent("com.teslacoilsw.widgetlocker.intent.LOCKED");
+                getBaseContext().sendBroadcast(levelup);
             } else if(action.equals(START_STOP_FORGROUND)){
             	foregroundStuff(utils.getCheckBoxPref(getBaseContext(), LockscreenSettings.SERVICE_FOREGROUND, true));
             } else if(action.equals(STOP_SERVICE)){
