@@ -160,7 +160,7 @@ public class mainActivity extends Activity {
 		if(action.equals("android.intent.action.MAIN") && categories.contains("android.intent.category.HOME")){
 			//Fire intent to the stock home
 			if(mLauncherPackage!="" && mLauncherActivity!=""){
-				Intent launcher = new Intent();
+				final Intent launcher = new Intent();
 				launcher.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 		        launcher.setComponent(new ComponentName(mLauncherPackage,mLauncherActivity));
 		        //Check if the launcher was already running on top to fire the first intent
@@ -171,11 +171,16 @@ public class mainActivity extends Activity {
 		        launcher.addCategory("android.intent.category.HOME");
 		        for(int i = 0; i < procInfos.size(); i++)
 		        {
-		        	if(procInfos.get(i).baseActivity.getPackageName().equals(mLauncherPackage) && procInfos.get(i).baseActivity.getClassName().equals(mLauncherActivity)) {
-		    	        startActivity(launcher);
-		    	        break;
-		        	}
-		        }	        
+		            if(procInfos.get(i).baseActivity.getPackageName().equals(mLauncherPackage) && procInfos.get(i).baseActivity.getClassName().equals(mLauncherActivity)) {
+		                Handler stuff=new Handler();
+		                stuff.postDelayed(new Runnable() {
+		                    public void run() {
+		                        startActivity(launcher);
+		                    }
+		                }, 150);
+		                break;
+		            }
+		        }
 		        startActivity(launcher);
 			}else{
 				Intent chooser=new Intent(this, HomeChooserActivity.class);
