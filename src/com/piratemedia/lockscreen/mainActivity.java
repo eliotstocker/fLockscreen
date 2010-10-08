@@ -277,6 +277,9 @@ public class mainActivity extends Activity {
 		    ImageView bluetoothIcon = (ImageView) findViewById(R.id.bluetooth);
 		    ImageView usb_msIcon = (ImageView) findViewById(R.id.usb_ms);
 		    ImageView count = (ImageView) findViewById(R.id.count);
+		    ImageView tweets = (ImageView) findViewById(R.id.tweets);
+		    ImageView mentions = (ImageView) findViewById(R.id.mentions);
+		    ImageView direct = (ImageView) findViewById(R.id.direct);
 		    TextView MusicInfo = (TextView) findViewById(R.id.MusicInfo);
 		    TextView network = (TextView) findViewById(R.id.Network);
 		    TextView batteryInfo = (TextView) findViewById(R.id.batteryInfoText);
@@ -294,6 +297,7 @@ public class mainActivity extends Activity {
 				{THEME_ITEM_BACKGROUND,THEME_ITEM_FOREGROUND}
 			);*/
 			//need to add an if here if theme_background_slide = true then:
+
 			if(utils.getCheckBoxPref(this, LockscreenSettings.THEME_BACKGROUND_SLIDE_KEY, false)) {
 				loadThemeResource(themeResources,themePackage,"slide_bg",slide2,THEME_ITEM_BACKGROUND);
 				slider_padding=slide2.getPaddingRight()+slide2.getPaddingLeft();
@@ -328,6 +332,9 @@ public class mainActivity extends Activity {
 			loadThemeResource(themeResources,themePackage,"bt_icon",bluetoothIcon,THEME_ITEM_FOREGROUND);
 			loadThemeResource(themeResources,themePackage,"usb_icon",usb_msIcon,THEME_ITEM_FOREGROUND);
 			loadThemeResource(themeResources,themePackage,"count_down",count,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"tweet_icon",tweets,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"mention_icon",mentions,THEME_ITEM_FOREGROUND);
+			loadThemeResource(themeResources,themePackage,"direct_icon",direct,THEME_ITEM_FOREGROUND);
 			loadThemeResource(themeResources,themePackage,"actions",mToastPic,THEME_ITEM_FOREGROUND);
 			
 			Resources res = getResources();

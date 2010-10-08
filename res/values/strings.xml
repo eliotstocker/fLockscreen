@@ -38,7 +38,7 @@
     <!-- Settings Strings -->
     <string name="settings">fLockscreen Settings</string>
     
-    <!-- Enable/Disble Flockscreen -->
+    <!-- Enable/Disable Flockscreen -->
     <string name="enable_disble_title">Enable fLockscreen</string>
     <string name="enabled">fLockscreen is On</string>
     <string name="disabled">fLockscreen is Off</string>
@@ -59,10 +59,10 @@
     
     <!-- Settings L/R Actions -->
     <string name="left_action">Set Left Slide Action</string>
-    <string name="left_action_summary">Set what happens when sliding the screen to the left</string>
+    <string name="left_action_summary">Set what happens when sliding the screen to the right</string>
     <string name="left_action_title">Set Left Action</string>
     <string name="right_action">Set Right Slide Action</string>
-    <string name="right_action_summary">Set what happens when sliding the screen to the right</string>
+    <string name="right_action_summary">Set what happens when sliding the screen to the left</string>
     <string name="right_action_title">Set Right Action</string>
     
     <!-- Settings Action Arrays -->
@@ -138,6 +138,9 @@
 	<string name="small_text_notif_summary">Use Just a Number and icon for Text Notifications (Dependent on selected theme)</string>
 	
 	<!-- Settings Notification enable -->
+	<string name="notif_enable_title">Enable/Disable Notifications</string>
+	<string name="notif_enable_summary">Choose which notifications you wish to display on the lockscreen</string>
+	
 	<string name="sms_count_title">SMS Count</string>
 	<string name="sms_count_summary">Show Number of unread SMS</string>
 
@@ -198,7 +201,7 @@
 	<string name="credits_name">fLockscreen</string>
 	<string name="credits_name_summary">By Ander Webb and Eliot Stocker</string>
 	<string name="credits_version">v 0.9.1</string>
-	<string name="credits_version_summary">Private Tester Version - Beta 2</string>
+	<string name="credits_version_summary">Private Tester Version - Beta 1.5</string>
 	
 	<!-- Home chooser -->
 	<string name="home_chooser_title">Pick your default home application</string>

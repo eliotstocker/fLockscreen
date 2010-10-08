@@ -115,8 +115,8 @@
 		android:defaultValue="false"/>
 	
 	<PreferenceScreen android:key="notifications"
-		android:title="Enable/Disble Notifications"
-		android:summary="Choose which notifications you wish to display on the lockscreen">
+		android:title="@string/notif_enable_title"
+		android:summary="@string/notif_enable_summary">
 		
 		<CheckBoxPreference android:key="sms_count"
 			android:defaultValue="true" android:title="@string/sms_count_title"
