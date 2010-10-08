@@ -167,6 +167,8 @@ public class mainActivity extends Activity {
 		        ActivityManager actvityManager = (ActivityManager)this.getSystemService( ACTIVITY_SERVICE );
 		        List<RunningTaskInfo> procInfos = actvityManager.getRunningTasks(2);
 		        //Maybe remove the loop and check just the 2nd procInfo?
+		        launcher.setAction("android.intent.action.MAIN");
+		        launcher.addCategory("android.intent.category.HOME");
 		        for(int i = 0; i < procInfos.size(); i++)
 		        {
 		        	if(procInfos.get(i).baseActivity.getPackageName().equals(mLauncherPackage) && procInfos.get(i).baseActivity.getClassName().equals(mLauncherActivity)) {
@@ -174,8 +176,6 @@ public class mainActivity extends Activity {
 		    	        break;
 		        	}
 		        }	        
-		        launcher.setAction("android.intent.action.MAIN");
-		        launcher.addCategory("android.intent.category.HOME");
 		        startActivity(launcher);
 			}else{
 				Intent chooser=new Intent(this, HomeChooserActivity.class);
