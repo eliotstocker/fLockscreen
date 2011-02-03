@@ -834,40 +834,32 @@ public class mainActivity extends Activity {
     	TextView suffix = (TextView) findViewById(R.id.sufix);
     	
         Date now = new Date();
-        Day.setText(DateFormat.format("dd", now));
+        Day.setText(DateFormat.format("d", now));
         MonthYear.setText(DateFormat.format("MMMM yyyy", now));
 
         //get day suffix (ie. 'th')
-        
-    	String fullday = (String) DateFormat.format("dd", now);
-    	int fullNum = java.lang.Integer.parseInt(fullday);
-    	if(fullNum == 11 || fullNum == 12 || fullNum == 13) {
-    		suffix.setText("th ");
-    	} else {
-    	String halfday = fullday.substring(1);
-    	int dayNum = java.lang.Integer.parseInt(halfday);
-    	
-    	switch (dayNum) {
-    	case 1:
-    		suffix.setText("st ");
-    		break;
-    	case 2:
-    		suffix.setText("nd ");
-    		break;
-    	case 3:
-    		suffix.setText("rd ");
-    		break;
-    	case 0:
-    	case 4:
-    	case 5:
-    	case 6:
-    	case 7:
-    	case 8:
-    	case 9:
-    		suffix.setText("th ");
-    		break;
-    	}
-    	}
+        String fullday = (String) DateFormat.format("dd", now);
+        int dayNum = java.lang.Integer.parseInt(fullday);
+
+        if(dayNum >= 11 && dayNum <= 13) {
+        	suffix.setText("th ");
+        }
+        else {
+        	switch (dayNum % 10) {
+        	case 1:
+        		suffix.setText("st ");
+        		break;
+        	case 2:
+        		suffix.setText("nd ");
+        		break;
+        	case 3:
+        		suffix.setText("rd ");
+        		break;
+        	default:
+        		suffix.setText("th ");
+        		break;
+        	}
+        }
     }
     
     private void updateArt(long album, long song) {

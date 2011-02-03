@@ -11,6 +11,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.os.IBinder;
+import android.telephony.PhoneStateListener;
+import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.content.ComponentName;
@@ -42,6 +44,8 @@ public class updateService extends Service {
 	public int batpercentage;
 	private NotificationManager mNM;
 	private BroadcastReceiver mReceiver;
+	private TelephonyManager mTM;
+	PhoneStateListener mPhoneStateListener = null;
     @Override
     public void onCreate() {
         super.onCreate();        
@@ -78,6 +82,17 @@ public class updateService extends Service {
 				}
 			};;;
 	        registerReceiver(mReceiver, filter);
+
+	        mTM = ((TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE));
+
+	        mPhoneStateListener = new PhoneStateListener() {
+	        	@Override
+	        	public void onServiceStateChanged(ServiceState serviceState) {
+	        		notifyChange(PHONE_CHANGED);
+	        	}
+	        };
+	        mTM.listen(mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+
     	}
     }
     private void foregroundStuff(boolean foreground){
@@ -432,6 +447,11 @@ private void notifyChange(String what) {
             if(mReceiver!=null){
                 unregisterReceiver(mReceiver);
                 mReceiver=null;
+            }
+            if(mPhoneStateListener!=null)
+            {
+            	mTM.listen(mPhoneStateListener,PhoneStateListener.LISTEN_NONE);
+            	mPhoneStateListener=null;
             }
             super.onDestroy();
         }
